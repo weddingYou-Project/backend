@@ -16,26 +16,26 @@ import lombok.Setter;
 @Entity
 @Table(name = "user")
 public class User {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "user_id")
-	private int userId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
+    private int userId;
 
-	@Column(name = "name", nullable = false)
-	private String name;
+    @Column(name = "name", nullable = false)
+    private String name;
 
-	@Column(name = "email", nullable = false, unique = true)
-	private String email;
+    @Column(name = "email", unique = true, nullable = false)
+    private String email;
 
-	@Column(name = "password", nullable = false)
-	private String password;
+    @Column(name = "password", nullable = false)
+    private String password;
 
-	@Column(name = "phone_number", nullable = false)
-	private String phoneNum;
+    @Column(name = "phone_number", nullable = false)
+    private String phoneNum;
 
-	@Column(name = "user_img", nullable = true)
-	private byte[] userImg;
+    @Column(name = "user_img")
+    private byte[] userImg;
 
-	@Column(name = "user_join_date", columnDefinition = "datetime default current_timestamp")
-	private LocalDateTime userJoinDate;
+    @Column(name = "user_join_date", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", nullable = false)
+    private LocalDateTime userJoinDate;
 }
