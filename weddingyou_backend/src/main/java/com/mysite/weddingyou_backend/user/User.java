@@ -32,9 +32,9 @@ public class User {
 
     @Column(name = "phone_number", nullable = false)
     private String phoneNum;
-
-    @Column(name = "user_img")
-    private byte[] userImg;
+    
+//    @Column(name = "user_img")
+//    private byte[] userImg;
 
     @Column(name = "user_join_date", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", nullable = false)
     private LocalDateTime userJoinDate;
