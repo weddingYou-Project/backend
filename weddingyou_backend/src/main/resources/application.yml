@@ -19,3 +19,12 @@ spring:
     show-sql: true # 콘솔창에 sql 명령문을 출력
     properties:
       hibernate.format_sql: true # sql명령문을 보기 좋게 보여준다.
+
+  mail:
+    host: smtp.naver.com
+    port: 465
+    username: 네이버 계정 @naver.com
+    password: 네이버 계정 비밀번호
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
