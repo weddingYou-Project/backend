@@ -4,6 +4,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+import com.mysite.weddingyou_backend.planner.Planner.Gender;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,6 +25,9 @@ public class PlannerDTO {
 	private String password;
 	
 //	private byte[] plannerImg;
+	
+	@NotNull
+	private Gender gender;
 	
 	@NotNull
 	private int career;

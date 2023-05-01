@@ -24,6 +24,7 @@ public class PlannerService {
         planner.setPassword(plannerDTO.getPassword());
         planner.setPhoneNum(plannerDTO.getPhoneNum());
 //        planner.setPlannerImg(plannerDTO.getPlannerImg());
+        planner.setGender(plannerDTO.getGender());
         planner.setCareer(plannerDTO.getCareer());
         planner.setPlannerJoinDate(LocalDateTime.now()); // 현재 시간으로 설정
         return plannerRepository.save(planner);
