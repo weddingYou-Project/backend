@@ -23,6 +23,7 @@ public class UserService {
         user.setEmail(userDTO.getEmail());
         user.setPassword(userDTO.getPassword());
         user.setPhoneNum(userDTO.getPhoneNum());
+        user.setGender(userDTO.getGender());
 //        user.setUserImg(userDTO.getUserImg());
         user.setUserJoinDate(LocalDateTime.now()); // 현재 시간으로 설정
         return userRepository.save(user);

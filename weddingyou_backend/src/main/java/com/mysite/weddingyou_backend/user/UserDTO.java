@@ -4,6 +4,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+import com.mysite.weddingyou_backend.user.User.Gender;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,6 +26,9 @@ public class UserDTO {
 	
 //	private byte[] userImg;
 
+	@NotNull
+	private Gender gender;
+	
 	@Pattern(regexp = "^\\d{3}-\\d{3,4}-\\d{4}$")
 	@NotNull
 	private String phoneNum;
