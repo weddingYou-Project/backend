@@ -47,7 +47,7 @@ public class UserController {
 	}
 	
 	//컨트롤러 임시비밀번호 추가 내용
-    @PostMapping("/forgotPassword")
+    @PostMapping("/user/forgotPassword")
     public ResponseEntity<String> forgotPassword(@RequestBody String email) {
         service.sendTemporaryPassword(email);
         return ResponseEntity.ok("임시 비밀번호를 이메일로 전송했습니다.");
