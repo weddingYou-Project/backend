@@ -45,5 +45,13 @@ public class UserController {
 		res = service.updatePassword(userEntity.getEmail(), userEntity.getPassword());
 		return res; //수정이 됐음1, 아니면 0
 	}
+	
+	//컨트롤러 임시비밀번호 추가 내용
+    @PostMapping("/forgotPassword")
+    public ResponseEntity<String> forgotPassword(@RequestBody String email) {
+        service.sendTemporaryPassword(email);
+        return ResponseEntity.ok("임시 비밀번호를 이메일로 전송했습니다.");
+    }
+
 
 }

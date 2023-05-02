@@ -56,4 +56,68 @@ public class UserService {
 	public int updatePassword(String email, String password) {
 		return userRepository.updatePassword(email, password);
 	}
+	
+	//서비스 임시비밀번호 추가내용
+	public void sendTemporaryPassword(String email) {
+	    Optional<UserEntity> optionalUser = userRepository.findByEmail(email);
+	    optionalUser.ifPresent(user -> {
+	        String temporaryPassword = generateTemporaryPassword();
+	        user.setPassword(temporaryPassword);
+	        userRepository.save(user);
+	        sendEmail(email, temporaryPassword);
+	    });
+	    if (!optionalUser.isPresent()) {
+	        throw new IllegalArgumentException("해당 이메일 주소로 등록된 사용자가 없습니다.");
+	    }
+	}
+
+	//임시 비밀번호 생성
+    private String generateTemporaryPassword() {
+        int length = 10; // 임시 비밀번호의 길이 설정
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"; // 임시 비밀번호에 사용될 문자열
+        StringBuilder builder = new StringBuilder(length);
+
+        for (int i = 0; i < length; i++) {
+            int randomIndex = new Random().nextInt(characters.length());
+            char randomCharacter = characters.charAt(randomIndex);
+            builder.append(randomCharacter);
+        }
+
+        return builder.toString();
+    }
+
+    //이메일 전송
+    private void sendEmail(String email, String temporaryPassword) {
+        String host = "smtp.naver.com"; // 메일 서버 호스트
+        String port = "465"; // 메일 서버 포트
+        String senderEmail = "your_email@naver.com"; // 보내는 사람 이메일 주소
+        String senderPassword = "your_password"; // 보내는 사람 이메일 비밀번호
+
+        Properties properties = new Properties();
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+        properties.put("mail.smtp.host", host);
+        properties.put("mail.smtp.port", port);
+        properties.put("mail.smtp.ssl.enable", "true");
+        properties.put("mail.smtp.ssl.trust", "smtp.naver.com");
+
+        Session session = Session.getInstance(properties, new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(senderEmail, senderPassword);
+            }
+        });
+
+        try {
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(senderEmail));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email));
+            message.setSubject("임시 비밀번호 발급 안내");
+            message.setText("임시 비밀번호는 " + temporaryPassword + " 입니다.");
+
+            Transport.send(message);
+        } catch (MessagingException e) {
+            throw new RuntimeException("이메일 전송 중 오류가 발생했습니다.");
+        }
+    }
 }
