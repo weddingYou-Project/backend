@@ -1,7 +1,6 @@
 package com.mysite.weddingyou_backend.user;
 
 import java.time.LocalDateTime;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -38,5 +37,6 @@ public class UserEntity {
 
 	@Column(name = "user_join_date", columnDefinition = "datetime default current_timestamp")
 	private LocalDateTime userJoinDate;
+	
 
 }

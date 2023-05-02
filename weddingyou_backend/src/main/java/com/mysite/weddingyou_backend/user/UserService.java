@@ -3,9 +3,16 @@ package com.mysite.weddingyou_backend.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 import jakarta.transaction.Transactional;
+
 import java.util.Optional;
+import java.util.Random;
+import java.security.MessageDigest;
+import java.util.Properties;
+
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 
 @Service
@@ -34,7 +41,7 @@ public class UserService {
 			//조회 결과가 있음(해당 이메일을 가진 회원 정보가 있다)
 			if(userData.getPassword().equals(userEntity.getPassword())) {
 				//비밀번호 일치
-				return userEntity;
+				return userData;
 			}else {
 				//비밀번호 불일치(로그인 실패)
 				return null;
@@ -45,8 +52,8 @@ public class UserService {
 		}
 	}
 	
+	//비밀번호 변경
 	public int updatePassword(String email, String password) {
 		return userRepository.updatePassword(email, password);
 	}
-
 }

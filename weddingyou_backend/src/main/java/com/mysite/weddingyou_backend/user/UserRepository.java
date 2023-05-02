@@ -22,5 +22,4 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 	@Transactional
 	@Query(value="update user set password = :password where email = :email", nativeQuery=true)
 	public int updatePassword(String email, String password);
-		
 }
