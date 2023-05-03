@@ -1,18 +1,22 @@
 package com.mysite.weddingyou_backend.user;
 
+import java.util.Optional;
+import java.util.Properties;
+import java.util.Random;
+
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
-
-import java.util.Optional;
-import java.util.Random;
-import java.security.MessageDigest;
-import java.util.Properties;
-
-import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 
 
 @Service
@@ -114,7 +118,6 @@ public class UserService {
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email));
             message.setSubject("임시 비밀번호 발급 안내");
             message.setText("임시 비밀번호는 " + temporaryPassword + " 입니다.");
-
             Transport.send(message);
         } catch (MessagingException e) {
             throw new RuntimeException("이메일 전송 중 오류가 발생했습니다.");
