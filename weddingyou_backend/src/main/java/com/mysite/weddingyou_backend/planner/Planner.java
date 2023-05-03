@@ -48,7 +48,7 @@ public class Planner {
     private LocalDateTime plannerJoinDate;
     
     public enum Gender {
-    	MALE,
-    	FEMALE
+    	male,
+    	female
     }
 }
