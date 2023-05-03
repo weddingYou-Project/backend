@@ -1,18 +1,22 @@
 package com.mysite.weddingyou_backend.planner;
 
+import java.util.Optional;
+import java.util.Properties;
+import java.util.Random;
+
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
-
-import java.util.Optional;
-import java.util.Random;
-import java.security.MessageDigest;
-import java.util.Properties;
-
-import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 
 
 @Service
@@ -58,17 +62,22 @@ public class PlannerService {
 	}
 	
 	//서비스 임시비밀번호 추가내용
-	public void sendTemporaryPassword(String email) {
+	public int sendTemporaryPassword(String email) {
+		System.out.println(email); //잘 출력되는지 확인
 	    Optional<PlannerEntity> optionalPlanner = plannerRepository.findByEmail(email);
+	    
+	    if (!optionalPlanner.isPresent()) {
+	        return 0;
+	    }
+	    
 	    optionalPlanner.ifPresent(planner -> {
 	        String temporaryPassword = generateTemporaryPassword();
 	        planner.setPassword(temporaryPassword);
 	        plannerRepository.save(planner);
 	        sendEmail(email, temporaryPassword);
 	    });
-	    if (!optionalPlanner.isPresent()) {
-	        throw new IllegalArgumentException("해당 이메일 주소로 등록된 사용자가 없습니다.");
-	    }
+	    return 1;
+	    
 	}
 
 	//임시 비밀번호 생성
@@ -90,8 +99,8 @@ public class PlannerService {
     private void sendEmail(String email, String temporaryPassword) {
         String host = "smtp.naver.com"; // 메일 서버 호스트
         String port = "465"; // 메일 서버 포트
-        String senderEmail = "your_email@naver.com"; // 보내는 사람 이메일 주소
-        String senderPassword = "your_password"; // 보내는 사람 이메일 비밀번호
+        String senderEmail = "weddingyou502@naver.com"; // 보내는 사람 이메일 주소
+        String senderPassword = "weddingyou502!"; // 보내는 사람 이메일 비밀번호
 
         Properties properties = new Properties();
         properties.put("mail.smtp.auth", "true");
@@ -112,9 +121,8 @@ public class PlannerService {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(senderEmail));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email));
-            message.setSubject("임시 비밀번호 발급 안내");
-            message.setText("임시 비밀번호는 " + temporaryPassword + " 입니다.");
-
+            message.setSubject("웨딩유 임시 비밀번호 발급 안내");
+            message.setText("안녕하세요. 웨딩유 입니다:) 임시 비밀번호는 " + temporaryPassword + " 입니다.");
             Transport.send(message);
         } catch (MessagingException e) {
             throw new RuntimeException("이메일 전송 중 오류가 발생했습니다.");

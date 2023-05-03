@@ -48,9 +48,10 @@ public class PlannerController {
 	
 	//컨트롤러 임시비밀번호 추가 내용
     @PostMapping("/planner/forgotPassword")
-    public ResponseEntity<String> forgotPassword(@RequestBody String email) {
-        service.sendTemporaryPassword(email);
-        return ResponseEntity.ok("임시 비밀번호를 이메일로 전송했습니다.");
+    public int forgotPassword(@RequestBody PlannerEntity plannerEntity) {
+        System.out.println(plannerEntity.getEmail()); //출력 확인
+        int res = service.sendTemporaryPassword(plannerEntity.getEmail());
+        return res;
     }
 
 
