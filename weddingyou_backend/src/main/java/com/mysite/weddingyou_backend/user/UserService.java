@@ -62,17 +62,21 @@ public class UserService {
 	}
 	
 	//서비스 임시비밀번호 추가내용
-	public void sendTemporaryPassword(String email) {
+	public int sendTemporaryPassword(String email) {
+		System.out.println(email); //잘 출력되는지 확인하기 위함
 	    Optional<UserEntity> optionalUser = userRepository.findByEmail(email);
+	    
+	    if (!optionalUser.isPresent()) {
+	        return 0;
+	    }
+	    
 	    optionalUser.ifPresent(user -> {
 	        String temporaryPassword = generateTemporaryPassword();
 	        user.setPassword(temporaryPassword);
 	        userRepository.save(user);
 	        sendEmail(email, temporaryPassword);
 	    });
-	    if (!optionalUser.isPresent()) {
-	        throw new IllegalArgumentException("해당 이메일 주소로 등록된 사용자가 없습니다.");
-	    }
+	    return 1;
 	}
 
 	//임시 비밀번호 생성

@@ -48,10 +48,10 @@ public class UserController {
 	
 	//컨트롤러 임시비밀번호 추가 내용
     @PostMapping("/user/forgotPassword")
-    public ResponseEntity<String> forgotPassword(@RequestBody UserEntity userEntity) {
-    	System.out.println(userEntity.getEmail()); //전송 확인
-        service.sendTemporaryPassword(userEntity.getEmail());
-        return ResponseEntity.ok("임시 비밀번호를 이메일로 전송했습니다.");
+    public int forgotPassword(@RequestBody UserEntity userEntity) {
+    	System.out.println(userEntity.getEmail()); //출력 확인
+        int res = service.sendTemporaryPassword(userEntity.getEmail());
+        return res;
     }
 
 
