@@ -23,8 +23,8 @@ spring:
   mail:
     host: smtp.naver.com
     port: 465
-    username: 네이버 계정 @naver.com
-    password: 네이버 계정 비밀번호
+    username: weddingyou502@naver.com
+    password: weddingyou502!
     properties:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
