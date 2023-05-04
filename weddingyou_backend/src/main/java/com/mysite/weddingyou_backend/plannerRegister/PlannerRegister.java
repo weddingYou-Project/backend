@@ -38,7 +38,7 @@ public class PlannerRegister {
 //    @Column(name = "planner_img")
 //    private byte[] plannerImg;
     
-    @Column(name = "planner_career", nullable = false)
+    @Column(name = "planner_career", nullable = false, columnDefinition = "INT DEFAULT 0")
     private int career;
     
     @Enumerated(EnumType.STRING) // Enum 값을 String 형태로 저장
