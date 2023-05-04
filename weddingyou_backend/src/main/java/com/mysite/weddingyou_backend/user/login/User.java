@@ -1,4 +1,4 @@
-package com.mysite.weddingyou_backend.user;
+package com.mysite.weddingyou_backend.user.login;
 
 import java.time.LocalDateTime;
 import jakarta.persistence.Column;

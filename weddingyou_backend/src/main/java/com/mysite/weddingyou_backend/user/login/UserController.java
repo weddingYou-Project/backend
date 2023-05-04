@@ -1,4 +1,4 @@
-package com.mysite.weddingyou_backend.planner;
+package com.mysite.weddingyou_backend.user.login;
 
 import java.util.Date;
 import java.util.Map;
@@ -18,16 +18,16 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 
 @RestController //데이터를 반환
-public class PlannerController {
+public class UserController {
 	
 	@Autowired
-	PlannerService service;
+	UserService service;
 	
 	//로그인
-	@PostMapping("/planner/login")
-	public Planner login(@RequestBody Planner planner, HttpSession session) { 
-		System.out.println(planner);
-		Planner loginResult = service.login(planner); //loginResult에는 dto가 저장됨
+	@PostMapping("/user/login")
+	public User login(@RequestBody User user, HttpSession session) { 
+		System.out.println(user);
+		User loginResult = service.login(user); //loginResult에는 dto가 저장됨
 		if(loginResult != null) {
 			//로그인 성공
 //			session.setAttribute("loginEmail", loginResult.getEmail());		 
@@ -39,18 +39,18 @@ public class PlannerController {
 	}
 
 	//비밀번호 수정
-	@PostMapping("/planner/updatePassword")
-	public int updatePassword(@RequestBody Planner planner, HttpSession session) { //리액트에서 email과 password란 이름으로 전달하도록
+	@PostMapping("/user/updatePassword") //userDTO에 email과 password를 저장한다고 가정
+	public int updatePassword(@RequestBody User user, HttpSession session) { //리액트에서 email과 password란 이름으로 전달하도록
 		int res = 0;
-		res = service.updatePassword(planner.getEmail(), planner.getPassword());
+		res = service.updatePassword(user.getEmail(), user.getPassword());
 		return res; //수정이 됐음1, 아니면 0
 	}
 	
 	//컨트롤러 임시비밀번호 추가 내용
-    @PostMapping("/planner/forgotPassword")
-    public int forgotPassword(@RequestBody Planner planner) {
-        System.out.println(planner.getEmail()); //출력 확인
-        int res = service.sendTemporaryPassword(planner.getEmail());
+    @PostMapping("/user/forgotPassword")
+    public int forgotPassword(@RequestBody User user) {
+    	System.out.println(user.getEmail()); //출력 확인
+        int res = service.sendTemporaryPassword(user.getEmail());
         return res;
     }
 

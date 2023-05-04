@@ -1,4 +1,4 @@
-package com.mysite.weddingyou_backend.planner;
+package com.mysite.weddingyou_backend.planner.login;
 
 import java.time.LocalDateTime;
 
