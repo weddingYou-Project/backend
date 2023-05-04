@@ -34,8 +34,8 @@ public class UserUpdateDeleteController {
 	 
 	 @PostMapping("/user/userUpdate")
 	    public UserUpdateDelete updateUser(@RequestBody UserUpdateDeleteDTO user) {
-		 UserUpdateDelete searchedUser = service.getUserByEmail(user.getEmail());
-		
+		 UserUpdateDelete searchedUser = service.getUserByEmail(user.getPreemail());
+		 System.out.println("phonenum;" +user.getPhoneNum());
 		 searchedUser.setEmail(user.getEmail());
 		 searchedUser.setPassword(user.getPassword());
 		 searchedUser.setPhoneNum(user.getPhoneNum());

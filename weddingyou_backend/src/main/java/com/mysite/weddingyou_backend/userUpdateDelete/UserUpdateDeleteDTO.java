@@ -32,4 +32,8 @@ public class UserUpdateDeleteDTO {
 	@Pattern(regexp = "^\\d{3}-\\d{3,4}-\\d{4}$")
 	@NotNull
 	private String phoneNum;
+	
+	@Email
+	@NotNull
+	private String preemail;
 }

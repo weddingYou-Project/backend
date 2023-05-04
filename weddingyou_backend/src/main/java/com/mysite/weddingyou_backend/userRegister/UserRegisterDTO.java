@@ -32,4 +32,6 @@ public class UserRegisterDTO {
 	@Pattern(regexp = "^\\d{3}-\\d{3,4}-\\d{4}$")
 	@NotNull
 	private String phoneNum;
+	
+	
 }

@@ -37,7 +37,7 @@ public class PlannerUpdateDeleteController {
 	 //회원 업데이트
 	 @PostMapping("/planner/userUpdate")
 	    public PlannerUpdateDelete updateUser(@RequestBody PlannerUpdateDeleteDTO planner) {
-		 PlannerUpdateDelete searchedPlanner = service.getPlannerByEmail(planner.getEmail());
+		 PlannerUpdateDelete searchedPlanner = service.getPlannerByEmail(planner.getPreemail());
 		 
 		 searchedPlanner.setEmail(planner.getEmail());
 		 searchedPlanner.setPassword(planner.getPassword());
