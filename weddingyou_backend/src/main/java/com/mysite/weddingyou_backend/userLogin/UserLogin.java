@@ -1,4 +1,4 @@
-package com.mysite.weddingyou_backend.user.login;
+package com.mysite.weddingyou_backend.userLogin;
 
 import java.time.LocalDateTime;
 import jakarta.persistence.Column;
@@ -14,7 +14,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @Table(name = "user") //UserEntity클래스를 사용해서 user라는 테이블이 만들어짐
-public class User {
+public class UserLogin {
 	@Id // pk 지정
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_id")

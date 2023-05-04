@@ -1,4 +1,4 @@
-package com.mysite.weddingyou_backend.planner.login;
+package com.mysite.weddingyou_backend.plannerLogin;
 
 import java.time.LocalDateTime;
 
@@ -16,7 +16,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @Table(name = "planner") //PlannerEntity클래스를 사용해서 planner라는 테이블이 만들어짐
-public class Planner {
+public class PlannerLogin {
 	@Id // pk 지정
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "planner_id")

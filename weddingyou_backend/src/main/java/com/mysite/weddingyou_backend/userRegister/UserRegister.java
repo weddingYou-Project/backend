@@ -1,4 +1,4 @@
-package com.mysite.weddingyou_backend.user.register;
+package com.mysite.weddingyou_backend.userRegister;
 
 import java.time.LocalDateTime;
 
@@ -17,7 +17,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "user")
-public class User {
+public class UserRegister {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
