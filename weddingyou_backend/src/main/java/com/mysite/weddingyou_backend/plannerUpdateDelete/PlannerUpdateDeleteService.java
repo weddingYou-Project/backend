@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.mysite.weddingyou_backend.plannerRegister.PlannerRegister;
+import com.mysite.weddingyou_backend.userUpdateDelete.UserUpdateDelete;
 
 import jakarta.transaction.Transactional;
 
@@ -36,6 +37,12 @@ public class PlannerUpdateDeleteService {
 		//repository의 save 메소드 소환
 		plannerRepository.save(planner);
 		// repository의 save 메서드 호출(조건. entity 객체를 넘겨줘야 함)
+	}
+	
+	public void delete(PlannerUpdateDelete planner) {
+		//repository의 delete 메소드 소환
+		plannerRepository.delete(planner);
+		// repository의 delete 메서드 호출(조건. entity 객체를 넘겨줘야 함)
 	}
 	
 	public PlannerUpdateDelete login(PlannerUpdateDelete loginPlannner) {

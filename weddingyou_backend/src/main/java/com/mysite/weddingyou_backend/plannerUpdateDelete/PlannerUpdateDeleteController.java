@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mysite.weddingyou_backend.userUpdateDelete.UserUpdateDelete;
+
 @RestController //데이터를 반환
 public class PlannerUpdateDeleteController {
 	
@@ -19,6 +21,14 @@ public class PlannerUpdateDeleteController {
 	    public ResponseEntity<PlannerUpdateDelete> searchUser(@Valid String email) {
 	        PlannerUpdateDelete searchedPlanner = service.getPlannerByEmail(email);
 	        return ResponseEntity.status(HttpStatus.CREATED).body(searchedPlanner);
+	    }
+	 
+	 //회원 탈퇴
+	 @PostMapping("/planner/plannerDelete")
+	    public ResponseEntity<UserUpdateDelete> deleteUser(@Valid String email) {
+		 PlannerUpdateDelete searchedPlanner = service.getPlannerByEmail(email);
+		service.delete(searchedPlanner);
+		return ResponseEntity.status(HttpStatus.OK).build();
 	    }
 
 

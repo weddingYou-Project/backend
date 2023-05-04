@@ -23,8 +23,8 @@ public class UserUpdateDeleteController {
 
 	 @PostMapping("/user/userDelete")
 	    public ResponseEntity<UserUpdateDelete> deleteUser(@Valid String email) {
-		 UserUpdateDelete searchedPlanner = service.getUserByEmail(email);
-		service.delete(searchedPlanner);
+		 UserUpdateDelete searchedUser = service.getUserByEmail(email);
+		service.delete(searchedUser);
 		return ResponseEntity.status(HttpStatus.OK).build();
 	    }
 
