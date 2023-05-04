@@ -14,7 +14,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @Table(name = "user") //UserEntity클래스를 사용해서 user라는 테이블이 만들어짐
-public class UserEntity {
+public class User {
 	@Id // pk 지정
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_id")

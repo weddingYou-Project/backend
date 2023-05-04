@@ -25,9 +25,9 @@ public class UserController {
 	
 	//로그인
 	@PostMapping("/user/login")
-	public UserEntity login(@RequestBody UserEntity userEntity, HttpSession session) { 
-		System.out.println(userEntity);
-		UserEntity loginResult = service.login(userEntity); //loginResult에는 dto가 저장됨
+	public User login(@RequestBody User user, HttpSession session) { 
+		System.out.println(user);
+		User loginResult = service.login(user); //loginResult에는 dto가 저장됨
 		if(loginResult != null) {
 			//로그인 성공
 //			session.setAttribute("loginEmail", loginResult.getEmail());		 
@@ -40,17 +40,17 @@ public class UserController {
 
 	//비밀번호 수정
 	@PostMapping("/user/updatePassword") //userDTO에 email과 password를 저장한다고 가정
-	public int updatePassword(@RequestBody UserEntity userEntity, HttpSession session) { //리액트에서 email과 password란 이름으로 전달하도록
+	public int updatePassword(@RequestBody User user, HttpSession session) { //리액트에서 email과 password란 이름으로 전달하도록
 		int res = 0;
-		res = service.updatePassword(userEntity.getEmail(), userEntity.getPassword());
+		res = service.updatePassword(user.getEmail(), user.getPassword());
 		return res; //수정이 됐음1, 아니면 0
 	}
 	
 	//컨트롤러 임시비밀번호 추가 내용
     @PostMapping("/user/forgotPassword")
-    public int forgotPassword(@RequestBody UserEntity userEntity) {
-    	System.out.println(userEntity.getEmail()); //출력 확인
-        int res = service.sendTemporaryPassword(userEntity.getEmail());
+    public int forgotPassword(@RequestBody User user) {
+    	System.out.println(user.getEmail()); //출력 확인
+        int res = service.sendTemporaryPassword(user.getEmail());
         return res;
     }
 

@@ -3,6 +3,7 @@ package com.mysite.weddingyou_backend.user;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.Random;
+import java.time.LocalDateTime;
 
 import javax.mail.Authenticator;
 import javax.mail.Message;
@@ -15,8 +16,7 @@ import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
@@ -26,26 +26,26 @@ public class UserService {
 	@Autowired
 	private UserRepository userRepository;
 	
-	public void save(UserEntity userEntity) {
+	public void save(User user) {
 		//repository의 save 메소드 소환
-		userRepository.save(userEntity);
+		userRepository.save(user);
 		// repository의 save 메서드 호출(조건. entity 객체를 넘겨줘야 함)
 	}
 	
-	public UserEntity login(UserEntity userEntity) {
+	public User login(User loginUser) {
 		/*
 		 1. 회원이 입력한 이메일로 DB에서 조회
 		 2. DB에서 조회한 비밀번호와 사용자가 입력한 비밀번호가 일치하는지 판단
 		 */
-		Optional<UserEntity> user = userRepository.findByEmail(userEntity.getEmail());
-		//optional 객체가 되는거임
+		User user = userRepository.findByEmail(loginUser.getEmail());
+		//optional 객체가 되는거임(변경)
 		
-		if(user.isPresent()) {
-			UserEntity userData = user.get(); //get해야지 userentity 객체가 반환되어 저장
+		if(user != null) {
+			//User userData = user.get(); //get해야지 userentity 객체가 반환되어 저장
 			//조회 결과가 있음(해당 이메일을 가진 회원 정보가 있다)
-			if(userData.getPassword().equals(userEntity.getPassword())) {
+			if(user.getPassword().equals(loginUser.getPassword())) {
 				//비밀번호 일치
-				return userData;
+				return user;
 			}else {
 				//비밀번호 불일치(로그인 실패)
 				return null;
@@ -64,18 +64,17 @@ public class UserService {
 	//서비스 임시비밀번호 추가내용
 	public int sendTemporaryPassword(String email) {
 		System.out.println(email); //잘 출력되는지 확인하기 위함
-	    Optional<UserEntity> optionalUser = userRepository.findByEmail(email);
+	    User optionalUser = userRepository.findByEmail(email);
 	    
-	    if (!optionalUser.isPresent()) {
+	    if (optionalUser == null) {
 	        return 0;
 	    }
 	    
-	    optionalUser.ifPresent(user -> {
-	        String temporaryPassword = generateTemporaryPassword();
-	        user.setPassword(temporaryPassword);
-	        userRepository.save(user);
-	        sendEmail(email, temporaryPassword);
-	    });
+	    String temporaryPassword = generateTemporaryPassword();
+	    optionalUser.setPassword(temporaryPassword);
+	    userRepository.save(optionalUser);
+	    sendEmail(email, temporaryPassword);
+	    
 	    return 1;
 	}
 

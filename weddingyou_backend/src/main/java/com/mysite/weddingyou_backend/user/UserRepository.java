@@ -7,15 +7,15 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.mysite.weddingyou_backend.user.UserEntity;
+import com.mysite.weddingyou_backend.user.User;
 
 import jakarta.transaction.Transactional;
 
 
 @Repository
-public interface UserRepository extends JpaRepository<UserEntity, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
 	//이메일로 회원 정보 조회(select * from User where email=?)
-	Optional<UserEntity> findByEmail(String Email); //optional은 null방지..?
+	User findByEmail(String Email); //optional은 null방지..?
 	
 	//insert, update, delete 할때 필요함
 	@Modifying
