@@ -10,17 +10,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class UserController {
-    private final UserService userService;
+public class UserRegisterController {
+    private final UserRegisterService userService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserRegisterController(UserRegisterService userService) {
         this.userService = userService;
     }
 
     @PostMapping("/user/register")
-    public ResponseEntity<User> createUser(@Valid @RequestBody UserDTO userDTO) {
-        User createdUser = userService.createUser(userDTO);
+    public ResponseEntity<UserRegister> createUser(@Valid @RequestBody UserRegisterDTO userDTO) {
+        UserRegister createdUser = userService.createUser(userDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
 }

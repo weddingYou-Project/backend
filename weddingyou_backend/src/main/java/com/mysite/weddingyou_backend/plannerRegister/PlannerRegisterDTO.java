@@ -4,14 +4,14 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-import com.mysite.weddingyou_backend.plannerRegister.Planner.Gender;
+import com.mysite.weddingyou_backend.plannerRegister.PlannerRegister.Gender;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class PlannerDTO {
+public class PlannerRegisterDTO {
 	
 	@NotNull
 	private String name;
