@@ -1,4 +1,4 @@
-package com.mysite.weddingyou_backend.user.login;
+package com.mysite.weddingyou_backend.userLogin;
 
 import java.util.Date;
 import java.util.Map;
