@@ -15,11 +15,12 @@ public class UserUpdateDeleteController {
 	UserUpdateDeleteService service;
 	
 
-	 @PostMapping("user/userSearch")
-		    public ResponseEntity<UserUpdateDelete> searchUser(@Valid String email) {
-		 UserUpdateDelete searchedUser = service.getUserByEmail(email);
-		        return ResponseEntity.status(HttpStatus.CREATED).body(searchedUser);
-		    }
+	 @PostMapping("/user/userSearch")
+	 public UserUpdateDelete searchUser( String email) {
+		 	UserUpdateDelete searchedUser = service.getUserByEmail(email);
+		 	System.out.println("searchedUser: "+searchedUser);
+		    return searchedUser;
+	 }
 
 	 @PostMapping("/user/userDelete")
 	    public ResponseEntity<UserUpdateDelete> deleteUser(@Valid String email) {
