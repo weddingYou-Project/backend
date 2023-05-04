@@ -22,7 +22,7 @@ public class PlannerUpdateDeleteController {
 	 @PostMapping("/planner/plannerSearch")
 	    public PlannerUpdateDelete searchUser(@RequestBody UserUpdateDeleteDTO planner) {
 	        PlannerUpdateDelete searchedPlanner = service.getPlannerByEmail(planner.getEmail());
-	        System.out.println(planner.getGender());
+	        System.out.println("career:" + searchedPlanner.getPlannerCareerYears());
 	        return searchedPlanner;
 	    }
 	 
