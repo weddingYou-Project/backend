@@ -24,7 +24,7 @@ public class PlannerUpdateDelete {
 	@Id // pk 지정
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "planner_id")
-	private int plannerId;
+	private Long plannerId;
 
 	@Column(name = "name", nullable = false)
 	private String name;
@@ -50,10 +50,8 @@ public class PlannerUpdateDelete {
 	@Column(name = "planner_join_date", columnDefinition = "datetime default current_timestamp")
 	private LocalDateTime plannerJoinDate;
 	
-	   public enum Gender {
-	    	male,
-	    	female
-	    }
+	 
+
 	
 
 }

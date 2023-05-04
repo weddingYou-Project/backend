@@ -35,11 +35,18 @@ public class PlannerUpdateDeleteController {
 	    }
 	 
 	 //회원 업데이트
-	 @PostMapping("/planner/plannerUpdate")
-	    public ResponseEntity<PlannerUpdateDelete> updateUser(@RequestBody PlannerUpdateDeleteDTO planner) {
+	 @PostMapping("/planner/userUpdate")
+	    public PlannerUpdateDelete updateUser(@RequestBody PlannerUpdateDeleteDTO planner) {
 		 PlannerUpdateDelete searchedPlanner = service.getPlannerByEmail(planner.getEmail());
+		 
+		 searchedPlanner.setEmail(planner.getEmail());
+		 searchedPlanner.setPassword(planner.getPassword());
+		 searchedPlanner.setPhoneNum(planner.getPhoneNum());
+		 searchedPlanner.setGender(planner.getGender());
+		 searchedPlanner.setPlannerCareerYears(planner.getCareer());
 		service.save(searchedPlanner);
-		return ResponseEntity.status(HttpStatus.OK).build();
+	
+		return searchedPlanner;
 	    }
 
 

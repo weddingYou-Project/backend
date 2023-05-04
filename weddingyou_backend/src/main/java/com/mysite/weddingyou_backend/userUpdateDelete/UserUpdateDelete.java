@@ -1,8 +1,7 @@
 package com.mysite.weddingyou_backend.userUpdateDelete;
+import com.mysite.weddingyou_backend.userRegister.UserRegister.Gender;
 
 import java.time.LocalDateTime;
-
-import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDelete.Gender;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,7 +22,7 @@ public class UserUpdateDelete {
 	@Id // pk 지정
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_id")
-	private int userId;
+	private Long userId;
 
 	@Column(name = "name", nullable = false)
 	private String name;
@@ -46,9 +45,7 @@ public class UserUpdateDelete {
 	@Column(name = "user_join_date", columnDefinition = "datetime default current_timestamp")
 	private LocalDateTime userJoinDate;
 	
-	 public enum Gender {
-	    	male,
-	    	female
-	    }
+	
+	
 
 }

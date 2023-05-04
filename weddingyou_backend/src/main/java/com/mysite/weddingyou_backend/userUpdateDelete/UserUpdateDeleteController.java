@@ -33,10 +33,15 @@ public class UserUpdateDeleteController {
 	    }
 	 
 	 @PostMapping("/user/userUpdate")
-	    public ResponseEntity<UserUpdateDelete> updateUser(@RequestBody UserUpdateDeleteDTO user) {
+	    public UserUpdateDelete updateUser(@RequestBody UserUpdateDeleteDTO user) {
 		 UserUpdateDelete searchedUser = service.getUserByEmail(user.getEmail());
+		
+		 searchedUser.setEmail(user.getEmail());
+		 searchedUser.setPassword(user.getPassword());
+		 searchedUser.setPhoneNum(user.getPhoneNum());
+		 searchedUser.setGender(user.getGender());
 		service.save(searchedUser);
-		return ResponseEntity.status(HttpStatus.OK).build();
+		return searchedUser;
 	    }
 
 }

@@ -30,7 +30,7 @@ public class PlannerUpdateDeleteDTO {
 	private Gender gender;
 	
 	@NotNull
-	private int career;
+	private String career;
 
 	@Pattern(regexp = "^\\d{3}-\\d{3,4}-\\d{4}$")
 	@NotNull
