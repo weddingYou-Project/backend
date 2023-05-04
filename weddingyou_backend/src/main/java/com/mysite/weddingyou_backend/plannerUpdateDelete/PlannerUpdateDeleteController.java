@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mysite.weddingyou_backend.userUpdateDelete.UserUpdateDelete;
+import com.mysite.weddingyou_backend.userUpdateDelete.UserUpdateDeleteDTO;
 
 @RestController //데이터를 반환
 public class PlannerUpdateDeleteController {
@@ -18,9 +20,10 @@ public class PlannerUpdateDeleteController {
 	
 	//회원 조회
 	 @PostMapping("/planner/plannerSearch")
-	    public ResponseEntity<PlannerUpdateDelete> searchUser(@Valid String email) {
-	        PlannerUpdateDelete searchedPlanner = service.getPlannerByEmail(email);
-	        return ResponseEntity.status(HttpStatus.CREATED).body(searchedPlanner);
+	    public PlannerUpdateDelete searchUser(@RequestBody UserUpdateDeleteDTO planner) {
+	        PlannerUpdateDelete searchedPlanner = service.getPlannerByEmail(planner.getEmail());
+	        System.out.println(planner.getGender());
+	        return searchedPlanner;
 	    }
 	 
 	 //회원 탈퇴

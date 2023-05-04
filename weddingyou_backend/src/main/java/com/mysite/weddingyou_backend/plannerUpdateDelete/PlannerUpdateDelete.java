@@ -1,8 +1,13 @@
 package com.mysite.weddingyou_backend.plannerUpdateDelete;
 
 import java.time.LocalDateTime;
+
+import com.mysite.weddingyou_backend.plannerRegister.PlannerRegister.Gender;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -38,9 +43,17 @@ public class PlannerUpdateDelete {
 	
 	@Column(name = "planner_career_years", nullable = false)
 	private String plannerCareerYears;
+	
+	 @Enumerated(EnumType.STRING) // Enum 값을 String 형태로 저장
+	    private Gender gender;
 
 	@Column(name = "planner_join_date", columnDefinition = "datetime default current_timestamp")
 	private LocalDateTime plannerJoinDate;
+	
+	   public enum Gender {
+	    	male,
+	    	female
+	    }
 	
 
 }

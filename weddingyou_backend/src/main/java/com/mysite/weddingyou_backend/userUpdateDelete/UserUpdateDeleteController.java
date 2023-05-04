@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController //데이터를 반환
@@ -16,9 +17,11 @@ public class UserUpdateDeleteController {
 	
 
 	 @PostMapping("/user/userSearch")
-	 public UserUpdateDelete searchUser( String email) {
-		 	UserUpdateDelete searchedUser = service.getUserByEmail(email);
-		 	System.out.println("searchedUser: "+searchedUser);
+	 public UserUpdateDelete searchUser(@RequestBody UserUpdateDeleteDTO user) {
+		 System.out.println(user.getEmail());
+		 
+		 	UserUpdateDelete searchedUser = service.getUserByEmail(user.getEmail());
+		 	System.out.println("searchedUser: "+searchedUser.getPhoneNum());
 		    return searchedUser;
 	 }
 
