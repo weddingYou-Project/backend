@@ -1,10 +1,10 @@
-package com.mysite.weddingyou_backend.user;
+package com.mysite.weddingyou_backend.user.register;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-import com.mysite.weddingyou_backend.user.User.Gender;
+import com.mysite.weddingyou_backend.user.register.User.Gender;
 
 import lombok.Getter;
 import lombok.Setter;

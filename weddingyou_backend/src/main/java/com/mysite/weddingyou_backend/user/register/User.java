@@ -1,4 +1,4 @@
-package com.mysite.weddingyou_backend.user;
+package com.mysite.weddingyou_backend.user.register;
 
 import java.time.LocalDateTime;
 
