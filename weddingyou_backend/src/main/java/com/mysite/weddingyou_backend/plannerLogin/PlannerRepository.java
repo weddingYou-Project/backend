@@ -1,4 +1,4 @@
-package com.mysite.weddingyou_backend.planner.login;
+package com.mysite.weddingyou_backend.plannerLogin;
 
 import java.util.Optional;
 
@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.mysite.weddingyou_backend.planner.login.Planner;
+import com.mysite.weddingyou_backend.plannerLogin.Planner;
 
 import jakarta.transaction.Transactional;
 

@@ -1,9 +1,8 @@
-package com.mysite.weddingyou_backend.user.login;
+package com.mysite.weddingyou_backend.plannerLogin;
 
 import java.util.Optional;
 import java.util.Properties;
 import java.util.Random;
-import java.time.LocalDateTime;
 
 import javax.mail.Authenticator;
 import javax.mail.Message;
@@ -16,36 +15,37 @@ import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import jakarta.transaction.Transactional;
 
 
 @Service
 @Transactional
-public class UserService {
+public class PlannerService {
 	 
 	@Autowired
-	private UserRepository userRepository;
+	private PlannerRepository plannerRepository;
 	
-	public void save(User user) {
+	public void save(Planner planner) {
 		//repository의 save 메소드 소환
-		userRepository.save(user);
+		plannerRepository.save(planner);
 		// repository의 save 메서드 호출(조건. entity 객체를 넘겨줘야 함)
 	}
 	
-	public User login(User loginUser) {
+	public Planner login(Planner loginPlannner) {
 		/*
 		 1. 회원이 입력한 이메일로 DB에서 조회
 		 2. DB에서 조회한 비밀번호와 사용자가 입력한 비밀번호가 일치하는지 판단
 		 */
-		User user = userRepository.findByEmail(loginUser.getEmail());
-		//optional 객체가 되는거임(변경)
+		Planner planner = plannerRepository.findByEmail(loginPlannner.getEmail());
+		//optional 객체가 되는거임
 		
-		if(user != null) {
-			//User userData = user.get(); //get해야지 userentity 객체가 반환되어 저장
+		if(planner != null) {
+			//Planner plannerData = planner.get(); //get해야지 plannerEntity 객체가 반환되어 저장
 			//조회 결과가 있음(해당 이메일을 가진 회원 정보가 있다)
-			if(user.getPassword().equals(loginUser.getPassword())) {
+			if(planner.getPassword().equals(loginPlannner.getPassword())) {
 				//비밀번호 일치
-				return user;
+				return planner;
 			}else {
 				//비밀번호 불일치(로그인 실패)
 				return null;
@@ -58,24 +58,25 @@ public class UserService {
 	
 	//비밀번호 변경
 	public int updatePassword(String email, String password) {
-		return userRepository.updatePassword(email, password);
+		return plannerRepository.updatePassword(email, password);
 	}
 	
 	//서비스 임시비밀번호 추가내용
 	public int sendTemporaryPassword(String email) {
-		System.out.println(email); //잘 출력되는지 확인하기 위함
-	    User optionalUser = userRepository.findByEmail(email);
+		System.out.println(email); //잘 출력되는지 확인
+	    Planner optionalPlanner = plannerRepository.findByEmail(email);
 	    
-	    if (optionalUser == null) {
+	    if (optionalPlanner == null) {
 	        return 0;
 	    }
 	    
 	    String temporaryPassword = generateTemporaryPassword();
-	    optionalUser.setPassword(temporaryPassword);
-	    userRepository.save(optionalUser);
+	    optionalPlanner.setPassword(temporaryPassword);
+	    plannerRepository.save(optionalPlanner);
 	    sendEmail(email, temporaryPassword);
 	    
 	    return 1;
+	    
 	}
 
 	//임시 비밀번호 생성

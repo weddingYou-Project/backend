@@ -1,4 +1,4 @@
-package com.mysite.weddingyou_backend.user.login;
+package com.mysite.weddingyou_backend.userLogin;
 
 import java.util.Optional;
 
@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.mysite.weddingyou_backend.user.login.User;
+import com.mysite.weddingyou_backend.userLogin.User;
 
 import jakarta.transaction.Transactional;
 
