@@ -36,18 +36,24 @@ public class PlannerUpdateDeleteController {
 	 
 	 //회원 업데이트
 	 @PostMapping("/planner/userUpdate")
-	    public PlannerUpdateDelete updateUser(@RequestBody PlannerUpdateDeleteDTO planner) {
+	    public PlannerUpdateDelete updateUser(@RequestBody PlannerUpdateDeleteDTO planner) throws Exception {
+		 System.out.println(planner.getPreemail());
+		 System.out.println(planner.getEmail());
 		 PlannerUpdateDelete searchedPlanner = service.getPlannerByEmail(planner.getPreemail());
-		 
-		 searchedPlanner.setEmail(planner.getEmail());
-		 searchedPlanner.setPassword(planner.getPassword());
-		 searchedPlanner.setPhoneNum(planner.getPhoneNum());
-		 searchedPlanner.setGender(planner.getGender());
-		 searchedPlanner.setPlannerCareerYears(planner.getCareer());
-		service.save(searchedPlanner);
-	
+		 PlannerUpdateDelete emailDuplicatePlanner = service.getPlannerByEmail(planner.getEmail());
+		 if(emailDuplicatePlanner==null) {
+			 searchedPlanner.setEmail(planner.getEmail());
+			 searchedPlanner.setPassword(planner.getPassword());
+			 searchedPlanner.setPhoneNum(planner.getPhoneNum());
+			 searchedPlanner.setGender(planner.getGender());
+			 searchedPlanner.setPlannerCareerYears(planner.getCareer());
+			 service.save(searchedPlanner);
+		 }else {
+			 throw new Exception("이메일이 중복됩니다!");
+		 }
+		
 		return searchedPlanner;
-	    }
+	   }
 
 
 }

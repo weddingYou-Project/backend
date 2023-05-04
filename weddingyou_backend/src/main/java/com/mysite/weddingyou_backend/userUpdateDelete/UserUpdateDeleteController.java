@@ -33,15 +33,23 @@ public class UserUpdateDeleteController {
 	    }
 	 
 	 @PostMapping("/user/userUpdate")
-	    public UserUpdateDelete updateUser(@RequestBody UserUpdateDeleteDTO user) {
+	    public UserUpdateDelete updateUser(@RequestBody UserUpdateDeleteDTO user) throws Exception {
 		 UserUpdateDelete searchedUser = service.getUserByEmail(user.getPreemail());
-		 System.out.println("phonenum;" +user.getPhoneNum());
-		 searchedUser.setEmail(user.getEmail());
-		 searchedUser.setPassword(user.getPassword());
-		 searchedUser.setPhoneNum(user.getPhoneNum());
-		 searchedUser.setGender(user.getGender());
-		service.save(searchedUser);
-		return searchedUser;
+		 UserUpdateDelete emailDuplicateUser = service.getUserByEmail(user.getEmail());
+		 if(emailDuplicateUser==null) {
+			 searchedUser.setEmail(user.getEmail());
+			 searchedUser.setPassword(user.getPassword());
+			 searchedUser.setPhoneNum(user.getPhoneNum());
+			 searchedUser.setGender(user.getGender());
+			service.save(searchedUser);
+		 }else {
+			 throw new Exception("이메일이 중복됩니다!");
+		 }
+		
+		 return searchedUser;
+		
 	    }
+	 
+	 	
 
 }
