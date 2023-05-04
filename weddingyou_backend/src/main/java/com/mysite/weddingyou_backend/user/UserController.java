@@ -25,4 +25,10 @@ public class UserController {
         User createdUser = userService.createUser(userDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
+    
+    @PostMapping("/userSearch")
+    public ResponseEntity<User> searchUser(@Valid String email) {
+        User searchedUser = userService.getUserByEmail(email);
+        return ResponseEntity.status(HttpStatus.CREATED).body(searchedUser);
+    }
 }
