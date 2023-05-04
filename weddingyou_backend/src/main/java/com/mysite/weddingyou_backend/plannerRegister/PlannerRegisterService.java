@@ -8,17 +8,17 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class PlannerService {
+public class PlannerRegisterService {
 
     @Autowired
-    private PlannerRepository plannerRepository;
+    private PlannerRegisterRepository plannerRepository;
 
-    public Planner getPlannerByEmail(String email) {
+    public PlannerRegister getPlannerByEmail(String email) {
         return plannerRepository.findByEmail(email);
     }
 
-    public Planner createPlanner(PlannerDTO plannerDTO) {
-        Planner planner = new Planner();
+    public PlannerRegister createPlanner(PlannerRegisterDTO plannerDTO) {
+        PlannerRegister planner = new PlannerRegister();
         planner.setName(plannerDTO.getName());
         planner.setEmail(plannerDTO.getEmail());
         planner.setPassword(plannerDTO.getPassword());
