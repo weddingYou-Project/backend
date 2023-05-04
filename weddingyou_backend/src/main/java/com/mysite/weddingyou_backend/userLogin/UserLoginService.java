@@ -21,23 +21,23 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class UserService {
+public class UserLoginService {
 	 
 	@Autowired
-	private UserRepository userRepository;
+	private UserLoginRepository userRepository;
 	
-	public void save(User user) {
+	public void save(UserLogin user) {
 		//repository의 save 메소드 소환
 		userRepository.save(user);
 		// repository의 save 메서드 호출(조건. entity 객체를 넘겨줘야 함)
 	}
 	
-	public User login(User loginUser) {
+	public UserLogin login(UserLogin loginUser) {
 		/*
 		 1. 회원이 입력한 이메일로 DB에서 조회
 		 2. DB에서 조회한 비밀번호와 사용자가 입력한 비밀번호가 일치하는지 판단
 		 */
-		User user = userRepository.findByEmail(loginUser.getEmail());
+		UserLogin user = userRepository.findByEmail(loginUser.getEmail());
 		//optional 객체가 되는거임(변경)
 		
 		if(user != null) {
@@ -64,7 +64,7 @@ public class UserService {
 	//서비스 임시비밀번호 추가내용
 	public int sendTemporaryPassword(String email) {
 		System.out.println(email); //잘 출력되는지 확인하기 위함
-	    User optionalUser = userRepository.findByEmail(email);
+	    UserLogin optionalUser = userRepository.findByEmail(email);
 	    
 	    if (optionalUser == null) {
 	        return 0;
