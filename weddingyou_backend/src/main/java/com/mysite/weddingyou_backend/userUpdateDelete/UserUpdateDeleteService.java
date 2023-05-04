@@ -39,6 +39,12 @@ public class UserUpdateDeleteService {
 		// repository의 save 메서드 호출(조건. entity 객체를 넘겨줘야 함)
 	}
 	
+	public void delete(UserUpdateDelete user) {
+		//repository의 delete 메소드 소환
+		userRepository.delete(user);
+		// repository의 delete 메서드 호출(조건. entity 객체를 넘겨줘야 함)
+	}
+	
 	public UserUpdateDelete login(UserUpdateDelete loginUser) {
 		/*
 		 1. 회원이 입력한 이메일로 DB에서 조회
