@@ -1,4 +1,4 @@
-package com.mysite.weddingyou_backend.planner.register;
+package com.mysite.weddingyou_backend.plannerRegister;
 
 import javax.validation.Valid;
 

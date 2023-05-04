@@ -1,4 +1,4 @@
-package com.mysite.weddingyou_backend.planner.register;
+package com.mysite.weddingyou_backend.plannerRegister;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
