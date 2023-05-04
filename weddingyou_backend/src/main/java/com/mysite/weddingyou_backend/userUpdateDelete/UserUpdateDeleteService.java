@@ -18,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDelete;
+
 
 @Service
 @Transactional
@@ -25,6 +27,11 @@ public class UserUpdateDeleteService {
 	 
 	@Autowired
 	private UserUpdateDeleteRepository userRepository;
+	
+	public UserUpdateDelete getUserByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+	
 	
 	public void save(UserUpdateDelete user) {
 		//repository의 save 메소드 소환
