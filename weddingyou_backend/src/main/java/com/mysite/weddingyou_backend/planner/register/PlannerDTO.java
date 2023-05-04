@@ -1,10 +1,10 @@
-package com.mysite.weddingyou_backend.planner;
+package com.mysite.weddingyou_backend.planner.register;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-import com.mysite.weddingyou_backend.planner.Planner.Gender;
+import com.mysite.weddingyou_backend.planner.register.Planner.Gender;
 
 import lombok.Getter;
 import lombok.Setter;

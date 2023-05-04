@@ -1,4 +1,4 @@
-package com.mysite.weddingyou_backend.planner;
+package com.mysite.weddingyou_backend.planner.register;
 
 import javax.validation.Valid;
 
@@ -7,13 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mysite.weddingyou_backend.user.User;
-
 @RestController
-@RequestMapping("/planner")
 public class PlannerController {
     private final PlannerService plannerService;
 
@@ -22,15 +18,9 @@ public class PlannerController {
         this.plannerService = plannerService;
     }
 
-    @PostMapping("/plannerRegister")
+    @PostMapping("/planner/register")
     public ResponseEntity<Planner> createPlanner(@Valid @RequestBody PlannerDTO plannerDTO) {
         Planner createdPlanner = plannerService.createPlanner(plannerDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdPlanner);
-    }
-    
-    @PostMapping("/plannerSearch")
-    public ResponseEntity<Planner> searchUser(@Valid String email) {
-        Planner searchedPlanner = plannerService.getPlannerByEmail(email);
-        return ResponseEntity.status(HttpStatus.CREATED).body(searchedPlanner);
     }
 }

@@ -1,4 +1,4 @@
-package com.mysite.weddingyou_backend.planner;
+package com.mysite.weddingyou_backend.planner.register;
 
 import java.time.LocalDateTime;
 
@@ -21,7 +21,7 @@ public class Planner {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "planner_id")
-    private int plannerId;
+    private Long plannerId;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -48,7 +48,7 @@ public class Planner {
     private LocalDateTime plannerJoinDate;
     
     public enum Gender {
-    	MALE,
-    	FEMALE
+    	male,
+    	female
     }
 }

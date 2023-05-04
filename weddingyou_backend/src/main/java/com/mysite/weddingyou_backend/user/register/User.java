@@ -1,4 +1,4 @@
-package com.mysite.weddingyou_backend.user;
+package com.mysite.weddingyou_backend.user.register;
 
 import java.time.LocalDateTime;
 
@@ -21,7 +21,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private int userId;
+    private Long userId;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -46,8 +46,8 @@ public class User {
     
     
     public enum Gender {
-    	MALE,
-    	FEMALE
+    	male,
+    	female
     }
 }
 
