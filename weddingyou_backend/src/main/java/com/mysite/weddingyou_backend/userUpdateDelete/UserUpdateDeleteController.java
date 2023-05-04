@@ -15,7 +15,7 @@ public class UserUpdateDeleteController {
 	UserUpdateDeleteService service;
 	
 
-	 @PostMapping("/userSearch")
+	 @PostMapping("user/userSearch")
 		    public ResponseEntity<UserUpdateDelete> searchUser(@Valid String email) {
 		 UserUpdateDelete searchedUser = service.getUserByEmail(email);
 		        return ResponseEntity.status(HttpStatus.CREATED).body(searchedUser);

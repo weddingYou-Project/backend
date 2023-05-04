@@ -15,7 +15,7 @@ public class PlannerUpdateDeleteController {
 	PlannerUpdateDeleteService service;
 	
 	//회원 조회
-	 @PostMapping("/plannerSearch")
+	 @PostMapping("planner/plannerSearch")
 	    public ResponseEntity<PlannerUpdateDelete> searchUser(@Valid String email) {
 	        PlannerUpdateDelete searchedPlanner = service.getPlannerByEmail(email);
 	        return ResponseEntity.status(HttpStatus.CREATED).body(searchedPlanner);
