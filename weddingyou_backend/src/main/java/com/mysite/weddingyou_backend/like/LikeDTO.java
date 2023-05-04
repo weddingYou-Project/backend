@@ -3,7 +3,7 @@ package com.mysite.weddingyou_backend.like;
 import javax.validation.constraints.NotNull;
 
 import com.mysite.weddingyou_backend.item.ItemDTO;
-import com.mysite.weddingyou_backend.user.UserDTO;
+import com.mysite.weddingyou_backend.userRegister.UserRegisterDTO;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +16,7 @@ public class LikeDTO {
 	private int likeId;
 	
 	@NotNull
-	private UserDTO user;
+	private UserRegisterDTO user;
 	
 	@NotNull
 	private ItemDTO item;

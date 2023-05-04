@@ -1,7 +1,7 @@
 package com.mysite.weddingyou_backend.like;
 
 import com.mysite.weddingyou_backend.item.Item;
-import com.mysite.weddingyou_backend.user.User;
+import com.mysite.weddingyou_backend.userRegister.UserRegister;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.FetchType;
@@ -19,7 +19,7 @@ public class Like {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User user;
+    private UserRegister user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")

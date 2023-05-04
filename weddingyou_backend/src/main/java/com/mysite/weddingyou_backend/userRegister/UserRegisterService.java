@@ -1,4 +1,4 @@
-package com.mysite.weddingyou_backend.user;
+package com.mysite.weddingyou_backend.userRegister;
 
 import java.time.LocalDateTime;
 
@@ -8,17 +8,17 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class UserService {
+public class UserRegisterService {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserRegisterRepository userRepository;
 
-    public User getUserByEmail(String email) {
+    public UserRegister getUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
-    public User createUser(UserDTO userDTO) {
-        User user = new User();
+    public UserRegister createUser(UserRegisterDTO userDTO) {
+        UserRegister user = new UserRegister();
         user.setName(userDTO.getName());
         user.setEmail(userDTO.getEmail());
         user.setPassword(userDTO.getPassword());

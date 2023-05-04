@@ -1,4 +1,4 @@
-package com.mysite.weddingyou_backend.planner;
+package com.mysite.weddingyou_backend.plannerRegister;
 
 import java.time.LocalDateTime;
 
@@ -17,11 +17,11 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "planner")
-public class Planner {
+public class PlannerRegister {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "planner_id")
-    private int plannerId;
+    private Long plannerId;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -38,17 +38,17 @@ public class Planner {
 //    @Column(name = "planner_img")
 //    private byte[] plannerImg;
     
-    @Column(name = "planner_career", nullable = false)
+    @Column(name = "planner_career_years", nullable = false, columnDefinition = "INT DEFAULT 0")
     private int career;
     
     @Enumerated(EnumType.STRING) // Enum 값을 String 형태로 저장
     private Gender gender;
 
-    @Column(name = "planner_join_date", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", nullable = false)
+    @Column(name = "planner_join_date", nullable = false)
     private LocalDateTime plannerJoinDate;
     
     public enum Gender {
-    	MALE,
-    	FEMALE
+    	male,
+    	female
     }
 }

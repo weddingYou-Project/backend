@@ -1,4 +1,4 @@
-package com.mysite.weddingyou_backend.user;
+package com.mysite.weddingyou_backend.userRegister;
 
 import javax.validation.Valid;
 
@@ -7,22 +7,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/user")
-public class UserController {
-    private final UserService userService;
+public class UserRegisterController {
+    private final UserRegisterService userService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserRegisterController(UserRegisterService userService) {
         this.userService = userService;
     }
 
-    @PostMapping("/userRegister")
-    public ResponseEntity<User> createUser(@Valid @RequestBody UserDTO userDTO) {
-        User createdUser = userService.createUser(userDTO);
+    @PostMapping("/user/register")
+    public ResponseEntity<UserRegister> createUser(@Valid @RequestBody UserRegisterDTO userDTO) {
+        UserRegister createdUser = userService.createUser(userDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
 }

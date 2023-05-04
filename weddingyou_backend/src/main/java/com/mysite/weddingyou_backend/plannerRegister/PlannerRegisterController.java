@@ -1,4 +1,4 @@
-package com.mysite.weddingyou_backend.planner;
+package com.mysite.weddingyou_backend.plannerRegister;
 
 import javax.validation.Valid;
 
@@ -7,22 +7,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/planner")
-public class PlannerController {
-    private final PlannerService plannerService;
+public class PlannerRegisterController {
+    private final PlannerRegisterService plannerService;
 
     @Autowired
-    public PlannerController(PlannerService plannerService) {
+    public PlannerRegisterController(PlannerRegisterService plannerService) {
         this.plannerService = plannerService;
     }
 
-    @PostMapping("/plannerRegister")
-    public ResponseEntity<Planner> createPlanner(@Valid @RequestBody PlannerDTO plannerDTO) {
-        Planner createdPlanner = plannerService.createPlanner(plannerDTO);
+    @PostMapping("/planner/register")
+    public ResponseEntity<PlannerRegister> createPlanner(@Valid @RequestBody PlannerRegisterDTO plannerDTO) {
+        PlannerRegister createdPlanner = plannerService.createPlanner(plannerDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdPlanner);
     }
 }
