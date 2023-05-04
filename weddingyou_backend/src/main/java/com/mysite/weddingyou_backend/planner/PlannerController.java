@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mysite.weddingyou_backend.user.User;
+
 @RestController
 @RequestMapping("/planner")
 public class PlannerController {
@@ -24,5 +26,11 @@ public class PlannerController {
     public ResponseEntity<Planner> createPlanner(@Valid @RequestBody PlannerDTO plannerDTO) {
         Planner createdPlanner = plannerService.createPlanner(plannerDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdPlanner);
+    }
+    
+    @PostMapping("/plannerSearch")
+    public ResponseEntity<Planner> searchUser(@Valid String email) {
+        Planner searchedPlanner = plannerService.getPlannerByEmail(email);
+        return ResponseEntity.status(HttpStatus.CREATED).body(searchedPlanner);
     }
 }
