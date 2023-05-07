@@ -37,7 +37,7 @@ public class UserUpdateDelete {
 	private String phoneNum;
 
 	@Column(name = "user_img", nullable = true)
-	private byte[] userImg;
+	private String userImg;
 	
 	 @Enumerated(EnumType.STRING) // Enum 값을 String 형태로 저장
 	    private Gender gender;

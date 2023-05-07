@@ -1,13 +1,17 @@
 package com.mysite.weddingyou_backend.userUpdateDelete;
 
-import javax.validation.Valid;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController //데이터를 반환
 public class UserUpdateDeleteController {
@@ -49,6 +53,20 @@ public class UserUpdateDeleteController {
 		 return searchedUser;
 		
 	    }
+	 
+	 @PostMapping("/user/profileImg")
+	 public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("useremail") String email) {
+		    try {	
+		    	UserUpdateDelete searchedUser = service.getUserByEmail(email);
+		        Files.copy(file.getInputStream(), Paths.get("uploads", file.getOriginalFilename())); //request에서 들어온 파일을 uploads 라는 경로에 originalfilename을 String 으로 올림
+		        searchedUser.setUserImg(file.getOriginalFilename()); //searchedUser에다가 이미지 파일 이름 저장
+		        service.save(searchedUser); // 이미지파일이름 데이터베이스에 업데이트함
+		        return ResponseEntity.ok().build();
+		    } catch (IOException e) {
+		        e.printStackTrace();
+		        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		    }
+		}
 	 
 	 	
 
