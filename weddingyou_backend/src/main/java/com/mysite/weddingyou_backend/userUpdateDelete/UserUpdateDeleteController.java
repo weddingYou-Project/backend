@@ -36,7 +36,7 @@ public class UserUpdateDeleteController {
 	    public UserUpdateDelete updateUser(@RequestBody UserUpdateDeleteDTO user) throws Exception {
 		 UserUpdateDelete searchedUser = service.getUserByEmail(user.getPreemail());
 		 UserUpdateDelete emailDuplicateUser = service.getUserByEmail(user.getEmail());
-		 if(emailDuplicateUser==null) {
+		 if(user.getPreemail().equals(user.getEmail()) || emailDuplicateUser==null) {
 			 searchedUser.setEmail(user.getEmail());
 			 searchedUser.setPassword(user.getPassword());
 			 searchedUser.setPhoneNum(user.getPhoneNum());

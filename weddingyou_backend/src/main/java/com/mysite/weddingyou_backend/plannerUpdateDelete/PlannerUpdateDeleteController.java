@@ -41,7 +41,7 @@ public class PlannerUpdateDeleteController {
 		 System.out.println(planner.getEmail());
 		 PlannerUpdateDelete searchedPlanner = service.getPlannerByEmail(planner.getPreemail());
 		 PlannerUpdateDelete emailDuplicatePlanner = service.getPlannerByEmail(planner.getEmail());
-		 if(emailDuplicatePlanner==null) {
+		 if(planner.getPreemail().equals(planner.getEmail())||emailDuplicatePlanner==null) {
 			 searchedPlanner.setEmail(planner.getEmail());
 			 searchedPlanner.setPassword(planner.getPassword());
 			 searchedPlanner.setPhoneNum(planner.getPhoneNum());
