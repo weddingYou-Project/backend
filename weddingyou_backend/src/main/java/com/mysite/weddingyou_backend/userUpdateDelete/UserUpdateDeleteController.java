@@ -5,14 +5,15 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,7 +30,6 @@ public class UserUpdateDeleteController {
 		 System.out.println(user.getEmail());
 		 
 		 	UserUpdateDelete searchedUser = service.getUserByEmail(user.getEmail());
-		 	System.out.println("searchedUser: "+searchedUser.getPhoneNum());
 		    return searchedUser;
 	 }
 
@@ -74,8 +74,10 @@ public class UserUpdateDeleteController {
 		    			e.getStackTrace();
 		    		}
 		    	}
-		        Files.copy(file.getInputStream(), Paths.get("C:/Project/profileImg/", file.getOriginalFilename())); //request에서 들어온 파일을 uploads 라는 경로에 originalfilename을 String 으로 올림
+		    	
+		        Files.copy(file.getInputStream(), Paths.get("C:/Project/profileImg/", file.getOriginalFilename()),StandardCopyOption.REPLACE_EXISTING); //request에서 들어온 파일을 uploads 라는 경로에 originalfilename을 String 으로 올림
 		        searchedUser.setUserImg(file.getOriginalFilename()); //searchedUser에다가 이미지 파일 이름 저장
+		      //  searchedUser.setUserImgUrl(file);
 		        service.save(searchedUser); // 이미지파일이름 데이터베이스에 업데이트함
 		        System.out.println(searchedUser.getUserImg());
 		        return ResponseEntity.ok().build();
@@ -85,9 +87,10 @@ public class UserUpdateDeleteController {
 		    }
 		}
 	 
-	 @GetMapping("/user/getprofileImg")
-	 public ResponseEntity<byte[]> getImage(@RequestParam("useremail") String email) {
-		 UserUpdateDelete searchedUser = service.getUserByEmail(email);
+	 @RequestMapping("/user/getprofileImg")
+	 public ResponseEntity<byte[]> getImage(@RequestBody UserUpdateDeleteDTO user) {
+		 System.out.println(user.getEmail());
+		 UserUpdateDelete searchedUser = service.getUserByEmail(user.getEmail());
 	     if (searchedUser != null) {
 	         Path imagePath = Paths.get(searchedUser.getUserImg());
 	         try {

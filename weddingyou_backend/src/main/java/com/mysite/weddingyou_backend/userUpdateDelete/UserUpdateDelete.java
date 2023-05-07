@@ -39,6 +39,7 @@ public class UserUpdateDelete {
 	@Column(name = "user_img", nullable = true)
 	private String userImg;
 	
+	
 	 @Enumerated(EnumType.STRING) // Enum 값을 String 형태로 저장
 	    private Gender gender;
 
