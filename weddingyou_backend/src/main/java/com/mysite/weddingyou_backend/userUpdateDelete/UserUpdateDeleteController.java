@@ -1,12 +1,16 @@
 package com.mysite.weddingyou_backend.userUpdateDelete;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -54,19 +58,49 @@ public class UserUpdateDeleteController {
 		
 	    }
 	 
-	 @PostMapping("/user/profileImg")
+	 @PostMapping("/user/updateprofileImg")
 	 public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("useremail") String email) {
 		    try {	
 		    	UserUpdateDelete searchedUser = service.getUserByEmail(email);
-		        Files.copy(file.getInputStream(), Paths.get("uploads", file.getOriginalFilename())); //request에서 들어온 파일을 uploads 라는 경로에 originalfilename을 String 으로 올림
+		    	System.out.println(file.getContentType());
+		    	System.out.println(file.getOriginalFilename());
+		    	System.out.println(email);
+		    	String path = "C:\\Project\\profileImg";
+		    	File folder = new File(path);
+		    	if(!folder.exists()) {
+		    		try {
+		    			folder.mkdir();
+		    		}catch(Exception e) {
+		    			e.getStackTrace();
+		    		}
+		    	}
+		        Files.copy(file.getInputStream(), Paths.get("C:/Project/profileImg/", file.getOriginalFilename())); //request에서 들어온 파일을 uploads 라는 경로에 originalfilename을 String 으로 올림
 		        searchedUser.setUserImg(file.getOriginalFilename()); //searchedUser에다가 이미지 파일 이름 저장
 		        service.save(searchedUser); // 이미지파일이름 데이터베이스에 업데이트함
+		        System.out.println(searchedUser.getUserImg());
 		        return ResponseEntity.ok().build();
 		    } catch (IOException e) {
 		        e.printStackTrace();
 		        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		    }
 		}
+	 
+	 @GetMapping("/user/getprofileImg")
+	 public ResponseEntity<byte[]> getImage(@RequestParam("useremail") String email) {
+		 UserUpdateDelete searchedUser = service.getUserByEmail(email);
+	     if (searchedUser != null) {
+	         Path imagePath = Paths.get(searchedUser.getUserImg());
+	         try {
+	             byte[] imageBytes = Files.readAllBytes(imagePath);
+	             return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
+	         } catch (IOException e) {
+	             e.printStackTrace();
+	             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	         }
+	     } else {
+	         return ResponseEntity.notFound().build();
+	     }
+	 }
 	 
 	 	
 
