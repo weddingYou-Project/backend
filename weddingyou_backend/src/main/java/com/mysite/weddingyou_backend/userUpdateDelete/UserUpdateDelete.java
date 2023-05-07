@@ -1,7 +1,8 @@
 package com.mysite.weddingyou_backend.userUpdateDelete;
-import com.mysite.weddingyou_backend.userRegister.UserRegister.Gender;
-
+import java.sql.Blob;
 import java.time.LocalDateTime;
+
+import com.mysite.weddingyou_backend.userRegister.UserRegister.Gender;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -38,7 +39,6 @@ public class UserUpdateDelete {
 
 	@Column(name = "user_img", nullable = true)
 	private String userImg;
-	
 	
 	 @Enumerated(EnumType.STRING) // Enum 값을 String 형태로 저장
 	    private Gender gender;

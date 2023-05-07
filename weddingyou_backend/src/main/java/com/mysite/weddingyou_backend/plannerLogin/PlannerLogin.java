@@ -35,7 +35,7 @@ public class PlannerLogin {
 	private String phoneNum;
 
 	@Column(name = "planner_img", nullable = true)
-	private byte[] plannerImg;
+	private String plannerImg;
 	
 	@Column(name = "planner_career_years", nullable = false)
 	private String plannerCareerYears;

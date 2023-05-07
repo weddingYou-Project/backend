@@ -1,13 +1,26 @@
 package com.mysite.weddingyou_backend.plannerUpdateDelete;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.Base64;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.mysite.weddingyou_backend.userUpdateDelete.UserUpdateDelete;
 import com.mysite.weddingyou_backend.userUpdateDelete.UserUpdateDeleteDTO;
@@ -54,6 +67,56 @@ public class PlannerUpdateDeleteController {
 		
 		return searchedPlanner;
 	   }
-
+	 @PostMapping("/planner/updateprofileImg")
+	 public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("useremail") String email) {
+		    try {	
+		    	PlannerUpdateDelete searchedPlanner = service.getPlannerByEmail(email);
+		    	String path = "C:\\Project\\profileImg\\planner";
+		    	File folder = new File(path);
+		    	if(!folder.exists()) {
+		    		try {
+		    			folder.mkdir();
+		    		}catch(Exception e) {
+		    			e.getStackTrace();
+		    		}
+		    	}
+		    	
+		        Files.copy(file.getInputStream(), Paths.get("C:/Project/profileImg/planner", file.getOriginalFilename()),StandardCopyOption.REPLACE_EXISTING); //request에서 들어온 파일을 uploads 라는 경로에 originalfilename을 String 으로 올림
+		        System.out.println(file.getInputStream());
+		        searchedPlanner.setPlannerImg(file.getOriginalFilename()); //searchedPlanner에다가 이미지 파일 이름 저장
+		        service.save(searchedPlanner); // 이미지파일이름 데이터베이스에 업데이트함
+		        System.out.println(searchedPlanner.getPlannerImg());
+		        return ResponseEntity.ok().build();
+		    } catch (IOException e) {
+		        e.printStackTrace();
+		        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		    }
+		}
+	
+	 
+	 @RequestMapping(value="/planner/getprofileImg",  produces = MediaType.IMAGE_JPEG_VALUE)
+	 public ResponseEntity<byte[]> getImage(@RequestBody UserUpdateDeleteDTO user) {
+		 System.out.println("유저이메일: " + user.getEmail());
+		 PlannerUpdateDelete searchedPlanner = service.getPlannerByEmail(user.getEmail());
+	     if (searchedPlanner != null) {
+	         Path imagePath = Paths.get("C:/Project/profileImg/planner",searchedPlanner.getPlannerImg());
+	         
+	         try {
+	             byte[] imageBytes = Files.readAllBytes(imagePath);
+	             byte[] base64encodedData = Base64.getEncoder().encode(imageBytes);
+	              return ResponseEntity.ok()
+	                      .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + 
+	                    		  searchedPlanner.getPlannerImg() + "\"")
+	                      .body(base64encodedData);
+	         } catch (IOException e) {
+	             e.printStackTrace();
+	             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	         }
+	      
+	     } else {
+	         return ResponseEntity.notFound().build();
+	     }
+	 }
+	 
 
 }

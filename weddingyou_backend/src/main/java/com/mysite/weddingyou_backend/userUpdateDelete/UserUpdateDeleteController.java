@@ -6,8 +6,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Base64;
+
+import javax.tools.FileObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -62,10 +66,7 @@ public class UserUpdateDeleteController {
 	 public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("useremail") String email) {
 		    try {	
 		    	UserUpdateDelete searchedUser = service.getUserByEmail(email);
-		    	System.out.println(file.getContentType());
-		    	System.out.println(file.getOriginalFilename());
-		    	System.out.println(email);
-		    	String path = "C:\\Project\\profileImg";
+		    	String path = "C:\\Project\\profileImg\\user";
 		    	File folder = new File(path);
 		    	if(!folder.exists()) {
 		    		try {
@@ -75,9 +76,10 @@ public class UserUpdateDeleteController {
 		    		}
 		    	}
 		    	
-		        Files.copy(file.getInputStream(), Paths.get("C:/Project/profileImg/", file.getOriginalFilename()),StandardCopyOption.REPLACE_EXISTING); //request에서 들어온 파일을 uploads 라는 경로에 originalfilename을 String 으로 올림
+		        Files.copy(file.getInputStream(), Paths.get("C:/Project/profileImg/user", file.getOriginalFilename()),StandardCopyOption.REPLACE_EXISTING); //request에서 들어온 파일을 uploads 라는 경로에 originalfilename을 String 으로 올림
+		        System.out.println(file.getInputStream());
 		        searchedUser.setUserImg(file.getOriginalFilename()); //searchedUser에다가 이미지 파일 이름 저장
-		      //  searchedUser.setUserImgUrl(file);
+		        //searchedUser.setUserImgUrl((Blob) file);
 		        service.save(searchedUser); // 이미지파일이름 데이터베이스에 업데이트함
 		        System.out.println(searchedUser.getUserImg());
 		        return ResponseEntity.ok().build();
@@ -86,20 +88,27 @@ public class UserUpdateDeleteController {
 		        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		    }
 		}
+	
 	 
-	 @RequestMapping("/user/getprofileImg")
+	 @RequestMapping(value="/user/getprofileImg",  produces = MediaType.IMAGE_JPEG_VALUE)
 	 public ResponseEntity<byte[]> getImage(@RequestBody UserUpdateDeleteDTO user) {
-		 System.out.println(user.getEmail());
+		 System.out.println("유저이메일: " + user.getEmail());
 		 UserUpdateDelete searchedUser = service.getUserByEmail(user.getEmail());
 	     if (searchedUser != null) {
-	         Path imagePath = Paths.get(searchedUser.getUserImg());
+	         Path imagePath = Paths.get("C:/Project/profileImg/user",searchedUser.getUserImg());
+
 	         try {
 	             byte[] imageBytes = Files.readAllBytes(imagePath);
-	             return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
+	             byte[] base64encodedData = Base64.getEncoder().encode(imageBytes);
+	              return ResponseEntity.ok()
+	                      .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + 
+	                    		  searchedUser.getUserImg() + "\"")
+	                      .body(base64encodedData);
 	         } catch (IOException e) {
 	             e.printStackTrace();
 	             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	         }
+	 
 	     } else {
 	         return ResponseEntity.notFound().build();
 	     }
