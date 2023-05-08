@@ -1,0 +1,65 @@
+package com.mysite.weddingyou_backend.like;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.mysite.weddingyou_backend.item.ItemService;
+import com.mysite.weddingyou_backend.userLogin.UserLogin;
+import com.mysite.weddingyou_backend.userLogin.UserLoginService;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+
+@RestController
+@RequestMapping("/like")
+public class LikeController {
+	
+	@Autowired
+	LikeService likeService;
+	
+	@Autowired
+	private UserLoginService userService;
+
+	@Autowired
+	private ItemService itemService;
+	
+	//찜목록 조회
+	@GetMapping("/list")
+    public List<LikeEntity> getLikeList(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        UserLogin loggedInUser = (UserLogin) session.getAttribute("loggedInUser");
+        List<LikeEntity> likeList = likeService.getLikeList(loggedInUser.getUserId());
+        return likeList;
+    }
+	
+	//좋아요 생성
+	@PostMapping("/create")
+	public ResponseEntity<Void> createLike(@RequestParam int itemId, HttpServletRequest request) {
+	    HttpSession session = request.getSession();
+	    UserLogin loggedInUser = (UserLogin) session.getAttribute("loggedInUser");
+
+	    LikeEntity likeEntity = new LikeEntity();
+	    //likeEntity.setUser(userService.getUserById(loggedInUser.getUserId()));
+	    likeEntity.setItemId(itemService.getItemById(itemId));
+
+	    likeService.addLike(likeEntity);
+	    return ResponseEntity.ok().build();
+	}
+	
+	//좋아요 삭제
+	@DeleteMapping("/delete/{likeId}")
+	public ResponseEntity<Void> deleteLike(@PathVariable Long likeId) {
+		likeService.deleteLike(likeId);
+		return ResponseEntity.ok().build();
+	}
+
+}

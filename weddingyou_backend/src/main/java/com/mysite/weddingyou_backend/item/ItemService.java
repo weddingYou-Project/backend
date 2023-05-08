@@ -1,6 +1,7 @@
 package com.mysite.weddingyou_backend.item;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,12 @@ public class ItemService {
 	public List<ItemEntity> searchItems(String keyword) {
 		keyword = keyword.toLowerCase(); // 검색어를 소문자로 변환
         return itemRepository.findByNameContaining(keyword);
+    }
+	
+	// 상품 아이디로 상품 가져오기
+    public ItemEntity getItemById(int id) {
+        Optional<ItemEntity> item = itemRepository.findById(id);
+        return item.orElse(null);
     }
 
 }
