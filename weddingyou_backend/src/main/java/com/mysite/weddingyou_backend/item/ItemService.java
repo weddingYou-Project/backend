@@ -20,6 +20,7 @@ public class ItemService {
 	
 	//검색
 	public List<ItemEntity> searchItems(String keyword) {
+		keyword = keyword.toLowerCase(); // 검색어를 소문자로 변환
         return itemRepository.findByNameContaining(keyword);
     }
 
