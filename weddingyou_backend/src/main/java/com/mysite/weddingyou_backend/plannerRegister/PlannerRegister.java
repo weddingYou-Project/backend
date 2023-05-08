@@ -38,13 +38,13 @@ public class PlannerRegister {
 //    @Column(name = "planner_img")
 //    private byte[] plannerImg;
     
-    @Column(name = "planner_career_years", nullable = false, columnDefinition = "INT DEFAULT 0")
+    @Column(name = "planner_career", nullable = false)
     private int career;
     
     @Enumerated(EnumType.STRING) // Enum 값을 String 형태로 저장
     private Gender gender;
 
-    @Column(name = "planner_join_date", nullable = false)
+    @Column(name = "planner_join_date", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", nullable = false)
     private LocalDateTime plannerJoinDate;
     
     public enum Gender {
