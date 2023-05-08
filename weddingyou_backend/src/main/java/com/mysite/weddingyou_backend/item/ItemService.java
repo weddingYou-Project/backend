@@ -17,5 +17,10 @@ public class ItemService {
 	public List<ItemEntity> getAllItems() {
 	    return itemRepository.findAll();
 	}
+	
+	//검색
+	public List<ItemEntity> searchItems(String keyword) {
+        return itemRepository.findByNameContaining(keyword);
+    }
 
 }
