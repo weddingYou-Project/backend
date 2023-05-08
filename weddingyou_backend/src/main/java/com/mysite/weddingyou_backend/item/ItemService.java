@@ -18,6 +18,11 @@ public class ItemService {
 	    return itemRepository.findAll();
 	}
 	
+	// 카테고리별 상품 리스트 반환
+    public List<ItemEntity> getItemsByCategory(String category) {
+        return itemRepository.findByCategory(category);
+    }
+	
 	//검색
 	public List<ItemEntity> searchItems(String keyword) {
 		keyword = keyword.toLowerCase(); // 검색어를 소문자로 변환
