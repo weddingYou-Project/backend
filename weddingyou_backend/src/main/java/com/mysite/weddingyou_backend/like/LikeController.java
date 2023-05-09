@@ -62,5 +62,14 @@ public class LikeController {
 		likeService.deleteLike(likeId);
 		return ResponseEntity.ok().build();
 	}
+	
+	//필터링
+	@GetMapping("/list/{category}")
+	public List<LikeEntity> getLikeListByCategory(HttpServletRequest request, @RequestParam("category") String category) {
+	    HttpSession session = request.getSession();
+	    UserLogin loggedInUser = (UserLogin) session.getAttribute("loggedInUser");
+	    List<LikeEntity> likeList = likeService.getLikeListByCategory(loggedInUser.getUserId(), category);
+	    return likeList;
+	}
 
 }

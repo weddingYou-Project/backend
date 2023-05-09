@@ -9,5 +9,7 @@ import org.springframework.stereotype.Repository;
 public interface LikeRepository extends JpaRepository<LikeEntity, Long> {
 	
 	List<LikeEntity> findByUserId(int userId);
+	
+	List<LikeEntity> findByUserIdAndItemId_Category(int userId, String category);
 
 }

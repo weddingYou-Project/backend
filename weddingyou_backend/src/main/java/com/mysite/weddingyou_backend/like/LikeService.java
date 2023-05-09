@@ -27,5 +27,10 @@ public class LikeService {
     public void deleteLike(Long likeId) {
         likeRepository.deleteById(likeId);
     }
+
+    //필터링
+    public List<LikeEntity> getLikeListByCategory(int userId, String category) {
+        return likeRepository.findByUserIdAndItemId_Category(userId, category);
+    }
 	
 }
