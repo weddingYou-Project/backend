@@ -90,7 +90,7 @@ public class ItemController {
 	 
 	 // 이미지 수정(사진 이름 카테고리)
 	 @RequestMapping("/updateItem")
-	 public ResponseEntity<Item> updateItem(@RequestParam("file") MultipartFile file,@RequestParam(value = "itemId") int itemId, @RequestBody ItemDTO itemDTO) {
+	 public ResponseEntity<Item> updateItem(@RequestParam("file") MultipartFile file,@RequestParam(value = "itemId") Long itemId, @RequestBody ItemDTO itemDTO) {
 		 
 		 	try {	
 				  
@@ -118,7 +118,7 @@ public class ItemController {
     
 	 // 이미지 삭제
 	 @PostMapping("/deleteItem")
-	 public ResponseEntity<String> deleteItem(@RequestParam(value = "itemId") int itemId) {
+	 public ResponseEntity<String> deleteItem(@RequestParam(value = "itemId") Long itemId) {
 	     itemService.deleteItem(itemId);
 	     return ResponseEntity.ok("Item with id " + itemId + " has been deleted.");
 	 }
@@ -127,13 +127,13 @@ public class ItemController {
 	 
 	 // 좋아요 +1
 	 @PostMapping("/like")
-     public void increaseLikeCount(@RequestParam(value = "itemId") int itemId) {
+     public void increaseLikeCount(@RequestParam(value = "itemId") Long itemId) {
          itemService.increaseLikeCount(itemId);
      }
 
 	 // 좋아요 -1
 	 @PostMapping("/dislike")
-     public void decreaseLikeCount(@RequestParam(value = "itemId") int itemId) {
+     public void decreaseLikeCount(@RequestParam(value = "itemId") Long itemId) {
          itemService.decreaseLikeCount(itemId);
      }
 

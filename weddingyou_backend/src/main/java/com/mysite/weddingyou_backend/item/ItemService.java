@@ -53,7 +53,7 @@ public class ItemService {
         return itemDTOs;
     }
 
-    public Item getItemById(int itemId) {
+    public Item getItemById(Long itemId) {
         Optional<Item> optionalItem = itemRepository.findById(itemId);
         if (optionalItem.isPresent()) {
             return optionalItem.get();
@@ -76,7 +76,7 @@ public class ItemService {
 
 	 
 
-    public Item updateItem(int itemId, ItemDTO itemDTO) {
+    public Item updateItem(Long itemId, ItemDTO itemDTO) {
         Item item = getItemById(itemId);
         item.setItemName(itemDTO.getItemName());
         item.setCategory(itemDTO.getCategory());
@@ -84,18 +84,18 @@ public class ItemService {
         return itemRepository.save(item);
     }
 
-    public void deleteItem(int itemId) {
+    public void deleteItem(Long itemId) {
         Item item = getItemById(itemId);
         itemRepository.delete(item);
     }
 
-    public void increaseLikeCount(int itemId) {
+    public void increaseLikeCount(Long itemId) {
         Item item = getItemById(itemId);
         item.setLikeCount(item.getLikeCount() + 1);
         itemRepository.save(item);
     }
 
-    public void decreaseLikeCount(int itemId) {
+    public void decreaseLikeCount(Long itemId) {
         Item item = getItemById(itemId);
         item.setLikeCount(item.getLikeCount() - 1);
         itemRepository.save(item);
