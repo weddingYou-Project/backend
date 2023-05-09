@@ -23,7 +23,7 @@ public class ItemEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "item_id")
-	private int itemId;
+	private Long itemId;
 	
 	@Column(name = "item_img", nullable = true)
 	private byte[] itemImg;
@@ -56,5 +56,12 @@ public class ItemEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "email")
 	private UserLogin email;
+	
+	// 위치 정보를 위한 필드
+    @Column(name = "latitude")
+    private Double latitude; // 위도
+
+    @Column(name = "longitude")
+    private Double longitude; // 경도
 
 }

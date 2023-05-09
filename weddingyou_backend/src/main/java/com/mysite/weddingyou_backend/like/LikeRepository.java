@@ -8,14 +8,14 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface LikeRepository extends JpaRepository<LikeEntity, Long> {
 	
-	List<LikeEntity> findByUserId(int userId);
+	List<LikeEntity> findByUserId(Long userId);
 	
-	List<LikeEntity> findByUserIdAndItemId_Category(int userId, String category);
+	List<LikeEntity> findByUserIdAndItemId_Category(Long userId, String category);
 	
-	List<LikeEntity> findByUserIdOrderByItemIdItemNameAsc(int userId);
-
-	List<LikeEntity> findByUserIdOrderByItemIdItemLikeCountDesc(int userId);
-
-	List<LikeEntity> findByUserIdOrderByItemIdItemLocationAsc(int userId);
+	List<LikeEntity> findByUserIdOrderByIdDesc(Long userId);
+	
+    List<LikeEntity> findByUserIdOrderByTitleAsc(Long userId);
+    
+    List<LikeEntity> findByUserIdOrderByLikesDesc(Long userId);
 
 }
