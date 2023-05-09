@@ -97,7 +97,10 @@ public class ItemService {
 
     public void decreaseLikeCount(Long itemId) {
         Item item = getItemById(itemId);
-        item.setLikeCount(item.getLikeCount() - 1);
+        if(item.getLikeCount()!=0) { //item likecount 음수 불가
+        	item.setLikeCount(item.getLikeCount() - 1);
+        }
+        
         itemRepository.save(item);
     }
 	
