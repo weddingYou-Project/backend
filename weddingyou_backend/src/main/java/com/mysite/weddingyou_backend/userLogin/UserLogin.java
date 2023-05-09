@@ -33,7 +33,7 @@ public class UserLogin {
 	private String phoneNum;
 
 	@Column(name = "user_img", nullable = true)
-	private byte[] userImg;
+	private String userImg;
 
 	@Column(name = "user_join_date", columnDefinition = "datetime default current_timestamp")
 	private LocalDateTime userJoinDate;

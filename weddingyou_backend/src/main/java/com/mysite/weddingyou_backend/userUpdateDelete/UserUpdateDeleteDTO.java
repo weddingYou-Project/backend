@@ -1,4 +1,4 @@
-package com.mysite.weddingyou_backend.userRegister;
+package com.mysite.weddingyou_backend.userUpdateDelete;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -11,7 +11,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserRegisterDTO {
+public class UserUpdateDeleteDTO {
 	
 	@NotNull
 	private String name;
@@ -33,5 +33,7 @@ public class UserRegisterDTO {
 	@NotNull
 	private String phoneNum;
 	
-	
+	@Email
+	@NotNull
+	private String preemail;
 }

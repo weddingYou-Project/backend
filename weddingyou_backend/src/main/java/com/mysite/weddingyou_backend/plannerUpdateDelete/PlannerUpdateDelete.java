@@ -1,9 +1,13 @@
-package com.mysite.weddingyou_backend.plannerLogin;
+package com.mysite.weddingyou_backend.plannerUpdateDelete;
 
 import java.time.LocalDateTime;
 
+import com.mysite.weddingyou_backend.plannerRegister.PlannerRegister.Gender;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -16,11 +20,11 @@ import lombok.Setter;
 @Setter
 @Getter
 @Table(name = "planner") //PlannerEntity클래스를 사용해서 planner라는 테이블이 만들어짐
-public class PlannerLogin {
+public class PlannerUpdateDelete {
 	@Id // pk 지정
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "planner_id")
-	private int plannerId;
+	private Long plannerId;
 
 	@Column(name = "name", nullable = false)
 	private String name;
@@ -39,9 +43,15 @@ public class PlannerLogin {
 	
 	@Column(name = "planner_career_years", nullable = false)
 	private String plannerCareerYears;
+	
+	 @Enumerated(EnumType.STRING) // Enum 값을 String 형태로 저장
+	    private Gender gender;
 
 	@Column(name = "planner_join_date", columnDefinition = "datetime default current_timestamp")
 	private LocalDateTime plannerJoinDate;
+	
+	 
+
 	
 
 }
