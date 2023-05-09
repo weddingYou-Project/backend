@@ -52,5 +52,9 @@ public class ItemEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
 	private UserLogin user;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "email")
+	private UserLogin email;
 
 }

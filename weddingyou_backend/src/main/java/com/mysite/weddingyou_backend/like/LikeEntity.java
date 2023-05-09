@@ -32,4 +32,8 @@ public class LikeEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
     private ItemEntity itemId;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "email")
+	private UserLogin email;
 }

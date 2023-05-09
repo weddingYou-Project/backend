@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mysite.weddingyou_backend.item.ItemService;
 import com.mysite.weddingyou_backend.userLogin.UserLogin;
+import com.mysite.weddingyou_backend.userLogin.UserLoginRepository;
 import com.mysite.weddingyou_backend.userLogin.UserLoginService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,7 +28,7 @@ public class LikeController {
 	LikeService likeService;
 	
 	@Autowired
-	private UserLoginService userService;
+	private UserLoginRepository userRepository;
 
 	@Autowired
 	private ItemService itemService;
@@ -48,7 +49,7 @@ public class LikeController {
 	    UserLogin loggedInUser = (UserLogin) session.getAttribute("loggedInUser");
 
 	    LikeEntity likeEntity = new LikeEntity();
-	    //likeEntity.setUser(userService.getUserById(loggedInUser.getUserId()));
+	    likeEntity.setEmail(userRepository.findByEmail(loggedInUser.getEmail()));
 	    likeEntity.setItemId(itemService.getItemById(itemId));
 
 	    likeService.addLike(likeEntity);
