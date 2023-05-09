@@ -71,5 +71,14 @@ public class LikeController {
 	    List<LikeEntity> likeList = likeService.getLikeListByCategory(loggedInUser.getUserId(), category);
 	    return likeList;
 	}
+	
+	//정렬(가나다순, 인기순, 지역순)
+	@GetMapping("/list/sort")
+	public List<LikeEntity> getLikeListSorted(HttpServletRequest request, @RequestParam(value = "sortType", defaultValue = "") String sortType) {
+	    HttpSession session = request.getSession();
+	    UserLogin loggedInUser = (UserLogin) session.getAttribute("loggedInUser");
+	    List<LikeEntity> likeList = likeService.getLikeListSorted(loggedInUser.getUserId(), sortType);
+	    return likeList;
+	}
 
 }

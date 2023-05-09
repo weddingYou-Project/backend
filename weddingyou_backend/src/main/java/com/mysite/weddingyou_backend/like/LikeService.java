@@ -32,5 +32,26 @@ public class LikeService {
     public List<LikeEntity> getLikeListByCategory(int userId, String category) {
         return likeRepository.findByUserIdAndItemId_Category(userId, category);
     }
+    
+    //정렬(가나다순, 인기순, 지역순)
+    public List<LikeEntity> getLikeListSorted(int userId, String sortType) {
+        List<LikeEntity> likeList = null;
+        switch (sortType) {
+            case "name":
+                likeList = likeRepository.findByUserIdOrderByItemIdItemNameAsc(userId);
+                break;
+            case "popular":
+                likeList = likeRepository.findByUserIdOrderByItemIdItemLikeCountDesc(userId);
+                break;
+            case "location":
+                likeList = likeRepository.findByUserIdOrderByItemIdItemLocationAsc(userId);
+                break;
+            default:
+                likeList = likeRepository.findByUserId(userId);
+                break;
+        }
+        return likeList;
+    }
+
 	
 }
