@@ -6,18 +6,19 @@ import javax.validation.constraints.NotNull;
 
 import com.mysite.weddingyou_backend.item.Item.Category;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ItemDTO {
 	
-	public ItemDTO() {
-	}
-
-	public ItemDTO(Item item) {
-	}
 
 	@NotNull
 	private Long itemId;

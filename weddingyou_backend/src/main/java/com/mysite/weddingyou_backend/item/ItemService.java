@@ -79,8 +79,8 @@ public class ItemService {
     public Item updateItem(int itemId, ItemDTO itemDTO) {
         Item item = getItemById(itemId);
         item.setItemName(itemDTO.getItemName());
-        item.setItemImg(itemDTO.getItemImg());
         item.setCategory(itemDTO.getCategory());
+        item.setImgContent(itemDTO.getContent());
         return itemRepository.save(item);
     }
 

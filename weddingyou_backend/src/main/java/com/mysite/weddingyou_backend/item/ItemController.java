@@ -90,9 +90,30 @@ public class ItemController {
 	 
 	 // 이미지 수정(사진 이름 카테고리)
 	 @RequestMapping("/updateItem")
-	 public ResponseEntity<Item> updateItem(@RequestParam(value = "itemId") int itemId, @RequestBody ItemDTO itemDTO) {
-	     Item updatedItemDTO = itemService.updateItem(itemId, itemDTO);
-	     return ResponseEntity.ok().body(updatedItemDTO);
+	 public ResponseEntity<Item> updateItem(@RequestParam("file") MultipartFile file,@RequestParam(value = "itemId") int itemId, @RequestBody ItemDTO itemDTO) {
+		 
+		 	try {	
+				  
+		    	String path = "C:\\Project\\ItemImg\\"+itemDTO.getCategory();
+		    	File folder = new File(path);
+		    	if(!folder.exists()) {
+		    		try {
+		    			folder.mkdir();
+		    		}catch(Exception e) {
+		    			e.getStackTrace();
+		    		}
+		    	}
+		    	
+		        Files.copy(file.getInputStream(), Paths.get(path, file.getOriginalFilename()),StandardCopyOption.REPLACE_EXISTING); //request에서 들어온 파일을 uploads 라는 경로에 originalfilename을 String 으로 올림
+		        System.out.println(file.getInputStream());
+		        itemDTO.setItemImg(file.getOriginalFilename()); //itemimg에다가 이미지 파일 이름 저장
+		        Item updatedItemDTO = itemService.updateItem(itemId,itemDTO); // 이미지파일이름 데이터베이스에 업데이트함
+		        return ResponseEntity.ok().body(updatedItemDTO);
+		    } catch (IOException e) {
+		        e.printStackTrace();
+		        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		    }
+	
 	 }
     
 	 // 이미지 삭제
