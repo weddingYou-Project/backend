@@ -1,14 +1,24 @@
 package com.mysite.weddingyou_backend.item;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.mysite.weddingyou_backend.item.Item.Category;
+import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDelete;
 
 @Service
 public class ItemService {
@@ -18,10 +28,11 @@ public class ItemService {
     public ItemService(ItemRepository itemRepository) {
         this.itemRepository = itemRepository;
     }
+   
 
     public List<Item> getItemsSortedBy(Category category, String sort) {
         List<Item> itemList = itemRepository.findByCategory(category);
-
+    
         if (sort == null || sort.equals("latest")) {
             Collections.sort(itemList, (a, b) -> b.getItemWriteDate().compareTo(a.getItemWriteDate()));
         } else if (sort.equals("likeCount")) {
@@ -53,13 +64,17 @@ public class ItemService {
     
     public Item createItem(ItemDTO itemDTO) {
         Item item = new Item();
-        item.setItemImg(itemDTO.getItemImg());
+        item.setImgContent(itemDTO.getContent());
         item.setItemName(itemDTO.getItemName());
         item.setCategory(itemDTO.getCategory());
+        item.setItemImg(itemDTO.getItemImg());
         item.setLikeCount(0);
         item.setItemWriteDate(LocalDateTime.now());
         return itemRepository.save(item);
     }
+    
+
+	 
 
     public Item updateItem(int itemId, ItemDTO itemDTO) {
         Item item = getItemById(itemId);

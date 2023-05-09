@@ -20,10 +20,10 @@ public class ItemDTO {
 	}
 
 	@NotNull
-	private int itemId;
+	private Long itemId;
 	
 	@NotNull
-    private byte[] itemImg;
+    private String itemImg;
     
 	@NotNull
     private int likeCount;
@@ -35,7 +35,11 @@ public class ItemDTO {
     private LocalDateTime itemWriteDate;
 	
 	@NotNull
+	private String content;
+	
+	@NotNull
     private Category category;
+	
 
 	public static ItemDTO fromEntity(Item item) {
 		ItemDTO itemDTO = new ItemDTO();

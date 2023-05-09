@@ -22,16 +22,17 @@ public class Item {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "item_id")
-    private int itemId;
+    private Long itemId;
 
-	@Column(name = "item_img"
-//			, nullable = false
-			)
-    private byte[] itemImg;
+	@Column(name = "item_img")
+    private String itemImg;
 	
 //	@ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "user_id")
 //    private UserRegister userRegister;
+	
+	@Column(name="img_content",nullable=false)
+	private String imgContent;
 	
 	@Column(name = "like_count", nullable = false)
     private int likeCount;
@@ -48,18 +49,7 @@ public class Item {
 
 	
 	public enum Category {
-		//웨딩홀
-		일반, 호텔, 채플, 스몰, 야외, 전통혼례, 
-		//스튜디오
-		인물중심, 배경, 인물and배경,
-		//의상
-		한복, 드레스, 남성예복,
-		//메이크업
-		헤어, 피부, 색조,
-		//신혼여행
-		국내, 해외,
-		//부케
-	    라운드, 드롭, 케스케이드, 핸드타이드
+		웨딩홀, 사진영상, 스튜디오, 신혼여행, 드레스, 남성예복, 메이크업, 부케, 고객센터, 이용후기, 회원목록
 	}
 	
 //	@OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)

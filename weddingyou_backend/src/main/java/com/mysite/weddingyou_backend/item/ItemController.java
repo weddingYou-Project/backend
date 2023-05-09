@@ -1,15 +1,25 @@
 package com.mysite.weddingyou_backend.item;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.mysite.weddingyou_backend.item.Item.Category;
+import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDelete;
 
 @Controller
 public class ItemController {
@@ -21,12 +31,13 @@ public class ItemController {
 	       this.itemService = itemService;
 	}
 	
+
 	// 이미지 목록 페이지
 	 @GetMapping("/itemList")
 	    public ResponseEntity<List<ItemDTO>> getItemsSortedBy(
 	    		@RequestParam(name = "category")Category category
 	    ) {
-	        List<ItemDTO> items;
+	        List<ItemDTO> items =null;
 	        items = itemService.getItemsByCategory(category);
 	         
 	        return ResponseEntity.ok().body(items);
@@ -42,14 +53,43 @@ public class ItemController {
 	 }
     
 	 // 새로운 이미지 생성
-	 @PostMapping("/insertItem")
-	 public ResponseEntity<Item> createItem(@RequestBody ItemDTO itemDTO) {
-		    Item newItem = itemService.createItem(itemDTO);
-		    return ResponseEntity.ok(newItem);
+	 @RequestMapping("/insertItem")
+	 public ResponseEntity<Item> createItem(@RequestParam("file") MultipartFile file,@RequestParam("category") Category category, @RequestParam("itemName") String itemName,
+			 @RequestParam("content")String content ) {
+		 	ItemDTO itemDTO = new ItemDTO();
+		 	itemDTO.setCategory(category);
+		 	itemDTO.setContent(content);
+		 	itemDTO.setItemName(itemName);
+		 	//itemDTO.setItemWriteDate(LocalDateTime.now());
+		 	//itemDTO.setLikeCount(0);
+		 	try {	
+				  
+		    	String path = "C:\\Project\\ItemImg\\"+category;
+		    	File folder = new File(path);
+		    	if(!folder.exists()) {
+		    		try {
+		    			folder.mkdir();
+		    		}catch(Exception e) {
+		    			e.getStackTrace();
+		    		}
+		    	}
+		    	
+		        Files.copy(file.getInputStream(), Paths.get(path, file.getOriginalFilename()),StandardCopyOption.REPLACE_EXISTING); //request에서 들어온 파일을 uploads 라는 경로에 originalfilename을 String 으로 올림
+		        System.out.println(file.getInputStream());
+		        itemDTO.setItemImg(file.getOriginalFilename()); //itemimg에다가 이미지 파일 이름 저장
+		        Item newItem = itemService.createItem(itemDTO); // 이미지파일이름 데이터베이스에 업데이트함
+		        return ResponseEntity.ok(newItem);
+		    } catch (IOException e) {
+		        e.printStackTrace();
+		        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		    }
+		  
 	}
 	 
+	
+	 
 	 // 이미지 수정(사진 이름 카테고리)
-	 @PostMapping("/updateItem")
+	 @RequestMapping("/updateItem")
 	 public ResponseEntity<Item> updateItem(@RequestParam(value = "itemId") int itemId, @RequestBody ItemDTO itemDTO) {
 	     Item updatedItemDTO = itemService.updateItem(itemId, itemDTO);
 	     return ResponseEntity.ok().body(updatedItemDTO);
@@ -61,6 +101,8 @@ public class ItemController {
 	     itemService.deleteItem(itemId);
 	     return ResponseEntity.ok("Item with id " + itemId + " has been deleted.");
 	 }
+	 
+	
 	 
 	 // 좋아요 +1
 	 @PostMapping("/like")
