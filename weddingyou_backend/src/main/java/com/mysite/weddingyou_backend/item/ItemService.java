@@ -1,26 +1,16 @@
 package com.mysite.weddingyou_backend.item;
 
-import java.io.File;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.mysite.weddingyou_backend.item.Item.Category1;
 import com.mysite.weddingyou_backend.item.Item.Category2;
-import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDelete;
+import com.mysite.weddingyou_backend.like.LikeEntity;
 
 @Service
 public class ItemService {
@@ -94,6 +84,14 @@ public class ItemService {
         itemRepository.delete(item);
     }
 
+    public int getLikeCount(Long itemId) {
+    	int like_count=0;
+    	List<LikeEntity> likeEntities = new ArrayList<>();
+    	Item item = getItemById(itemId);
+    	likeEntities = item.getLike();
+    	like_count = likeEntities.size();
+		return like_count;
+	 }
 //    public void increaseLikeCount(Long itemId) {
 //        Item item = getItemById(itemId);
 //        item.setLikeCount(item.getLikeCount() + 1);

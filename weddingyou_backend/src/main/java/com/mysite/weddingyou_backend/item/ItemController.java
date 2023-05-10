@@ -126,6 +126,12 @@ public class ItemController {
 	     return ResponseEntity.ok("Item with id " + itemId + " has been deleted.");
 	 }
 	 
+	 @RequestMapping("/getLikeCount")
+	 public int getLikeCount(@RequestParam(value = "itemId") Long itemId) {
+		int likeCount =  itemService.getLikeCount(itemId);
+		return likeCount;
+	 }
+	 
 	
 	 
 //	 // 좋아요 +1

@@ -1,6 +1,7 @@
 package com.mysite.weddingyou_backend.item;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import com.mysite.weddingyou_backend.like.LikeEntity;
 
@@ -37,8 +38,8 @@ public class Item {
 	private String imgContent;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "like_id")
-	private LikeEntity likeId;
+	@JoinColumn(name = "item_id")
+	private List<LikeEntity> like;
 	 
 	@Column(name = "item_name", nullable = false)
     private String itemName;
