@@ -31,7 +31,7 @@ public class ItemService {
     }
 	
 	// 상품 아이디로 상품 가져오기
-    public ItemEntity getItemById(int id) {
+    public ItemEntity getItemById(Long id) {
         Optional<ItemEntity> item = itemRepository.findById(id);
         return item.orElse(null);
     }

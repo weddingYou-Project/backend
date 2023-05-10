@@ -1,7 +1,6 @@
 package com.mysite.weddingyou_backend.like;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mysite.weddingyou_backend.item.ItemService;
 import com.mysite.weddingyou_backend.userLogin.UserLogin;
 import com.mysite.weddingyou_backend.userLogin.UserLoginRepository;
-import com.mysite.weddingyou_backend.userLogin.UserLoginService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -46,7 +44,7 @@ public class LikeController {
 	
 	//좋아요 생성
 	@PostMapping("/create")
-	public ResponseEntity<Void> createLike(@RequestParam int itemId, HttpServletRequest request) {
+	public ResponseEntity<Void> createLike(@RequestParam Long itemId, HttpServletRequest request) {
 	    HttpSession session = request.getSession();
 	    UserLogin loggedInUser = (UserLogin) session.getAttribute("loggedInUser");
 
@@ -64,6 +62,7 @@ public class LikeController {
 		likeService.deleteLike(likeId);
 		return ResponseEntity.ok().build();
 	}
+	
 	
 	//필터링
 	@GetMapping("/list/{category}")

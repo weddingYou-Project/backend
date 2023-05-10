@@ -1,12 +1,11 @@
 package com.mysite.weddingyou_backend.like;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 @Service
 @Transactional
@@ -29,7 +28,7 @@ public class LikeService {
     public void deleteLike(Long likeId) {
         likeRepository.deleteById(likeId);
     }
-
+    
     //필터링
     public List<LikeEntity> getLikeListByCategory(Long userId, String category) {
         return likeRepository.findByUserIdAndItemId_Category(userId, category);
