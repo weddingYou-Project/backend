@@ -1,6 +1,7 @@
 package com.mysite.weddingyou_backend.item;
 
 import java.io.File;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -17,7 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.mysite.weddingyou_backend.item.Item.Category;
+import com.mysite.weddingyou_backend.item.Item.Category1;
+import com.mysite.weddingyou_backend.item.Item.Category2;
 import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDelete;
 
 @Service
@@ -30,8 +32,8 @@ public class ItemService {
     }
    
 
-    public List<Item> getItemsSortedBy(Category category, String sort) {
-        List<Item> itemList = itemRepository.findByCategory(category);
+    public List<Item> getItemsSortedBy(Category1 category1, Category2 category2, String sort) {
+        List<Item> itemList = itemRepository.findByCategory1AndCategory2(category1, category2);
     
         if (sort == null || sort.equals("latest")) {
             Collections.sort(itemList, (a, b) -> b.getItemWriteDate().compareTo(a.getItemWriteDate()));
@@ -44,8 +46,8 @@ public class ItemService {
         return itemList;
     }
     
-    public List<ItemDTO> getItemsByCategory(Category category) {
-        List<Item> items = itemRepository.findByCategory(category);
+    public List<ItemDTO> getItemsByCategory(Category1 category1, Category2 category2) {
+        List<Item> items = itemRepository.findByCategory1AndCategory2(category1, category2);
         List<ItemDTO> itemDTOs = new ArrayList<>();
         for (Item item : items) {
             itemDTOs.add(ItemDTO.fromEntity(item));
@@ -66,7 +68,8 @@ public class ItemService {
         Item item = new Item();
         item.setImgContent(itemDTO.getContent());
         item.setItemName(itemDTO.getItemName());
-        item.setCategory(itemDTO.getCategory());
+        item.setCategory1(itemDTO.getCategory1());
+        item.setCategory2(itemDTO.getCategory2());
         item.setItemImg(itemDTO.getItemImg());
         item.setLikeCount(0);
         item.setItemWriteDate(LocalDateTime.now());
@@ -79,7 +82,8 @@ public class ItemService {
     public Item updateItem(Long itemId, ItemDTO itemDTO) {
         Item item = getItemById(itemId);
         item.setItemName(itemDTO.getItemName());
-        item.setCategory(itemDTO.getCategory());
+        item.setCategory1(itemDTO.getCategory1());
+        item.setCategory2(itemDTO.getCategory2());
         item.setImgContent(itemDTO.getContent());
         return itemRepository.save(item);
     }

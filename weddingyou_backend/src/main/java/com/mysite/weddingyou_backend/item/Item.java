@@ -44,12 +44,19 @@ public class Item {
     private LocalDateTime itemWriteDate;
 	
 	@Enumerated(EnumType.STRING)
-	@Column(name = "category", nullable = false)
-    private Category category;
+	@Column(name = "category1", nullable = false)
+    private Category1 category1;
 
+	@Enumerated(EnumType.STRING)
+	@Column(name = "category2", nullable = false)
+    private Category2 category2;
 	
-	public enum Category {
-		웨딩홀, 사진영상, 스튜디오, 신혼여행, 드레스, 남성예복, 메이크업, 부케, 고객센터, 이용후기, 회원목록
+	public enum Category1 {
+		웨딩홀, 사진영상, 스튜디오, 신혼여행, 드레스, 남성예복, 메이크업, 부케
+	}
+	
+	public enum Category2 {
+		웨딩홀, 사진영상, 스튜디오, 신혼여행, 드레스, 남성예복, 메이크업, 부케
 	}
 	
 //	@OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)

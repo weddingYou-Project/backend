@@ -4,9 +4,10 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.mysite.weddingyou_backend.item.Item.Category;
+import com.mysite.weddingyou_backend.item.Item.Category1;
+import com.mysite.weddingyou_backend.item.Item.Category2;
 
 public interface ItemRepository extends JpaRepository<Item, Long> {
 
-	List<Item> findByCategory(Category category);
+	List<Item> findByCategory1AndCategory2(Category1 category1, Category2 category2);
 }

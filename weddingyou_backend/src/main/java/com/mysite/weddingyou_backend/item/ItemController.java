@@ -1,6 +1,7 @@
 package com.mysite.weddingyou_backend.item;
 
 import java.io.File;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -18,7 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.mysite.weddingyou_backend.item.Item.Category;
+import com.mysite.weddingyou_backend.item.Item.Category1;
+import com.mysite.weddingyou_backend.item.Item.Category2;
 import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDelete;
 
 @Controller
@@ -35,36 +37,38 @@ public class ItemController {
 	// 이미지 목록 페이지
 	 @GetMapping("/itemList")
 	    public ResponseEntity<List<ItemDTO>> getItemsSortedBy(
-	    		@RequestParam(name = "category")Category category
+	    		@RequestParam(name = "category")Category1 category1, @RequestParam(name = "category")Category2 category2
 	    ) {
 	        List<ItemDTO> items =null;
-	        items = itemService.getItemsByCategory(category);
+	        items = itemService.getItemsByCategory(category1, category2);
 	         
 	        return ResponseEntity.ok().body(items);
 	    }
 	 
 	 // 이미지 목록 정렬
 	 @GetMapping("/sortItems")
-	 public ResponseEntity<List<Item>> getItemsByCategorySorted(@RequestParam("category") Category category, 
-	                                               @RequestParam(value = "sort", required = false) String sort) {
-	     List<Item> items = itemService.getItemsSortedBy(category, sort);
+	 public ResponseEntity<List<Item>> getItemsByCategorySorted(@RequestParam("category") Category1 category1, 
+			 @RequestParam("category") Category2 category2, @RequestParam(value = "sort", required = false) String sort) {
+	     List<Item> items = itemService.getItemsSortedBy(category1,category2, sort);
 
 	     return ResponseEntity.ok().body(items);
 	 }
     
 	 // 새로운 이미지 생성
 	 @RequestMapping("/insertItem")
-	 public ResponseEntity<Item> createItem(@RequestParam("file") MultipartFile file,@RequestParam("category") Category category, @RequestParam("itemName") String itemName,
+	 public ResponseEntity<Item> createItem(@RequestParam("file") MultipartFile file,@RequestParam("category") Category1 category1, 
+			 @RequestParam("category") Category2 category2,@RequestParam("itemName") String itemName,
 			 @RequestParam("content")String content ) {
 		 	ItemDTO itemDTO = new ItemDTO();
-		 	itemDTO.setCategory(category);
+		 	itemDTO.setCategory1(category1);
+		 	itemDTO.setCategory2(category2);
 		 	itemDTO.setContent(content);
 		 	itemDTO.setItemName(itemName);
 		 	//itemDTO.setItemWriteDate(LocalDateTime.now());
 		 	//itemDTO.setLikeCount(0);
 		 	try {	
 				  
-		    	String path = "C:\\Project\\ItemImg\\"+category;
+		    	String path = "C:\\Project\\ItemImg\\"+category1+"\\"+category2;
 		    	File folder = new File(path);
 		    	if(!folder.exists()) {
 		    		try {
@@ -94,7 +98,7 @@ public class ItemController {
 		 
 		 	try {	
 				  
-		    	String path = "C:\\Project\\ItemImg\\"+itemDTO.getCategory();
+		    	String path = "C:\\Project\\ItemImg\\"+itemDTO.getCategory1()+"\\"+itemDTO.getCategory2();
 		    	File folder = new File(path);
 		    	if(!folder.exists()) {
 		    		try {

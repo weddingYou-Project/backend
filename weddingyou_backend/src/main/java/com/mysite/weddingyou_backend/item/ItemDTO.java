@@ -4,7 +4,8 @@ import java.time.LocalDateTime;
 
 import javax.validation.constraints.NotNull;
 
-import com.mysite.weddingyou_backend.item.Item.Category;
+import com.mysite.weddingyou_backend.item.Item.Category1;
+import com.mysite.weddingyou_backend.item.Item.Category2;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,9 +40,12 @@ public class ItemDTO {
 	private String content;
 	
 	@NotNull
-    private Category category;
+    private Category1 category1;
 	
 
+	@NotNull
+    private Category2 category2;
+	
 	public static ItemDTO fromEntity(Item item) {
 		ItemDTO itemDTO = new ItemDTO();
         itemDTO.setItemId(item.getItemId());
@@ -49,7 +53,8 @@ public class ItemDTO {
         itemDTO.setItemImg(item.getItemImg());
         itemDTO.setLikeCount(item.getLikeCount());
         itemDTO.setItemWriteDate(item.getItemWriteDate());
-        itemDTO.setCategory(item.getCategory());
+        itemDTO.setCategory1(item.getCategory1());
+        itemDTO.setCategory2(item.getCategory2());
         return itemDTO;
 	}
 
