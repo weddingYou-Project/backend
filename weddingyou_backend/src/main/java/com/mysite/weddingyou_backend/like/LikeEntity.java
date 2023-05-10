@@ -1,6 +1,5 @@
 package com.mysite.weddingyou_backend.like;
-
-import com.mysite.weddingyou_backend.item.Item;
+import com.mysite.weddingyou_backend.item.ItemEntity;
 import com.mysite.weddingyou_backend.userLogin.UserLogin;
 
 import jakarta.persistence.Column;
@@ -25,18 +24,22 @@ public class LikeEntity {
     @Column(name = "like_id")
     private Long likeId;
     
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_id")
-//    private UserLogin userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private UserLogin userId;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
-    private Item itemId;
+    private ItemEntity itemId;
 	
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "email")
     private UserLogin email;
 	
     @Column(name = "like", nullable = false)
-   private Integer likeCount;
+    private Integer likeCount;
+    
+    @Column(name = "location")
+    private String location;
 }
+
