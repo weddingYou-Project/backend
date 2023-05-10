@@ -1,5 +1,7 @@
 package com.mysite.weddingyou_backend.like;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,22 +76,29 @@ public class LikeController {
 	
 	//정렬(가나다순, 인기순, 지역순)
 	@GetMapping("/list/sort")
-	public List<LikeEntity> getLikeListSorted(HttpServletRequest request, 
-	                                         @RequestParam(value = "sortType", defaultValue = "") String sortType,
-	                                         @RequestParam(value = "latitude", required = false) Double latitude,
-	                                         @RequestParam(value = "longitude", required = false) Double longitude) {
+	public List<LikeEntity> getLikeList(HttpServletRequest request, @RequestParam(required = false) String sortBy) {
 	    HttpSession session = request.getSession();
 	    UserLogin loggedInUser = (UserLogin) session.getAttribute("loggedInUser");
-	    List<LikeEntity> likeList;
-	    
-	    if (latitude != null && longitude != null) {
-	        // 위도, 경도 정보가 있는 경우 지역순으로 정렬
-	        likeList = likeService.getLikeListSortedByLocation(Long.valueOf(loggedInUser.getUserId()), sortType, latitude, longitude);
-	    } else {
-	        // 위도, 경도 정보가 없는 경우 일반적인 정렬 수행
-	        likeList = likeService.getLikeListSorted(Long.valueOf(loggedInUser.getUserId()), sortType);
+	    List<LikeEntity> likeList = likeService.getLikeList(Long.valueOf(loggedInUser.getUserId()));
+
+	    if (sortBy != null) {
+	        switch (sortBy) {
+	            case "name": //오름차순
+	            	Collections.sort(likeList, (a, b) -> a.getItemId().getItemName().compareTo(b.getItemId().getItemName()));
+	                break;
+	            case "popularity": //내림차순
+	            	Collections.sort(likeList, (a, b) -> b.getLikeCount().compareTo(a.getLikeCount()));
+	                break;
+	            case "location": //오름차순
+	                Collections.sort(likeList, (a, b) -> a.getLocation().compareTo(b.getLocation()));
+	                break;
+	            default:
+	                // 예외 처리
+	                throw new IllegalArgumentException("Invalid sort option: " + sortBy);
+	        }
 	    }
 	    return likeList;
 	}
+
 
 }

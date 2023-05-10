@@ -12,10 +12,5 @@ public interface LikeRepository extends JpaRepository<LikeEntity, Long> {
 	
 	List<LikeEntity> findByUserIdAndItemId_Category(Long userId, String category);
 	
-	List<LikeEntity> findByUserIdOrderByIdDesc(Long userId);
-	
-    List<LikeEntity> findByUserIdOrderByTitleAsc(Long userId);
-    
-    List<LikeEntity> findByUserIdOrderByLikesDesc(Long userId);
 
 }
