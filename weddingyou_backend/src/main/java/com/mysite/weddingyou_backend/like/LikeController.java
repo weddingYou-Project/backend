@@ -45,14 +45,18 @@ public class LikeController {
 	
 	//좋아요 생성
 	@PostMapping("/create")
-	public ResponseEntity<Void> createLike(@RequestParam Long itemId, HttpServletRequest request) {
-	    HttpSession session = request.getSession();
-	    UserLogin loggedInUser = (UserLogin) session.getAttribute("loggedInUser");
+	public ResponseEntity<Void> createLike(@RequestParam Long itemId, @RequestParam("email") String email,HttpServletRequest request) {
+//	    HttpSession session = request.getSession();
+//	    UserLogin loggedInUser = (UserLogin) session.getAttribute("loggedInUser");
 
 	    LikeEntity likeEntity = new LikeEntity();
-	    likeEntity.setUser(userRepository.findByEmail(loggedInUser.getEmail()));
+	//    likeEntity.setUser(userRepository.findByEmail(loggedInUser.getEmail()));
+	    likeEntity.setUser(userRepository.findByEmail(email));
 	    likeEntity.setItem(itemService.getItemById(itemId));
-
+	    List<LikeEntity> list = likeService.getLikeListByItemId(itemId);
+	    likeEntity.setLikeCount(list.size()+1);
+	    
+	    likeService.increaseLikeNum(list);
 	    likeService.addLike(likeEntity);
 	    return ResponseEntity.ok().build();
 	}

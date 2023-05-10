@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mysite.weddingyou_backend.item.Item;
 import com.mysite.weddingyou_backend.userLogin.UserLogin;
 
 
@@ -39,6 +40,22 @@ public class LikeService {
     	List<LikeEntity> likelist = getLikeList(email);
     	
         return likeRepository.findByUserAndItem_Category1AndItem_Category2(email, category1, category2);
+    }
+    
+    public List<LikeEntity> getLikeListByItemId(Long itemId){
+
+   	   Item item = new Item();
+   	   item.setItemId(itemId);
+   	   
+    	return likeRepository.findAllByItem(item);
+    }
+    
+    public void increaseLikeNum(List<LikeEntity> list) {
+    	for(int i=0;i<list.size();i++) {
+	    	LikeEntity likeentity = list.get(i);
+	    	likeentity.setLikeCount(list.size()+1);
+	    	likeRepository.save(likeentity);
+	    }
     }
     
 //    //정렬(가나다순, 인기순, 지역순)
