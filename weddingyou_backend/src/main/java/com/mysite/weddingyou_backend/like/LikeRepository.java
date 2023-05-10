@@ -9,9 +9,9 @@ import com.mysite.weddingyou_backend.item.Item;
 import com.mysite.weddingyou_backend.userLogin.UserLogin;
 
 @Repository
-public interface LikeRepository extends JpaRepository<LikeEntity, Long> {
-	
-	List<LikeEntity> findByUser(String email);
+public interface LikeRepository extends JpaRepository<LikeEntity, Long> {	
+
+	List<LikeEntity> findByUser(UserLogin user);
 //	
 	List<LikeEntity> findByUserAndItem_Category1AndItem_Category2(String email, String category1, String category2);
 	

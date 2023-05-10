@@ -36,10 +36,11 @@ public class LikeController {
 	
 	//찜목록 조회
 	@GetMapping("/list")
-    public List<LikeEntity> getLikeList(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        UserLogin loggedInUser = (UserLogin) session.getAttribute("loggedInUser");
-        List<LikeEntity> likeList = likeService.getLikeList(loggedInUser.getEmail());
+    public List<LikeEntity> getLikeList(@RequestParam String email, HttpServletRequest request) {
+       // HttpSession session = request.getSession();
+       // UserLogin loggedInUser = (UserLogin) session.getAttribute("loggedInUser");
+		
+        List<LikeEntity> likeList = likeService.getLikeList(email);
         return likeList;
     }
 	

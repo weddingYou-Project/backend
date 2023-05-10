@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.mysite.weddingyou_backend.item.Item;
 import com.mysite.weddingyou_backend.userLogin.UserLogin;
 
@@ -23,7 +25,7 @@ public class LikeService {
 	   UserLogin user = new UserLogin();
 	   user.setEmail(email);
 	   
-        return likeRepository.findByUser(email);
+        return likeRepository.findByUser(user);
     }
 
 	//좋아요 추가

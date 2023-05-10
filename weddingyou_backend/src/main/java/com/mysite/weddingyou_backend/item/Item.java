@@ -3,6 +3,7 @@ package com.mysite.weddingyou_backend.item;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mysite.weddingyou_backend.like.LikeEntity;
 
 import jakarta.persistence.Column;
@@ -37,6 +38,7 @@ public class Item {
 	@Column(name="img_content",nullable=false)
 	private String imgContent;
 	
+	@JsonManagedReference
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "item_id")
 	private List<LikeEntity> like;
