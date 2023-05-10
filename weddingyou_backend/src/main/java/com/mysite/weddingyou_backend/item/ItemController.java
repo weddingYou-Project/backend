@@ -3,6 +3,7 @@ package com.mysite.weddingyou_backend.item;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
@@ -65,19 +66,25 @@ public class ItemController {
 		 	//itemDTO.setItemWriteDate(LocalDateTime.now());
 		 	//itemDTO.setLikeCount(0);
 		 	try {	
-				  
-		    	String path = "C:\\Project\\ItemImg\\"+category1+"\\"+category2;
-		    	File folder = new File(path);
-		    	if(!folder.exists()) {
+		 		String path1 = "C:\\Project\\itemImg\\";
+		    	String path2 = "C:\\Project\\itemImg\\"+category1;
+		     	String path3 = "C:\\Project\\itemImg\\"+category1+"\\"+category2;
+		     	File folder1 = new File(path1);
+		    	File folder2 = new File(path2);
+		    	File folder3 = new File(path3);
+		    	if(!folder1.exists() || !folder2.exists() || !folder3.exists()) {
 		    		try {
-		    			folder.mkdir();
+		    			folder1.mkdir();
+		    			folder2.mkdir();
+		    			folder3.mkdir();
 		    		}catch(Exception e) {
 		    			e.getStackTrace();
 		    		}
 		    	}
 		    	
-		        Files.copy(file.getInputStream(), Paths.get(path, file.getOriginalFilename()),StandardCopyOption.REPLACE_EXISTING); //request에서 들어온 파일을 uploads 라는 경로에 originalfilename을 String 으로 올림
-		        System.out.println(file.getInputStream());
+		    
+		        Files.copy(file.getInputStream(), Paths.get(path3, file.getOriginalFilename()),StandardCopyOption.REPLACE_EXISTING); //request에서 들어온 파일을 uploads 라는 경로에 originalfilename을 String 으로 올림
+		       
 		        itemDTO.setItemImg(file.getOriginalFilename()); //itemimg에다가 이미지 파일 이름 저장
 		        Item newItem = itemService.createItem(itemDTO); // 이미지파일이름 데이터베이스에 업데이트함
 		        return ResponseEntity.ok(newItem);
@@ -95,17 +102,19 @@ public class ItemController {
 	 public ResponseEntity<Item> updateItem(@RequestParam("file") MultipartFile file,@RequestParam(value = "itemId") Long itemId, @RequestBody ItemDTO itemDTO) {
 		 
 		 	try {	
-				  
-		    	String path = "C:\\Project\\ItemImg\\"+itemDTO.getCategory1()+"\\"+itemDTO.getCategory2();
-		    	File folder = new File(path);
-		    	if(!folder.exists()) {
-		    		try {
-		    			folder.mkdir();
-		    		}catch(Exception e) {
-		    			e.getStackTrace();
-		    		}
-		    	}
-		    	
+		 		
+		    	String path = "C:\\Project\\itemImg\\"+itemDTO.getCategory1()+"\\"+itemDTO.getCategory2();
+//		    	File folder = new File(path);
+//		    	if(!folder.exists()) {
+//		    		try {
+//		    			folder.mkdir();
+//		    		}catch(Exception e) {
+//		    			e.getStackTrace();
+//		    		}
+//		    	}
+		    	Item deleteItem = itemService.getItemById(itemId);
+		    	Path deleteFilePath = Paths.get(path, deleteItem.getItemImg());
+		    	Files.delete(deleteFilePath);
 		        Files.copy(file.getInputStream(), Paths.get(path, file.getOriginalFilename()),StandardCopyOption.REPLACE_EXISTING); //request에서 들어온 파일을 uploads 라는 경로에 originalfilename을 String 으로 올림
 		        System.out.println(file.getInputStream());
 		        itemDTO.setItemImg(file.getOriginalFilename()); //itemimg에다가 이미지 파일 이름 저장

@@ -80,7 +80,8 @@ public class PlannerUpdateDeleteController {
 		    			e.getStackTrace();
 		    		}
 		    	}
-		    	
+		    	Path deleteFilePath = Paths.get(path, searchedPlanner.getPlannerImg());
+		    	Files.delete(deleteFilePath);
 		        Files.copy(file.getInputStream(), Paths.get("C:/Project/profileImg/planner", file.getOriginalFilename()),StandardCopyOption.REPLACE_EXISTING); //request에서 들어온 파일을 uploads 라는 경로에 originalfilename을 String 으로 올림
 		        System.out.println(file.getInputStream());
 		        searchedPlanner.setPlannerImg(file.getOriginalFilename()); //searchedPlanner에다가 이미지 파일 이름 저장
