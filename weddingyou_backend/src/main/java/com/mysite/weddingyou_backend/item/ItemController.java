@@ -99,7 +99,7 @@ public class ItemController {
 	 
 	 // 이미지 수정(사진 이름 카테고리)
 	 @RequestMapping("/updateItem")
-	 public ResponseEntity<Item> updateItem(@RequestParam("file") MultipartFile file,@RequestParam(value = "itemId") Long itemId,  ItemDTO itemDTO) {
+	 public ResponseEntity<Item> updateItem(@RequestParam("file") MultipartFile file,@RequestParam(value = "itemId") Long itemId,  @RequestBody ItemDTO itemDTO) {
 		 
 		 	try {	
 		 		
@@ -129,9 +129,29 @@ public class ItemController {
     
 	 // 이미지 삭제
 	 @PostMapping("/deleteItem")
-	 public ResponseEntity<String> deleteItem(@RequestParam(value = "itemId") Long itemId) {
-	     itemService.deleteItem(itemId);
-	     return ResponseEntity.ok("Item with id " + itemId + " has been deleted.");
+	 public ResponseEntity<String> deleteItem(@RequestParam(value = "itemId") Long itemId, @RequestBody ItemDTO itemDTO) {
+		 try {	
+		 		
+		    	String path = "C:\\Project\\itemImg\\"+itemDTO.getCategory1()+"\\"+itemDTO.getCategory2();
+//		    	File folder = new File(path);
+//		    	if(!folder.exists()) {
+//		    		try {
+//		    			folder.mkdir();
+//		    		}catch(Exception e) {
+//		    			e.getStackTrace();
+//		    		}
+//		    	}
+		    	Item deleteItem = itemService.getItemById(itemId);
+		    	Path deleteFilePath = Paths.get(path, deleteItem.getItemImg());
+		    	Files.delete(deleteFilePath);
+		       
+		        itemService.deleteItem(itemId); // 이미지파일이름 데이터베이스에 업데이트함
+		        return ResponseEntity.ok().body("Item with id " + itemId + " has been deleted.");
+		    } catch (IOException e) {
+		        e.printStackTrace();
+		        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		    }
+	   
 	 }
 	 
 	 @RequestMapping("/getLikeCount")
