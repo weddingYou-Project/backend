@@ -25,10 +25,6 @@ public class LikeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "like_id")
     private Long likeId;
-   
-//   @ManyToOne(fetch = FetchType.LAZY)
-//   @JoinColumn(name = "user_id")
-//   private UserLogin user;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
