@@ -1,10 +1,14 @@
 package com.mysite.weddingyou_backend.item;
 
+import java.time.LocalDateTime;
+
 import com.mysite.weddingyou_backend.plannerLogin.PlannerLogin;
 import com.mysite.weddingyou_backend.userLogin.UserLogin;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,53 +19,47 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity
-@Setter
 @Getter
+@Setter
+@Entity
 @Table(name = "item")
 public class ItemEntity {
+	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "item_id")
-	private Long itemId;
-	
-	@Column(name = "item_img", nullable = true)
-	private byte[] itemImg;
-	
-	@Column(name = "user_id", nullable = false)
-	private String userId;
-	
-	@Column(name = "like", nullable = false)
-	private Integer likeCount;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "item_id")
+    private Long itemId;
 
-	@Column(name = "planner_id", nullable = false)
-	private String plannerId;
+	@Column(name = "item_img")
+    private String itemImg;
 
+	
+	@Column(name="img_content",nullable=false)
+	private String imgContent;
+	
+	@Column(name = "like_count", nullable = false)
+    private int likeCount;
+	
 	@Column(name = "item_name", nullable = false)
-	private String itemName;
-
-	@Column(name = "category", nullable = false)
-	private String category;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "planner_id", referencedColumnName = "planner_id", insertable = false, updatable = false) //외래키 정의
-	private PlannerLogin planner;
-	//db에 쓰여질 수 없음, 참조만 가능
-	//referenceColumnName : 참조하는 테이블의 기본키 컬럼 이름을 나타냄
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
-	private UserLogin user;
+    private String itemName;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "email")
-	private UserLogin email;
+	@Column(name = "item_write_date", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", nullable = false)
+    private LocalDateTime itemWriteDate;
 	
-	// 위치 정보를 위한 필드
-    @Column(name = "latitude")
-    private Double latitude; // 위도
+	@Enumerated(EnumType.STRING)
+	@Column(name = "category1", nullable = false)
+    private Category1 category1;
 
-    @Column(name = "longitude")
-    private Double longitude; // 경도
+	@Enumerated(EnumType.STRING)
+	@Column(name = "category2", nullable = false)
+    private Category2 category2;
+	
+	public enum Category1 {
+		웨딩홀, 의상, 스튜디오, 메이크업, 신혼여행, 부케
+	}
+	
+	public enum Category2 {
+		일반, 호텔, 채플, 스몰, 야외, 전통혼례, 한복, 드레스, 남성예복, 인물중심, 배경중심, 균형적인, 헤어, 메이크업, 국내, 해외, 라운드, 드롭, 케스케이드, 핸드타이드
+	}
 
 }

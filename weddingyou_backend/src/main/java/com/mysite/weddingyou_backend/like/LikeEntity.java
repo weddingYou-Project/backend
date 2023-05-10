@@ -37,12 +37,6 @@ public class LikeEntity {
 	@JoinColumn(name = "email")
 	private UserLogin email;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "latitude")
-	private ItemEntity latitude;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "longitude")
-	private ItemEntity longitude;
-
+	@Column(name = "like", nullable = false)
+	private Integer likeCount;
 }
