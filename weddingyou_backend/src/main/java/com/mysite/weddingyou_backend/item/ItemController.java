@@ -36,7 +36,7 @@ public class ItemController {
 	// 이미지 목록 페이지
 	 @GetMapping("/itemList")
 	    public ResponseEntity<List<ItemDTO>> getItemsSortedBy(
-	    		@RequestParam(name = "category")Category1 category1, @RequestParam(name = "category")Category2 category2
+	    		@RequestParam(name = "category1")Category1 category1, @RequestParam(name = "category2")Category2 category2
 	    ) {
 	        List<ItemDTO> items =null;
 	        items = itemService.getItemsByCategory(category1, category2);
@@ -46,8 +46,8 @@ public class ItemController {
 	 
 	 // 이미지 목록 정렬
 	 @GetMapping("/sortItems")
-	 public ResponseEntity<List<Item>> getItemsByCategorySorted(@RequestParam("category") Category1 category1, 
-			 @RequestParam("category") Category2 category2, @RequestParam(value = "sort", required = false) String sort) {
+	 public ResponseEntity<List<Item>> getItemsByCategorySorted(@RequestParam("category1") Category1 category1, 
+			 @RequestParam("category2") Category2 category2, @RequestParam(value = "sort", required = false) String sort) {
 	     List<Item> items = itemService.getItemsSortedBy(category1,category2, sort);
 
 	     return ResponseEntity.ok().body(items);
@@ -55,8 +55,8 @@ public class ItemController {
     
 	 // 새로운 이미지 생성
 	 @RequestMapping("/insertItem")
-	 public ResponseEntity<Item> createItem(@RequestParam("file") MultipartFile file,@RequestParam("category") Category1 category1, 
-			 @RequestParam("category") Category2 category2,@RequestParam("itemName") String itemName,
+	 public ResponseEntity<Item> createItem(@RequestParam("file") MultipartFile file,@RequestParam("category1") Category1 category1, 
+			 @RequestParam("category2") Category2 category2,@RequestParam("itemName") String itemName,
 			 @RequestParam("content")String content ) {
 		 	ItemDTO itemDTO = new ItemDTO();
 		 	itemDTO.setCategory1(category1);

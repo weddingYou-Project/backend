@@ -24,16 +24,18 @@ public class LikeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "like_id")
     private Long likeId;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private UserLogin userId;
+    
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "user_id")
+//    private UserLogin userId;
+    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
     private Item itemId;
 	
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "email")
-  private UserLogin email;
+    private UserLogin email;
 	
     @Column(name = "like", nullable = false)
    private Integer likeCount;
