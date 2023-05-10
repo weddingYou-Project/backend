@@ -15,8 +15,8 @@ public class LikeService {
 	LikeRepository likeRepository;
 	
 	//찜목록 조회
-	public List<LikeEntity> getLikeList(Long userId) {
-        return likeRepository.findByUserId(userId);
+	public List<LikeEntity> getLikeList(String email) {
+        return likeRepository.findByEmail(email);
     }
 
 	//좋아요 추가
@@ -30,8 +30,8 @@ public class LikeService {
     }
     
     //필터링
-    public List<LikeEntity> getLikeListByCategory(Long userId, String category) {
-        return likeRepository.findByUserIdAndItemId_Category(userId, category);
+    public List<LikeEntity> getLikeListByCategory(String email, String category) {
+        return likeRepository.findByEmailAndItemId_Category(email, category);
     }
     
     //정렬(가나다순, 인기순, 지역순)

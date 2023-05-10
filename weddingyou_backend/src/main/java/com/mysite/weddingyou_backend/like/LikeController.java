@@ -1,6 +1,7 @@
 package com.mysite.weddingyou_backend.like;
 
 import java.util.Collections;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ public class LikeController {
     public List<LikeEntity> getLikeList(HttpServletRequest request) {
         HttpSession session = request.getSession();
         UserLogin loggedInUser = (UserLogin) session.getAttribute("loggedInUser");
-        List<LikeEntity> likeList = likeService.getLikeList(Long.valueOf(loggedInUser.getUserId()));
+        List<LikeEntity> likeList = likeService.getLikeList(loggedInUser.getEmail());
         return likeList;
     }
 	
@@ -69,7 +70,7 @@ public class LikeController {
 	public List<LikeEntity> getLikeListByCategory(HttpServletRequest request, @RequestParam("category") String category) {
 	    HttpSession session = request.getSession();
 	    UserLogin loggedInUser = (UserLogin) session.getAttribute("loggedInUser");
-	    List<LikeEntity> likeList = likeService.getLikeListByCategory(Long.valueOf(loggedInUser.getUserId()), category);
+	    List<LikeEntity> likeList = likeService.getLikeListByCategory(loggedInUser.getEmail(), category);
 	    return likeList;
 	}
 	
@@ -78,7 +79,7 @@ public class LikeController {
 	public List<LikeEntity> getLikeList(HttpServletRequest request, @RequestParam(required = false) String sortBy) {
 	    HttpSession session = request.getSession();
 	    UserLogin loggedInUser = (UserLogin) session.getAttribute("loggedInUser");
-	    List<LikeEntity> likeList = likeService.getLikeList(Long.valueOf(loggedInUser.getUserId()));
+	    List<LikeEntity> likeList = likeService.getLikeList(loggedInUser.getEmail());
 
 	    if (sortBy != null) {
 	        switch (sortBy) {
@@ -98,6 +99,4 @@ public class LikeController {
 	    }
 	    return likeList;
 	}
-
-
 }

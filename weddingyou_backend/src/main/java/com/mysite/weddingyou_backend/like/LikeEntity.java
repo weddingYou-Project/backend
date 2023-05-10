@@ -26,10 +26,6 @@ public class LikeEntity {
     private Long likeId;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private UserLogin userId;
-    
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
     private ItemEntity itemId;
 	
