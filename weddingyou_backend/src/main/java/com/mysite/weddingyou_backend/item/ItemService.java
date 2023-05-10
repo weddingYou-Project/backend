@@ -72,7 +72,7 @@ public class ItemService {
         item.setCategory1(itemDTO.getCategory1());
         item.setCategory2(itemDTO.getCategory2());
         item.setItemImg(itemDTO.getItemImg());
-        item.setLikeCount(0);
+     //   item.setLikeCount(0);
         item.setItemWriteDate(LocalDateTime.now());
         return itemRepository.save(item);
     }
@@ -94,19 +94,19 @@ public class ItemService {
         itemRepository.delete(item);
     }
 
-    public void increaseLikeCount(Long itemId) {
-        Item item = getItemById(itemId);
-        item.setLikeCount(item.getLikeCount() + 1);
-        itemRepository.save(item);
-    }
-
-    public void decreaseLikeCount(Long itemId) {
-        Item item = getItemById(itemId);
-        if(item.getLikeCount()!=0) { //item likecount 음수 불가
-        	item.setLikeCount(item.getLikeCount() - 1);
-        }
-        
-        itemRepository.save(item);
-    }
+//    public void increaseLikeCount(Long itemId) {
+//        Item item = getItemById(itemId);
+//        item.setLikeCount(item.getLikeCount() + 1);
+//        itemRepository.save(item);
+//    }
+//
+//    public void decreaseLikeCount(Long itemId) {
+//        Item item = getItemById(itemId);
+//        if(item.getLikeCount()!=0) { //item likecount 음수 불가
+//        	item.setLikeCount(item.getLikeCount() - 1);
+//        }
+//        
+//        itemRepository.save(item);
+//    }
 	
 }

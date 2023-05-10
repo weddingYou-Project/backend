@@ -128,16 +128,16 @@ public class ItemController {
 	 
 	
 	 
-	 // 좋아요 +1
-	 @PostMapping("/like")
-     public void increaseLikeCount(@RequestParam(value = "itemId") Long itemId) {
-         itemService.increaseLikeCount(itemId);
-     }
-
-	 // 좋아요 -1
-	 @PostMapping("/dislike")
-     public void decreaseLikeCount(@RequestParam(value = "itemId") Long itemId) {
-         itemService.decreaseLikeCount(itemId);
-     }
+//	 // 좋아요 +1
+//	 @PostMapping("/like")
+//     public void increaseLikeCount(@RequestParam(value = "itemId") Long itemId) {
+//         itemService.increaseLikeCount(itemId);
+//     }
+//
+//	 // 좋아요 -1
+//	 @PostMapping("/dislike")
+//     public void decreaseLikeCount(@RequestParam(value = "itemId") Long itemId) {
+//         itemService.decreaseLikeCount(itemId);
+//     }
 
 }
