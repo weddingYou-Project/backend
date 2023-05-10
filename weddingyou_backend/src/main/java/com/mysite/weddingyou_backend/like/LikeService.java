@@ -1,6 +1,7 @@
 package com.mysite.weddingyou_backend.like;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,10 +51,28 @@ public class LikeService {
     	return likeRepository.findAllByItem(item);
     }
     
+    public List<LikeEntity> getLikeListByLikeId(Long likeId){
+
+    	   Optional<LikeEntity> item = likeRepository.findById(likeId);
+    	   LikeEntity foundItem = item.get();
+    	   Item searchedItem = foundItem.getItem();
+
+     	return likeRepository.findAllByItem(searchedItem);
+     }
+    
     public void increaseLikeNum(List<LikeEntity> list) {
     	for(int i=0;i<list.size();i++) {
 	    	LikeEntity likeentity = list.get(i);
 	    	likeentity.setLikeCount(list.size()+1);
+	    	likeRepository.save(likeentity);
+	    }
+    }
+    
+    public void decreaseLikeNum(List<LikeEntity> list) {
+    	System.out.println(list);
+    	for(int i=0;i<list.size();i++) {
+	    	LikeEntity likeentity = list.get(i);
+	    	likeentity.setLikeCount(list.size()-1);
 	    	likeRepository.save(likeentity);
 	    }
     }

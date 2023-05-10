@@ -64,6 +64,9 @@ public class LikeController {
 	//좋아요 삭제
 	@DeleteMapping("/delete/{likeId}")
 	public ResponseEntity<Void> deleteLike(@PathVariable Long likeId) {
+		
+		List<LikeEntity> list= likeService.getLikeListByLikeId(likeId);
+		likeService.decreaseLikeNum(list);
 		likeService.deleteLike(likeId);
 		return ResponseEntity.ok().build();
 	}
