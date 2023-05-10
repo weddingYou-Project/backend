@@ -76,6 +76,7 @@ public class ItemService {
         item.setCategory1(itemDTO.getCategory1());
         item.setCategory2(itemDTO.getCategory2());
         item.setImgContent(itemDTO.getContent());
+        item.setItemWriteDate(LocalDateTime.now());
         return itemRepository.save(item);
     }
 

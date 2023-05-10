@@ -99,7 +99,7 @@ public class ItemController {
 	 
 	 // 이미지 수정(사진 이름 카테고리)
 	 @RequestMapping("/updateItem")
-	 public ResponseEntity<Item> updateItem(@RequestParam("file") MultipartFile file,@RequestParam(value = "itemId") Long itemId, @RequestBody ItemDTO itemDTO) {
+	 public ResponseEntity<Item> updateItem(@RequestParam("file") MultipartFile file,@RequestParam(value = "itemId") Long itemId,  ItemDTO itemDTO) {
 		 
 		 	try {	
 		 		
