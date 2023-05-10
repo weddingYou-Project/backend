@@ -87,9 +87,10 @@ public class ItemService {
 
     public int getLikeCount(Long itemId) {
     	int like_count=0;
-    	List<LikeEntity> likeEntities = new ArrayList<>();
-    	Item item = getItemById(itemId);
-    	likeEntities = item.getLike();
+    	 Item item = new Item();
+		 item.setItemId(itemId);
+		 List<LikeEntity> likeEntities = item.getLike();
+    	
     	like_count = likeEntities.size();
 		return like_count;
 	 }

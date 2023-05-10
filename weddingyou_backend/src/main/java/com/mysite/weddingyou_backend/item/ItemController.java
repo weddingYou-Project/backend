@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.mysite.weddingyou_backend.item.Item.Category1;
 import com.mysite.weddingyou_backend.item.Item.Category2;
+import com.mysite.weddingyou_backend.like.LikeEntity;
 
 @RestController
 @RequestMapping("/item")
@@ -156,6 +157,7 @@ public class ItemController {
 	 
 	 @RequestMapping("/getLikeCount")
 	 public int getLikeCount(@RequestParam(value = "itemId") Long itemId) {
+		
 		int likeCount =  itemService.getLikeCount(itemId);
 		return likeCount;
 	 }
