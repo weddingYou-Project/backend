@@ -22,13 +22,12 @@ public class UserLogin {
 	@Id // pk 지정
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_id")
-	private int userId;
+	private Long userId;
 
 	@Column(name = "name", nullable = false)
 	private String name;
 
-	@OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "email")
+	
 	@Column(name = "email", nullable = false, unique = true)
 	private String email;
 

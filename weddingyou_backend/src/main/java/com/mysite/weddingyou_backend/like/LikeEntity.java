@@ -1,4 +1,6 @@
 package com.mysite.weddingyou_backend.like;
+import java.util.List;
+
 import com.mysite.weddingyou_backend.item.Item;
 import com.mysite.weddingyou_backend.userLogin.UserLogin;
 
@@ -23,18 +25,18 @@ public class LikeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "like_id")
     private Long likeId;
-    
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private UserLogin userId;
+   
+//   @ManyToOne(fetch = FetchType.LAZY)
+//   @JoinColumn(name = "user_id")
+//   private UserLogin user;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
-    private Item itemId;
+    private Item item;
 	
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "email")
-    private UserLogin email;
+    @JoinColumn(name = "email", referencedColumnName="email")
+    private UserLogin user;
 	
     @Column(name = "like", nullable = false)
     private Integer likeCount;
