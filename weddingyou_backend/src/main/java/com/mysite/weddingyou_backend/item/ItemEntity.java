@@ -2,6 +2,7 @@ package com.mysite.weddingyou_backend.item;
 
 import java.time.LocalDateTime;
 
+import com.mysite.weddingyou_backend.like.LikeEntity;
 import com.mysite.weddingyou_backend.plannerLogin.PlannerLogin;
 import com.mysite.weddingyou_backend.userLogin.UserLogin;
 
@@ -32,19 +33,19 @@ public class ItemEntity {
 
 	@Column(name = "item_img")
     private String itemImg;
-
 	
 	@Column(name="img_content",nullable=false)
 	private String imgContent;
-	
-	@Column(name = "like_count", nullable = false)
-    private int likeCount;
 	
 	@Column(name = "item_name", nullable = false)
     private String itemName;
 	
 	@Column(name = "item_write_date", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", nullable = false)
     private LocalDateTime itemWriteDate;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "like")
+	private LikeEntity likeCount;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name = "category1", nullable = false)
