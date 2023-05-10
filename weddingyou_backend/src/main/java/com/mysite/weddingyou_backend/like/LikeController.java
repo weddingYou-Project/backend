@@ -46,7 +46,7 @@ public class LikeController {
 	
 	//좋아요 생성
 	@PostMapping("/create")
-	public ResponseEntity<Void> createLike(@RequestParam int itemId, HttpServletRequest request) {
+	public ResponseEntity<Void> createLike(@RequestParam Long itemId, HttpServletRequest request) {
 	    HttpSession session = request.getSession();
 	    UserLogin loggedInUser = (UserLogin) session.getAttribute("loggedInUser");
 
