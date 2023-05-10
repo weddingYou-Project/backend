@@ -26,9 +26,7 @@ public class ItemDTO {
 	
 	@NotNull
     private String itemImg;
-    
-	@NotNull
-    private int likeCount;
+   
     
 	@NotNull
     private String itemName;
@@ -51,7 +49,6 @@ public class ItemDTO {
         itemDTO.setItemId(item.getItemId());
         itemDTO.setItemName(item.getItemName());
         itemDTO.setItemImg(item.getItemImg());
-        itemDTO.setLikeCount(item.getLikeCount());
         itemDTO.setItemWriteDate(item.getItemWriteDate());
         itemDTO.setCategory1(item.getCategory1());
         itemDTO.setCategory2(item.getCategory2());

@@ -21,7 +21,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.mysite.weddingyou_backend.item.Item.Category1;
 import com.mysite.weddingyou_backend.item.Item.Category2;
-import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDelete;
 
 @Controller
 public class ItemController {
