@@ -66,14 +66,26 @@ public class UserUpdateDeleteController {
 	 public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("useremail") String email) {
 		    try {	
 		    	UserUpdateDelete searchedUser = service.getUserByEmail(email);
-		    	String path = "C:\\Project\\profileImg\\user";
-		    	File folder = new File(path);
-		    	if(!folder.exists()) {
+		    	String path1 = "C:\\Project";
+		    	String path2 = "C:\\Project\\profileImg";
+		    	String path3 = "C:\\Project\\profileImg\\user";
+		    	File folder1 = new File(path1);
+		    	File folder2 = new File(path2);
+		    	File folder3 = new File(path3);
+		    	if(!folder1.exists() || !folder2.exists() || !folder3.exists()) {
 		    		try {
-		    			folder.mkdir();
+		    			folder1.mkdir();
+		    			folder2.mkdir();
+		    			folder3.mkdir();
 		    		}catch(Exception e) {
 		    			e.getStackTrace();
 		    		}
+		    	}
+		    	
+		    	
+		    	if(searchedUser.getUserImg() != null) {
+		    		Path deleteFilePath = Paths.get(path3, searchedUser.getUserImg());
+		    		Files.delete(deleteFilePath);
 		    	}
 		    	
 		        Files.copy(file.getInputStream(), Paths.get("C:/Project/profileImg/user", file.getOriginalFilename()),StandardCopyOption.REPLACE_EXISTING); //request에서 들어온 파일을 uploads 라는 경로에 originalfilename을 String 으로 올림
