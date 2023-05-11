@@ -42,8 +42,8 @@ public class ItemController {
 	
 	// 카테고리별 상품 리스트 반환
     @GetMapping("/{category}")
-    public List<Item> getItemsByCategory(@PathVariable String category) {
-        return itemService.getItemsByCategory(category);
+    public List<Item> getItemsByCategory(@PathVariable Category1 category1, Category2 category2) {
+        return itemService.getItemsByCategory1(category1, category2);
     }
 	
 	//검색

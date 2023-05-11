@@ -36,14 +36,14 @@ public class ItemService {
 	}
 	
 	// 카테고리별 상품 리스트 반환
-    public List<Item> getItemsByCategory(String category) {
-        return itemRepository.findByCategory(category);
+    public List<Item> getItemsByCategory1(Category1 category1, Category2 category2) {
+        return itemRepository.findByCategory1AndCategory2(category1, category2);
     }
 	
 	//검색
 	public List<Item> searchItems(String keyword) {
 		keyword = keyword.toLowerCase(); // 검색어를 소문자로 변환
-        return itemRepository.findByNameContaining(keyword);
+        return itemRepository.findByItemNameContaining(keyword);
     }
 	
     
