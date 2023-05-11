@@ -2,7 +2,7 @@ package com.mysite.weddingyou_backend.like;
 import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.mysite.weddingyou_backend.item.ItemEntity;
+import com.mysite.weddingyou_backend.item.Item;
 import com.mysite.weddingyou_backend.userLogin.UserLogin;
 
 import jakarta.persistence.Column;
@@ -30,7 +30,7 @@ public class LikeEntity  {
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
-    private ItemEntity item;
+    private Item item;
 	
    
     @ManyToOne(fetch=FetchType.LAZY)

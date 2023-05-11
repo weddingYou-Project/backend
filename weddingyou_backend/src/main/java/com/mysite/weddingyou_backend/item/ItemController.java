@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.mysite.weddingyou_backend.item.ItemEntity.Category1;
-import com.mysite.weddingyou_backend.item.ItemEntity.Category2;
+import com.mysite.weddingyou_backend.item.Item.Category1;
+import com.mysite.weddingyou_backend.item.Item.Category2;
 import com.mysite.weddingyou_backend.like.LikeEntity;
 
 @RestController
@@ -36,19 +36,19 @@ public class ItemController {
 	//제품 데이터 로딩 및 처리
 	//모든 item 반환->빼도 될 것 같기도..?
 	@GetMapping 
-    public List<ItemEntity> getAllItems() {
+    public List<Item> getAllItems() {
         return itemService.getAllItems();
     }
 	
 	// 카테고리별 상품 리스트 반환
     @GetMapping("/{category}")
-    public List<ItemEntity> getItemsByCategory(@PathVariable String category) {
+    public List<Item> getItemsByCategory(@PathVariable String category) {
         return itemService.getItemsByCategory(category);
     }
 	
 	//검색
 	@GetMapping("/search")
-    public List<ItemEntity> searchItems(@RequestParam("keyword") String keyword) {
+    public List<Item> searchItems(@RequestParam("keyword") String keyword) {
         return itemService.searchItems(keyword);
     }
 	
@@ -66,16 +66,16 @@ public class ItemController {
 		 
 		 // 이미지 목록 정렬
 		 @GetMapping("/sortItems")
-		 public ResponseEntity<List<ItemEntity>> getItemsByCategorySorted(@RequestParam("category1") Category1 category1, 
+		 public ResponseEntity<List<Item>> getItemsByCategorySorted(@RequestParam("category1") Category1 category1, 
 				 @RequestParam("category2") Category2 category2, @RequestParam(value = "sort", required = false) String sort) {
-		     List<ItemEntity> items = itemService.getItemsSortedBy(category1,category2, sort);
+		     List<Item> items = itemService.getItemsSortedBy(category1,category2, sort);
 
 		     return ResponseEntity.ok().body(items);
 		 }
 	    
 		 // 새로운 이미지 생성
 		 @RequestMapping("/insertItem")
-		 public ResponseEntity<ItemEntity> createItem(@RequestParam("file") MultipartFile file,@RequestParam("category1") Category1 category1, 
+		 public ResponseEntity<Item> createItem(@RequestParam("file") MultipartFile file,@RequestParam("category1") Category1 category1, 
 				 @RequestParam("category2") Category2 category2,@RequestParam("itemName") String itemName,
 				 @RequestParam("content")String content ) {
 			 	ItemDTO itemDTO = new ItemDTO();
@@ -106,7 +106,7 @@ public class ItemController {
 			        Files.copy(file.getInputStream(), Paths.get(path3, file.getOriginalFilename()),StandardCopyOption.REPLACE_EXISTING); //request에서 들어온 파일을 uploads 라는 경로에 originalfilename을 String 으로 올림
 			       
 			        itemDTO.setItemImg(file.getOriginalFilename()); //itemimg에다가 이미지 파일 이름 저장
-			        ItemEntity newItem = itemService.createItem(itemDTO); // 이미지파일이름 데이터베이스에 업데이트함
+			        Item newItem = itemService.createItem(itemDTO); // 이미지파일이름 데이터베이스에 업데이트함
 			        return ResponseEntity.ok(newItem);
 			    } catch (IOException e) {
 			        e.printStackTrace();
@@ -119,7 +119,7 @@ public class ItemController {
 		 
 		 // 이미지 수정(사진 이름 카테고리)
 		 @RequestMapping("/updateItem")
-		 public ResponseEntity<ItemEntity> updateItem(@RequestParam("file") MultipartFile file,@RequestParam(value = "itemId") Long itemId,  @RequestBody ItemDTO itemDTO) {
+		 public ResponseEntity<Item> updateItem(@RequestParam("file") MultipartFile file,@RequestParam(value = "itemId") Long itemId,  @RequestBody ItemDTO itemDTO) {
 			 
 			 	try {	
 			 		
@@ -132,13 +132,13 @@ public class ItemController {
 //			    			e.getStackTrace();
 //			    		}
 //			    	}
-			    	ItemEntity deleteItem = itemService.getItemById(itemId);
+			    	Item deleteItem = itemService.getItemById(itemId);
 			    	Path deleteFilePath = Paths.get(path, deleteItem.getItemImg());
 			    	Files.delete(deleteFilePath);
 			        Files.copy(file.getInputStream(), Paths.get(path, file.getOriginalFilename()),StandardCopyOption.REPLACE_EXISTING); //request에서 들어온 파일을 uploads 라는 경로에 originalfilename을 String 으로 올림
 			        System.out.println(file.getInputStream());
 			        itemDTO.setItemImg(file.getOriginalFilename()); //itemimg에다가 이미지 파일 이름 저장
-			        ItemEntity updatedItemDTO = itemService.updateItem(itemId,itemDTO); // 이미지파일이름 데이터베이스에 업데이트함
+			        Item updatedItemDTO = itemService.updateItem(itemId,itemDTO); // 이미지파일이름 데이터베이스에 업데이트함
 			        return ResponseEntity.ok().body(updatedItemDTO);
 			    } catch (IOException e) {
 			        e.printStackTrace();
@@ -161,7 +161,7 @@ public class ItemController {
 //			    			e.getStackTrace();
 //			    		}
 //			    	}
-			    	ItemEntity deleteItem = itemService.getItemById(itemId);
+			    	Item deleteItem = itemService.getItemById(itemId);
 			    	Path deleteFilePath = Paths.get(path, deleteItem.getItemImg());
 			    	Files.delete(deleteFilePath);
 			       

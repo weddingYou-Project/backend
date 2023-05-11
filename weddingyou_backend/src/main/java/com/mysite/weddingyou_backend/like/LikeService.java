@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.mysite.weddingyou_backend.item.ItemEntity;
-import com.mysite.weddingyou_backend.item.ItemEntity.Category1;
-import com.mysite.weddingyou_backend.item.ItemEntity.Category2;
+import com.mysite.weddingyou_backend.item.Item;
+import com.mysite.weddingyou_backend.item.Item.Category1;
+import com.mysite.weddingyou_backend.item.Item.Category2;
 import com.mysite.weddingyou_backend.userLogin.UserLogin;
 
 
@@ -48,7 +48,7 @@ public class LikeService {
     
     public List<LikeEntity> getLikeListByItemId(Long itemId){
 
-       ItemEntity item = new ItemEntity();
+       Item item = new Item();
    	   item.setItemId(itemId);
    	   
     	return likeRepository.findAllByItem(item);
@@ -58,7 +58,7 @@ public class LikeService {
 
     	   Optional<LikeEntity> item = likeRepository.findById(likeId);
     	   LikeEntity foundItem = item.get();
-    	   ItemEntity searchedItem = foundItem.getItem();
+    	   Item searchedItem = foundItem.getItem();
 
      	return likeRepository.findAllByItem(searchedItem);
      }

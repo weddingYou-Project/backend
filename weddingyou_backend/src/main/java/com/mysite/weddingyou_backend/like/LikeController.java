@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mysite.weddingyou_backend.item.ItemEntity.Category1;
-import com.mysite.weddingyou_backend.item.ItemEntity.Category2;
+import com.mysite.weddingyou_backend.item.Item.Category1;
+import com.mysite.weddingyou_backend.item.Item.Category2;
 import com.mysite.weddingyou_backend.item.ItemService;
 import com.mysite.weddingyou_backend.userLogin.UserLogin;
 import com.mysite.weddingyou_backend.userLogin.UserLoginRepository;
