@@ -69,7 +69,7 @@ public class EstimateController {
 		data.setMatchstatus(false);
 		data.setTitle(writer + "님의 견적서");
 		data.setDate(LocalDate.now());
-		
+		data.setViewcount(0);		
 		estimateService.insert(data);
 	}
 	

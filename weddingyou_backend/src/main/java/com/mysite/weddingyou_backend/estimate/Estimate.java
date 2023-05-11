@@ -67,6 +67,8 @@ public class Estimate {
     @Column (name = "e_matchstatus")
     private boolean matchstatus;     
     
+    @Column (name = "e_viewcount") //조회수
+    private int viewcount;
 }
 	
 	
