@@ -1,7 +1,6 @@
 package com.mysite.weddingyou_backend.like;
 
 import java.util.Collections;
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mysite.weddingyou_backend.item.ItemEntity.Category1;
+import com.mysite.weddingyou_backend.item.ItemEntity.Category2;
 import com.mysite.weddingyou_backend.item.ItemService;
 import com.mysite.weddingyou_backend.userLogin.UserLogin;
 import com.mysite.weddingyou_backend.userLogin.UserLoginRepository;
@@ -36,23 +37,28 @@ public class LikeController {
 	
 	//찜목록 조회
 	@GetMapping("/list")
-    public List<LikeEntity> getLikeList(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        UserLogin loggedInUser = (UserLogin) session.getAttribute("loggedInUser");
-        List<LikeEntity> likeList = likeService.getLikeList(loggedInUser.getEmail());
+    public List<LikeEntity> getLikeList(@RequestParam String email, HttpServletRequest request) {
+       // HttpSession session = request.getSession();
+       // UserLogin loggedInUser = (UserLogin) session.getAttribute("loggedInUser");
+		
+        List<LikeEntity> likeList = likeService.getLikeList(email);
         return likeList;
     }
 	
 	//좋아요 생성
 	@PostMapping("/create")
-	public ResponseEntity<Void> createLike(@RequestParam Long itemId, HttpServletRequest request) {
-	    HttpSession session = request.getSession();
-	    UserLogin loggedInUser = (UserLogin) session.getAttribute("loggedInUser");
+	public ResponseEntity<Void> createLike(@RequestParam Long itemId, @RequestParam("email") String email,HttpServletRequest request) {
+//	    HttpSession session = request.getSession();
+//	    UserLogin loggedInUser = (UserLogin) session.getAttribute("loggedInUser");
 
 	    LikeEntity likeEntity = new LikeEntity();
-	    likeEntity.setEmail(userRepository.findByEmail(loggedInUser.getEmail()));
-	    likeEntity.setItemId(itemService.getItemById(itemId));
-
+	//    likeEntity.setUser(userRepository.findByEmail(loggedInUser.getEmail()));
+	    likeEntity.setUser(userRepository.findByEmail(email));
+	    likeEntity.setItem(itemService.getItemById(itemId));
+	    List<LikeEntity> list = likeService.getLikeListByItemId(itemId);
+	    likeEntity.setLikeCount(list.size()+1);
+	    
+	    likeService.increaseLikeNum(list);
 	    likeService.addLike(likeEntity);
 	    return ResponseEntity.ok().build();
 	}
@@ -60,20 +66,23 @@ public class LikeController {
 	//좋아요 삭제
 	@DeleteMapping("/delete/{likeId}")
 	public ResponseEntity<Void> deleteLike(@PathVariable Long likeId) {
+		
+		List<LikeEntity> list= likeService.getLikeListByLikeId(likeId);
+		likeService.decreaseLikeNum(list);
 		likeService.deleteLike(likeId);
 		return ResponseEntity.ok().build();
 	}
 	
 	
 	//필터링
-	@GetMapping("/list/{category}")
-	public List<LikeEntity> getLikeListByCategory(HttpServletRequest request, @RequestParam("category") String category) {
-	    HttpSession session = request.getSession();
-	    UserLogin loggedInUser = (UserLogin) session.getAttribute("loggedInUser");
-	    List<LikeEntity> likeList = likeService.getLikeListByCategory(loggedInUser.getEmail(), category);
+	@GetMapping("/list/{category1}/{category2}")
+	public List<LikeEntity> getLikeListByCategory(HttpServletRequest request, @RequestParam("email") String email, @PathVariable("category1") Category1 category1, @PathVariable("category2") Category2 category2) {
+	   // HttpSession session = request.getSession();
+	   // UserLogin loggedInUser = (UserLogin) session.getAttribute("loggedInUser");
+	   // List<LikeEntity> likeList = likeService.getLikeListByCategory(loggedInUser.getEmail(), category1, category2);
+		List<LikeEntity> likeList = likeService.getLikeListByCategory(email, category1, category2);
 	    return likeList;
 	}
-	
 	//정렬(가나다순, 인기순, 지역순)
 	@GetMapping("/list/sort")
 	public List<LikeEntity> getLikeList(HttpServletRequest request, @RequestParam(required = false) String sortBy) {
@@ -84,17 +93,17 @@ public class LikeController {
 	    if (sortBy != null) {
 	        switch (sortBy) {
 	            case "name": //오름차순
-	            	Collections.sort(likeList, (a, b) -> a.getItemId().getItemName().compareTo(b.getItemId().getItemName()));
+	            	Collections.sort(likeList, (a, b) -> a.getItem().getItemName().compareTo(b.getItem().getItemName()));
 	                break;
 	            case "popularity": //내림차순
-	            	Collections.sort(likeList, (a, b) -> b.getLikeCount().compareTo(a.getLikeCount()));
-	                break;
-	            case "location": //오름차순
+            	Collections.sort(likeList, (a, b) -> b.getLikeCount().compareTo(a.getLikeCount()));
+                break;
+            case "location": //오름차순
 	                Collections.sort(likeList, (a, b) -> a.getLocation().compareTo(b.getLocation()));
-	                break;
+                break;
 	            default:
 	                // 예외 처리
-	                throw new IllegalArgumentException("Invalid sort option: " + sortBy);
+                throw new IllegalArgumentException("Invalid sort option: " + sortBy);
 	        }
 	    }
 	    return likeList;
