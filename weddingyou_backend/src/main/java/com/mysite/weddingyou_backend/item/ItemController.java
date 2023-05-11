@@ -11,9 +11,9 @@ import java.util.Base64;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,8 +47,8 @@ public class ItemController {
 	        return ResponseEntity.ok().body(items);
 	    }
 	 
-	 @RequestMapping(value="/itemList/category1",  produces = MediaType.IMAGE_JPEG_VALUE)
-	 public ResponseEntity<List<byte[]>> getImagesByCategory1(@RequestParam(name = "category1")Category1 category1) {
+	 @RequestMapping(value="/itemList/{category1}",  produces = "application/json")
+	 public ResponseEntity<List<byte[]>> getImagesByCategory1(@PathVariable Category1 category1) {
 		 List<ItemDTO> items =null;
 	        items = itemService.getItemsByCategory1(category1);
 	       
@@ -59,8 +59,9 @@ public class ItemController {
 	    	for(int i =0;i<items.size();i++) {
 	    		ItemDTO targetItem = items.get(i);
 	    		Category2 category2 = targetItem.getCategory2();    	 
-		    	 String path = "C:/Project/itemImg/"+category1+"/"+category2;
+		    	 String path = "C:/Project/itemImg/"+targetItem.getCategory1()+"/"+category2;
 		    	 Path imagePath = Paths.get(path,targetItem.getItemImg());
+		    	 //System.out.println(path);
 
 		         try {
 		             byte[] imageBytes = Files.readAllBytes(imagePath);
