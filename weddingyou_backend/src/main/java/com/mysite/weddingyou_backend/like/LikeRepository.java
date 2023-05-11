@@ -19,5 +19,6 @@ public interface LikeRepository extends JpaRepository<LikeEntity, Long> {
 	
 	List<LikeEntity> findAllByItem(Item item);
 	
+	List<LikeEntity> findByUserAndItem(UserLogin user, Item item);
 
 }

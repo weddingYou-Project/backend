@@ -30,7 +30,20 @@ public class LikeService {
 
 	//좋아요 추가
     public void addLike(LikeEntity likeEntity) {
-        likeRepository.save(likeEntity);
+    	likeRepository.save(likeEntity);
+    	
+        
+    }
+    
+    //유저와 item 중복 확인
+    public int checkDuplicatedUserAndItem(LikeEntity likeEntity) {
+    	List<LikeEntity> likeEntities = likeRepository.findByUserAndItem(likeEntity.getUser(), likeEntity.getItem());
+    	System.out.println(likeEntities);
+    	if(likeEntities.size() !=0) { // 중복
+    		return 1;
+    	}else { //중복되지 않음
+    		return 0; 
+    	}
     }
 
     //좋아요 삭제
