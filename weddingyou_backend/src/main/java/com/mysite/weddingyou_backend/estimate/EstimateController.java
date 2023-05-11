@@ -3,6 +3,7 @@ package com.mysite.weddingyou_backend.estimate;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -67,6 +68,7 @@ public class EstimateController {
 		data.setImg(list.toString());
 		data.setMatchstatus(false);
 		data.setTitle(writer + "님의 견적서");
+		data.setDate(LocalDate.now());
 		
 		estimateService.insert(data);
 	}

@@ -19,52 +19,52 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="Customer_Proposal")
+@Table(name="Estimate")
 public class Estimate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "c_id")
+    @Column(name = "e_id")
     private Long id;
 
-    @Column(name = "c_title")
+    @Column(name = "e_title")
     private String title;		//게시글 제목
 
-    @Column(name = "c_requirement")
+    @Column(name = "e_requirement")
     private String requirement;	//게시글 요구사항(요청사항)
 
-    @Column(name = "c_budget")
+    @Column(name = "e_budget")
     private int budget;			//예산
 
-    @Column(name = "c_writer")
+    @Column(name = "e_writer")
     private String writer;
     
-    @Column(name= "c_weddingdate")	//결혼 예정일
+    @Column(name= "e_weddingdate")	//결혼 예정일
     private String weddingdate;
     
     
-    @Column(name = "c_img",length=2000)
+    @Column(name = "e_img",length=2000)
     private String img;			//추가 이미지
 
-    @Column(name = "c_date")
+    @Column(name = "e_date")
     private LocalDate date;		//날짜
 
-    @Column(name = "c_region")
+    @Column(name = "e_region")
     private String region;		//지역
 
-    @Column(name = "c_dress")
+    @Column(name = "e_dress")
     private String dress;		//드레스
 
-    @Column(name = "c_makeup")
+    @Column(name = "e_makeup")
     private String makeup;		//화장
 
-    @Column(name = "c_honeymoon")
+    @Column(name = "e_honeymoon")
     private String honeymoon;	//신혼여행지
 	
-    @Column (name = "c_studio")
+    @Column (name = "e_studio")
     private String studio;
     
-    @Column (name = "c_matchstatus")
+    @Column (name = "e_matchstatus")
     private boolean matchstatus;     
     
 }

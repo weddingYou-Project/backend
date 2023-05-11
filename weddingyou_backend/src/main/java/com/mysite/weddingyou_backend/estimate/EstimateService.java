@@ -20,7 +20,6 @@ public class EstimateService {
 	
 	
 	public void insert(Estimate data) {
-		data.setDate(LocalDate.now());
 		estimateRepository.save(data);	
 	}
 	
