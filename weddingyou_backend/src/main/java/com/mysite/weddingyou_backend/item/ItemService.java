@@ -6,19 +6,26 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.mysite.weddingyou_backend.item.Item.Category1;
 import com.mysite.weddingyou_backend.item.Item.Category2;
 import com.mysite.weddingyou_backend.like.LikeEntity;
+import com.mysite.weddingyou_backend.like.LikeRepository;
 
 @Service
 public class ItemService {
 	
+	@Autowired
 	private final ItemRepository itemRepository;
+	
+	@Autowired
+	private final LikeRepository likeRepository;
 
-    public ItemService(ItemRepository itemRepository) {
+    public ItemService(ItemRepository itemRepository, LikeRepository likeRepository) {
         this.itemRepository = itemRepository;
+        this.likeRepository=likeRepository;
     }
    
 
@@ -89,25 +96,13 @@ public class ItemService {
     	int like_count=0;
     	 Item item = new Item();
 		 item.setItemId(itemId);
-		 List<LikeEntity> likeEntities = item.getLike();
-    	
-    	like_count = likeEntities.size();
+		 LikeEntity like = new LikeEntity();
+		 like.setItem(item);
+		 List<LikeEntity> likeEntities = likeRepository.findAllByItem(item);
+		 like_count = likeEntities.size();
+		//like_count = likeEntities.get(0).getLikeCount();
 		return like_count;
 	 }
-//    public void increaseLikeCount(Long itemId) {
-//        Item item = getItemById(itemId);
-//        item.setLikeCount(item.getLikeCount() + 1);
-//        itemRepository.save(item);
-//    }
-//
-//    public void decreaseLikeCount(Long itemId) {
-//        Item item = getItemById(itemId);
-//        if(item.getLikeCount()!=0) { //item likecount 음수 불가
-//        	item.setLikeCount(item.getLikeCount() - 1);
-//        }
-//        
-//        itemRepository.save(item);
-//    }
-	
+
 }
 

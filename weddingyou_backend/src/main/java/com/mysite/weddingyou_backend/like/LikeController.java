@@ -85,11 +85,11 @@ public class LikeController {
 	}
 	//정렬(가나다순, 인기순, 지역순)
 	@GetMapping("/list/sort")
-	public List<LikeEntity> getLikeList(HttpServletRequest request, @RequestParam(required = false) String sortBy) {
-	    HttpSession session = request.getSession();
-	    UserLogin loggedInUser = (UserLogin) session.getAttribute("loggedInUser");
-	    List<LikeEntity> likeList = likeService.getLikeList(loggedInUser.getEmail());
-
+	public List<LikeEntity> getLikeList(@RequestParam("email") String email, HttpServletRequest request, @RequestParam(required = false) String sortBy) {
+	  //  HttpSession session = request.getSession();
+	  //  UserLogin loggedInUser = (UserLogin) session.getAttribute("loggedInUser");
+	  //  List<LikeEntity> likeList = likeService.getLikeList(loggedInUser.getEmail());
+		List<LikeEntity> likeList = likeService.getLikeList(email);
 	    if (sortBy != null) {
 	        switch (sortBy) {
 	            case "name": //오름차순
