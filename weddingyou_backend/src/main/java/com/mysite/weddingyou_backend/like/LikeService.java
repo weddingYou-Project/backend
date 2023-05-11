@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.mysite.weddingyou_backend.item.Item;
+import com.mysite.weddingyou_backend.item.Item.Category1;
+import com.mysite.weddingyou_backend.item.Item.Category2;
 import com.mysite.weddingyou_backend.userLogin.UserLogin;
 
 
@@ -39,10 +39,11 @@ public class LikeService {
     }
     
     //필터링
-    public List<LikeEntity> getLikeListByCategory(String email, String category1, String category2) {
-    	List<LikeEntity> likelist = getLikeList(email);
-    	
-        return likeRepository.findByUserAndItem_Category1AndItem_Category2(email, category1, category2);
+    public List<LikeEntity> getLikeListByCategory(String email, Category1 category1, Category2 category2) {
+    	UserLogin user = new UserLogin();
+ 	   user.setEmail(email);
+ 
+        return likeRepository.findByUserAndItem_Category1AndItem_Category2(user, category1, category2);
     }
     
     public List<LikeEntity> getLikeListByItemId(Long itemId){

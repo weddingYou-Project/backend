@@ -1,7 +1,6 @@
 package com.mysite.weddingyou_backend.like;
 
 import java.util.Collections;
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mysite.weddingyou_backend.item.Item.Category1;
+import com.mysite.weddingyou_backend.item.Item.Category2;
 import com.mysite.weddingyou_backend.item.ItemService;
 import com.mysite.weddingyou_backend.userLogin.UserLogin;
 import com.mysite.weddingyou_backend.userLogin.UserLoginRepository;
@@ -75,10 +76,11 @@ public class LikeController {
 	
 	//필터링
 	@GetMapping("/list/{category1}/{category2}")
-	public List<LikeEntity> getLikeListByCategory(HttpServletRequest request, @PathVariable("category1") String category1, @PathVariable("category2") String category2) {
-	    HttpSession session = request.getSession();
-	    UserLogin loggedInUser = (UserLogin) session.getAttribute("loggedInUser");
-	    List<LikeEntity> likeList = likeService.getLikeListByCategory(loggedInUser.getEmail(), category1, category2);
+	public List<LikeEntity> getLikeListByCategory(HttpServletRequest request, @RequestParam("email") String email, @PathVariable("category1") Category1 category1, @PathVariable("category2") Category2 category2) {
+	   // HttpSession session = request.getSession();
+	   // UserLogin loggedInUser = (UserLogin) session.getAttribute("loggedInUser");
+	   // List<LikeEntity> likeList = likeService.getLikeListByCategory(loggedInUser.getEmail(), category1, category2);
+		List<LikeEntity> likeList = likeService.getLikeListByCategory(email, category1, category2);
 	    return likeList;
 	}
 	//정렬(가나다순, 인기순, 지역순)
