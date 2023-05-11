@@ -10,7 +10,9 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -47,12 +49,12 @@ public class ItemController {
 	        return ResponseEntity.ok().body(items);
 	    }
 	 
-	 @RequestMapping(value="/itemList/{category1}",  produces = "application/json")
-	 public ResponseEntity<List<byte[]>> getImagesByCategory1(@PathVariable Category1 category1) {
+	 @RequestMapping(value="/itemList/{category1}")
+	 public List<String> getImagesByCategory1(@PathVariable Category1 category1) {
 		 List<ItemDTO> items =null;
 	        items = itemService.getItemsByCategory1(category1);
 	       
-	        List<byte[]> encodingDatas = new ArrayList<>();
+	        List<String> encodingDatas = new ArrayList<>();
 	        
 	        
 	    if(items!=null) {
@@ -61,29 +63,62 @@ public class ItemController {
 	    		Category2 category2 = targetItem.getCategory2();    	 
 		    	 String path = "C:/Project/itemImg/"+targetItem.getCategory1()+"/"+category2;
 		    	 Path imagePath = Paths.get(path,targetItem.getItemImg());
-		    	 //System.out.println(path);
+		    	 System.out.println(imagePath);
 
 		         try {
 		             byte[] imageBytes = Files.readAllBytes(imagePath);
 		             byte[] base64encodedData = Base64.getEncoder().encode(imageBytes);
-		             encodingDatas.add(base64encodedData);
+		             
+		             encodingDatas.add(new String(base64encodedData));
+		          
 		         } catch (IOException e) {
 		             e.printStackTrace();
-		             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		            
 		         }
 		        
 	    	}
-	    	 return ResponseEntity.ok().body(encodingDatas);
-		 
-		     } else {
-		         return ResponseEntity.notFound().build();
-		     }
-		    	 
-		     
+	    	
+	    }
+	    return encodingDatas;
 	    }
 	     
 
-	    
+//	 @RequestMapping(value="/itemList/{category1}", produces = MediaType.IMAGE_JPEG_VALUE)
+//	 public ResponseEntity<byte[]> getImage(@PathVariable Category1 category1) {
+//		 List<ItemDTO> items =null;
+//	        items = itemService.getItemsByCategory1(category1);
+//	       
+//	          
+//	        
+//	    if(items!=null) {
+//	    	for(int i =0;i<items.size();i++) {
+//	    		ItemDTO targetItem = items.get(i);
+//	    		Category2 category2 = targetItem.getCategory2();    	 
+//		    	 String path = "C:/Project/itemImg/"+targetItem.getCategory1()+"/"+category2;
+//		    	 Path imagePath = Paths.get(path,targetItem.getItemImg());
+//		    	 System.out.println(imagePath);
+//
+//		         try {
+//		             byte[] imageBytes = Files.readAllBytes(imagePath);
+//		             byte[] base64encodedData = Base64.getEncoder().encode(imageBytes);
+//		             return ResponseEntity.ok()
+//		                      .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + 
+//		                    		  targetItem.getItemImg() + "\"")
+//		                      .body(base64encodedData);
+//		         } catch (IOException e) {
+//		             e.printStackTrace();
+//		             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+//		         }
+//		        
+//	    	}
+//	    	 return ResponseEntity.ok().body(encodingDatas);
+//		 
+//		     } else {
+//		         return ResponseEntity.notFound().build();
+//		     }
+//		    	 
+//		     
+//	    }
 	        
 	 
 	 
