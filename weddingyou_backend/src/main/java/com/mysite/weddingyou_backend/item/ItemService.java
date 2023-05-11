@@ -44,8 +44,17 @@ public class ItemService {
         return itemList;
     }
     
-    public List<ItemDTO> getItemsByCategory(Category1 category1, Category2 category2) {
+    public List<ItemDTO> getItemsByCategory1AndCategory2(Category1 category1, Category2 category2) {
         List<Item> items = itemRepository.findByCategory1AndCategory2(category1, category2);
+        List<ItemDTO> itemDTOs = new ArrayList<>();
+        for (Item item : items) {
+            itemDTOs.add(ItemDTO.fromEntity(item));
+        }
+        return itemDTOs;
+    }
+    
+    public List<ItemDTO> getItemsByCategory1(Category1 category1) {
+        List<Item> items = itemRepository.findByCategory1(category1);
         List<ItemDTO> itemDTOs = new ArrayList<>();
         for (Item item : items) {
             itemDTOs.add(ItemDTO.fromEntity(item));

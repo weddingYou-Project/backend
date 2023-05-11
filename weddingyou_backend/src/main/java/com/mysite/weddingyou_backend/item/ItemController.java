@@ -6,9 +6,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.mysite.weddingyou_backend.item.Item.Category1;
 import com.mysite.weddingyou_backend.item.Item.Category2;
-import com.mysite.weddingyou_backend.like.LikeEntity;
 
 @RestController
 @RequestMapping("/item")
@@ -40,10 +42,49 @@ public class ItemController {
 	    		@RequestParam(name = "category1")Category1 category1, @RequestParam(name = "category2")Category2 category2
 	    ) {
 	        List<ItemDTO> items =null;
-	        items = itemService.getItemsByCategory(category1, category2);
+	        items = itemService.getItemsByCategory1AndCategory2(category1, category2);
 	         
 	        return ResponseEntity.ok().body(items);
 	    }
+	 
+	 @RequestMapping(value="/itemList/category1",  produces = MediaType.IMAGE_JPEG_VALUE)
+	 public ResponseEntity<List<byte[]>> getImagesByCategory1(@RequestParam(name = "category1")Category1 category1) {
+		 List<ItemDTO> items =null;
+	        items = itemService.getItemsByCategory1(category1);
+	       
+	        List<byte[]> encodingDatas = new ArrayList<>();
+	        
+	        
+	    if(items!=null) {
+	    	for(int i =0;i<items.size();i++) {
+	    		ItemDTO targetItem = items.get(i);
+	    		Category2 category2 = targetItem.getCategory2();    	 
+		    	 String path = "C:/Project/itemImg/"+category1+"/"+category2;
+		    	 Path imagePath = Paths.get(path,targetItem.getItemImg());
+
+		         try {
+		             byte[] imageBytes = Files.readAllBytes(imagePath);
+		             byte[] base64encodedData = Base64.getEncoder().encode(imageBytes);
+		             encodingDatas.add(base64encodedData);
+		         } catch (IOException e) {
+		             e.printStackTrace();
+		             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		         }
+		        
+	    	}
+	    	 return ResponseEntity.ok().body(encodingDatas);
+		 
+		     } else {
+		         return ResponseEntity.notFound().build();
+		     }
+		    	 
+		     
+	    }
+	     
+
+	    
+	        
+	 
 	 
 	 // 이미지 목록 정렬
 	 @GetMapping("/sortItems")
