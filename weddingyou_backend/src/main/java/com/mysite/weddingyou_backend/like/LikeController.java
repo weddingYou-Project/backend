@@ -1,5 +1,11 @@
 package com.mysite.weddingyou_backend.like;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 
@@ -13,8 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mysite.weddingyou_backend.item.Item;
 import com.mysite.weddingyou_backend.item.Item.Category1;
 import com.mysite.weddingyou_backend.item.Item.Category2;
+import com.mysite.weddingyou_backend.item.ItemDTO;
 import com.mysite.weddingyou_backend.item.ItemService;
 import com.mysite.weddingyou_backend.userLogin.UserLogin;
 import com.mysite.weddingyou_backend.userLogin.UserLoginRepository;
@@ -37,12 +45,42 @@ public class LikeController {
 	
 	//찜목록 조회
 	@GetMapping("/list")
-    public List<LikeEntity> getLikeList(@RequestParam String email, HttpServletRequest request) {
+    public List<String> getLikeList(@RequestParam String email, HttpServletRequest request) {
        // HttpSession session = request.getSession();
        // UserLogin loggedInUser = (UserLogin) session.getAttribute("loggedInUser");
 		
         List<LikeEntity> likeList = likeService.getLikeList(email);
-        return likeList;
+     
+       
+        List<String> encodingDatas = new ArrayList<>();
+        
+        
+    if(likeList!=null) {
+    	for(int i =0;i<likeList.size();i++) {
+    		Item targetItem = likeList.get(i).getItem();
+    		Category2 category2 = targetItem.getCategory2();
+    		
+	    	 String path = "C:/Project/itemImg/"+targetItem.getCategory1()+"/"+category2;
+	    	 Path imagePath = Paths.get(path,targetItem.getItemImg());
+	    	 System.out.println(imagePath);
+
+	         try {
+	             byte[] imageBytes = Files.readAllBytes(imagePath);
+	             byte[] base64encodedData = Base64.getEncoder().encode(imageBytes);
+	             
+	             encodingDatas.add(new String(base64encodedData));
+	             
+	         } catch (IOException e) {
+	             e.printStackTrace();
+	            
+	         }
+	        encodingDatas.add(String.valueOf(targetItem.getItemId()));
+	        System.out.println(targetItem.getItemId());
+    	}
+    	
+    }
+    return encodingDatas;
+    
     }
 	
 	//좋아요 생성
