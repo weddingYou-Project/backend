@@ -59,6 +59,7 @@ public class ItemService {
         for (Item item : items) {
             itemDTOs.add(ItemDTO.fromEntity(item));
         }
+        Collections.sort(itemDTOs, (a, b) -> b.getItemWriteDate().compareTo(a.getItemWriteDate()));;
         return itemDTOs;
     }
 

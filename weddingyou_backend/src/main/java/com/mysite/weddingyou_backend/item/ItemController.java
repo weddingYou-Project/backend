@@ -49,6 +49,16 @@ public class ItemController {
 	        return ResponseEntity.ok().body(items);
 	    }
 	 
+	// 이미지 목록 페이지
+		 @RequestMapping("/getItemList/{itemId}")
+		    public ResponseEntity<Item> getItemByItemId(
+		    		@PathVariable(name = "itemId")String itemId) {
+		        Item item =null;
+		        item = itemService.getItemById(Long.parseLong(itemId));
+		         
+		        return ResponseEntity.ok().body(item);
+		 }
+	 
 	 @RequestMapping(value="/itemList/{category1}")
 	 public List<String> getImagesByCategory1(@PathVariable Category1 category1) {
 		 List<ItemDTO> items =null;
@@ -60,7 +70,8 @@ public class ItemController {
 	    if(items!=null) {
 	    	for(int i =0;i<items.size();i++) {
 	    		ItemDTO targetItem = items.get(i);
-	    		Category2 category2 = targetItem.getCategory2();    	 
+	    		Category2 category2 = targetItem.getCategory2();
+	    		
 		    	 String path = "C:/Project/itemImg/"+targetItem.getCategory1()+"/"+category2;
 		    	 Path imagePath = Paths.get(path,targetItem.getItemImg());
 		    	 System.out.println(imagePath);
@@ -70,55 +81,18 @@ public class ItemController {
 		             byte[] base64encodedData = Base64.getEncoder().encode(imageBytes);
 		             
 		             encodingDatas.add(new String(base64encodedData));
-		          
+		             
 		         } catch (IOException e) {
 		             e.printStackTrace();
 		            
 		         }
-		        
+		        encodingDatas.add(String.valueOf(targetItem.getItemId()));
+		        System.out.println(targetItem.getItemId());
 	    	}
 	    	
 	    }
 	    return encodingDatas;
 	    }
-	     
-
-//	 @RequestMapping(value="/itemList/{category1}", produces = MediaType.IMAGE_JPEG_VALUE)
-//	 public ResponseEntity<byte[]> getImage(@PathVariable Category1 category1) {
-//		 List<ItemDTO> items =null;
-//	        items = itemService.getItemsByCategory1(category1);
-//	       
-//	          
-//	        
-//	    if(items!=null) {
-//	    	for(int i =0;i<items.size();i++) {
-//	    		ItemDTO targetItem = items.get(i);
-//	    		Category2 category2 = targetItem.getCategory2();    	 
-//		    	 String path = "C:/Project/itemImg/"+targetItem.getCategory1()+"/"+category2;
-//		    	 Path imagePath = Paths.get(path,targetItem.getItemImg());
-//		    	 System.out.println(imagePath);
-//
-//		         try {
-//		             byte[] imageBytes = Files.readAllBytes(imagePath);
-//		             byte[] base64encodedData = Base64.getEncoder().encode(imageBytes);
-//		             return ResponseEntity.ok()
-//		                      .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + 
-//		                    		  targetItem.getItemImg() + "\"")
-//		                      .body(base64encodedData);
-//		         } catch (IOException e) {
-//		             e.printStackTrace();
-//		             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-//		         }
-//		        
-//	    	}
-//	    	 return ResponseEntity.ok().body(encodingDatas);
-//		 
-//		     } else {
-//		         return ResponseEntity.notFound().build();
-//		     }
-//		    	 
-//		     
-//	    }
 	        
 	 
 	 
@@ -239,19 +213,6 @@ public class ItemController {
 		return likeCount;
 	 }
 	 
-	
-	 
-//	 // 좋아요 +1
-//	 @PostMapping("/like")
-//     public void increaseLikeCount(@RequestParam(value = "itemId") Long itemId) {
-//         itemService.increaseLikeCount(itemId);
-//     }
-//
-//	 // 좋아요 -1
-//	 @PostMapping("/dislike")
-//     public void decreaseLikeCount(@RequestParam(value = "itemId") Long itemId) {
-//         itemService.decreaseLikeCount(itemId);
-//     }
 
 }
 
