@@ -20,7 +20,13 @@ public class UserRegisterController {
 
     @PostMapping("/user/register")
     public ResponseEntity<UserRegister> createUser(@Valid @RequestBody UserRegisterDTO userDTO) {
-        UserRegister createdUser = userService.createUser(userDTO);
+        UserRegister createdUser = null;
+		try {
+			createdUser = userService.createUser(userDTO);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
 }
