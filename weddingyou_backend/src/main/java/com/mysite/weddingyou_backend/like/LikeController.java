@@ -1,5 +1,6 @@
 package com.mysite.weddingyou_backend.like;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,6 +21,7 @@ import com.mysite.weddingyou_backend.userLogin.UserLogin;
 import com.mysite.weddingyou_backend.userLogin.UserLoginRepository;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 @RestController
@@ -83,29 +85,31 @@ public class LikeController {
 		List<LikeEntity> likeList = likeService.getLikeListByCategory(email, category1, category2);
 	    return likeList;
 	}
+	
 	//정렬(가나다순, 인기순, 지역순)
 	@GetMapping("/list/sort")
-	public List<LikeEntity> getLikeList(HttpServletRequest request, @RequestParam(required = false) String sortBy) {
-	    HttpSession session = request.getSession();
-	    UserLogin loggedInUser = (UserLogin) session.getAttribute("loggedInUser");
-	    List<LikeEntity> likeList = likeService.getLikeList(loggedInUser.getEmail());
+	public List<LikeEntity> getLikeList(HttpServletRequest request, @RequestParam(required = false) String sortBy, String email) {
+	    //HttpSession session = request.getSession();
+	    //UserLogin loggedInUser = (UserLogin) session.getAttribute("loggedInUser");
+
+	    List<LikeEntity> likeList = likeService.getLikeList(email);
 
 	    if (sortBy != null) {
 	        switch (sortBy) {
-	            case "name": //오름차순
-	            	Collections.sort(likeList, (a, b) -> a.getItem().getItemName().compareTo(b.getItem().getItemName()));
+	            case "name":
+	                Collections.sort(likeList, (a, b) -> a.getItem().getItemName().compareTo(b.getItem().getItemName()));
 	                break;
-	            case "popularity": //내림차순
-            	Collections.sort(likeList, (a, b) -> b.getLikeCount().compareTo(a.getLikeCount()));
-                break;
-            case "location": //오름차순
+	            case "popularity":
+	                Collections.sort(likeList, (a, b) -> b.getLikeCount().compareTo(a.getLikeCount()));
+	                break;
+	            case "location":
 	                Collections.sort(likeList, (a, b) -> a.getLocation().compareTo(b.getLocation()));
-                break;
+	                break;
 	            default:
-	                // 예외 처리
-                throw new IllegalArgumentException("Invalid sort option: " + sortBy);
+	                throw new IllegalArgumentException("Invalid sort option: " + sortBy);
 	        }
 	    }
 	    return likeList;
 	}
+
 }
