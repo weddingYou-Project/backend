@@ -15,6 +15,8 @@ import com.mysite.weddingyou_backend.userLogin.UserLogin;
 public interface LikeRepository extends JpaRepository<LikeEntity, Long> {	
 
 	List<LikeEntity> findByUser(UserLogin user);
+	
+	List<LikeEntity> findByPlanner(PlannerLogin planner);
 //	
 	List<LikeEntity> findByUserAndItem_Category1AndItem_Category2(UserLogin user, Category1 category1, Category2 category2);
 	

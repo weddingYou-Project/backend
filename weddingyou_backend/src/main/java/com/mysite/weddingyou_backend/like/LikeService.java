@@ -11,7 +11,9 @@ import com.mysite.weddingyou_backend.item.Item;
 import com.mysite.weddingyou_backend.item.Item.Category1;
 import com.mysite.weddingyou_backend.item.Item.Category2;
 import com.mysite.weddingyou_backend.plannerLogin.PlannerLogin;
+import com.mysite.weddingyou_backend.plannerLogin.PlannerLoginRepository;
 import com.mysite.weddingyou_backend.userLogin.UserLogin;
+import com.mysite.weddingyou_backend.userLogin.UserLoginRepository;
 
 
 @Service
@@ -21,12 +23,26 @@ public class LikeService {
 	@Autowired
 	LikeRepository likeRepository;
 	
+	@Autowired
+	UserLoginRepository userRepository;
+	
+	@Autowired
+	PlannerLoginRepository plannerRepository;
+	
 	//찜목록 조회
 	public List<LikeEntity> getLikeList(String email) {
 	   UserLogin user = new UserLogin();
-	   user.setEmail(email);
+	   PlannerLogin planner = new PlannerLogin();
+	   if(userRepository.findByEmail(email)!=null) {
+		   user.setEmail(email);
+		   return likeRepository.findByUser(user);
+	   }else {
+		   planner.setEmail(email);
+		   return likeRepository.findByPlanner(planner);
+	   }
 	   
-        return likeRepository.findByUser(user);
+	   
+        
     }
 
 	//좋아요 추가

@@ -53,6 +53,7 @@ public class LikeController {
        // HttpSession session = request.getSession();
        // UserLogin loggedInUser = (UserLogin) session.getAttribute("loggedInUser");
 		String email = user.getEmail();
+		
         List<LikeEntity> likeList = likeService.getLikeList(email);
      
        
