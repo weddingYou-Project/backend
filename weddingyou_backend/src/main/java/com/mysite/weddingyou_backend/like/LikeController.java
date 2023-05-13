@@ -24,8 +24,10 @@ import com.mysite.weddingyou_backend.item.Item;
 import com.mysite.weddingyou_backend.item.Item.Category1;
 import com.mysite.weddingyou_backend.item.Item.Category2;
 import com.mysite.weddingyou_backend.item.ItemService;
+import com.mysite.weddingyou_backend.plannerLogin.PlannerLogin;
+import com.mysite.weddingyou_backend.plannerLogin.PlannerLoginRepository;
+import com.mysite.weddingyou_backend.userLogin.UserLogin;
 import com.mysite.weddingyou_backend.userLogin.UserLoginRepository;
-import com.mysite.weddingyou_backend.userUpdateDelete.UserUpdateDeleteDTO;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -38,6 +40,9 @@ public class LikeController {
 	
 	@Autowired
 	private UserLoginRepository userRepository;
+	
+	@Autowired
+	private PlannerLoginRepository plannerRepository;
 
 	@Autowired
 	private ItemService itemService;
@@ -84,32 +89,59 @@ public class LikeController {
 	
 	//좋아요 생성
 	@PostMapping("/create")
-	public ResponseEntity<Void> createLike(@RequestParam Long itemId, @RequestParam("email") String email,HttpServletRequest request) {
+	public ResponseEntity<Void> createLike(@RequestParam String email, @RequestParam Long itemId ,HttpServletRequest request) {
+		//, @RequestBody likeDTO user (추가해주기)
 //	    HttpSession session = request.getSession();
 //	    UserLogin loggedInUser = (UserLogin) session.getAttribute("loggedInUser");
 		
+//		Long itemId = user.getItemId();
+//		String email = user.getEmail();
 	    LikeEntity likeEntity = new LikeEntity();
 	//    likeEntity.setUser(userRepository.findByEmail(loggedInUser.getEmail()));
-	    likeEntity.setUser(userRepository.findByEmail(email));
 	    likeEntity.setItem(itemService.getItemById(itemId));
-	    if(likeService.checkDuplicatedUserAndItem(likeEntity)==0) {
-	    	 List<LikeEntity> list = likeService.getLikeListByItemId(itemId);
-	 	    likeEntity.setLikeCount(list.size()+1);
-	 	    
-	 	    likeService.increaseLikeNum(list);
-	 	    likeService.addLike(likeEntity);
+	    if(userRepository.findByEmail(email)!=null) {
+	    	 likeEntity.setUser(userRepository.findByEmail(email));
+	    	 if(likeService.checkDuplicatedUserAndItem(likeEntity)==0) {
+		    	 List<LikeEntity> list = likeService.getLikeListByItemId(itemId);
+		 	    likeEntity.setLikeCount(list.size()+1);
+		 	    
+		 	    likeService.increaseLikeNum(list);
+		 	    likeService.addLike(likeEntity);
+		    }
+	    }else {
+	    	likeEntity.setPlanner(plannerRepository.findByEmail(email));
+	    	if(likeService.checkDuplicatedPlannerAndItem(likeEntity)==0) {
+		    	 List<LikeEntity> list = likeService.getLikeListByItemId(itemId);
+		 	    likeEntity.setLikeCount(list.size()+1);
+		 	    
+		 	    likeService.increaseLikeNum(list);
+		 	    likeService.addLike(likeEntity);
+		    }
 	    }
-	   
+
 	    return ResponseEntity.ok().build();
 	}
 	
 	//좋아요 삭제
-	@DeleteMapping("/delete/{likeId}")
-	public ResponseEntity<Void> deleteLike(@PathVariable Long likeId) {
+	@PostMapping("/delete")
+	public ResponseEntity<Void> deleteLike(@RequestParam String email, @RequestParam Long itemId) {
+		//, @RequestBody likeDTO data (추가해주기)
+//		Long itemId = data.getItemId();
+//		String email = data.getEmail();
 		
-		List<LikeEntity> list= likeService.getLikeListByLikeId(likeId);
-		likeService.decreaseLikeNum(list);
-		likeService.deleteLike(likeId);
+		Item item = itemService.getItemById(itemId);
+		if(userRepository.findByEmail(email)!=null) {
+			UserLogin user = userRepository.findByEmail(email);
+			List<LikeEntity> likeItem = likeService.getLikeListByItemIdAndUser(user, item);
+			likeService.decreaseLikeNum(likeItem);
+			likeService.deleteLike(likeItem.get(0).getLikeId());
+		}else {
+			PlannerLogin planner = plannerRepository.findByEmail(email);
+			List<LikeEntity> likeItem = likeService.getLikeListByItemIdAndPlanner(planner, item);
+			likeService.decreaseLikeNum(likeItem);
+			likeService.deleteLike(likeItem.get(0).getLikeId());
+		}
+	
 		return ResponseEntity.ok().build();
 	}
 	

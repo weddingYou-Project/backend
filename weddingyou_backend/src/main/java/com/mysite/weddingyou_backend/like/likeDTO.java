@@ -46,6 +46,8 @@ public class likeDTO {
 	private String location;
 
 	private String email;
+	
+	private Long itemId;
 
     
 }

@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.mysite.weddingyou_backend.item.Item;
 import com.mysite.weddingyou_backend.item.Item.Category1;
 import com.mysite.weddingyou_backend.item.Item.Category2;
+import com.mysite.weddingyou_backend.plannerLogin.PlannerLogin;
 import com.mysite.weddingyou_backend.userLogin.UserLogin;
 
 
@@ -45,6 +46,17 @@ public class LikeService {
     		return 0; 
     	}
     }
+    
+  //플래너와 item 중복 확인
+    public int checkDuplicatedPlannerAndItem(LikeEntity likeEntity) {
+    	List<LikeEntity> likeEntities = likeRepository.findByPlannerAndItem(likeEntity.getPlanner(), likeEntity.getItem());
+    	System.out.println(likeEntities);
+    	if(likeEntities.size() !=0) { // 중복
+    		return 1;
+    	}else { //중복되지 않음
+    		return 0; 
+    	}
+    }
 
     //좋아요 삭제
     public void deleteLike(Long likeId) {
@@ -65,6 +77,16 @@ public class LikeService {
    	   item.setItemId(itemId);
    	   
     	return likeRepository.findAllByItem(item);
+    }
+    
+    public List<LikeEntity> getLikeListByItemIdAndUser(UserLogin user, Item item) {
+    	List<LikeEntity> likeItem = likeRepository.findByUserAndItem(user, item);
+    	return likeItem;
+    }
+    
+    public List<LikeEntity> getLikeListByItemIdAndPlanner(PlannerLogin planner, Item item) {
+    	List<LikeEntity> likeItem = likeRepository.findByPlannerAndItem(planner, item);
+    	return likeItem;
     }
     
     public List<LikeEntity> getLikeListByLikeId(Long likeId){

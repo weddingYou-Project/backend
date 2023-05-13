@@ -1,8 +1,7 @@
 package com.mysite.weddingyou_backend.like;
-import java.io.Serializable;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.mysite.weddingyou_backend.item.Item;
+import com.mysite.weddingyou_backend.plannerLogin.PlannerLogin;
 import com.mysite.weddingyou_backend.userLogin.UserLogin;
 
 import jakarta.persistence.Column;
@@ -36,6 +35,10 @@ public class LikeEntity  {
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "email", referencedColumnName="email")
     private UserLogin user;
+    
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "planneremail", referencedColumnName="email")
+    private PlannerLogin planner;
 	
     @Column(name = "like", nullable = false)
     private Integer likeCount;
