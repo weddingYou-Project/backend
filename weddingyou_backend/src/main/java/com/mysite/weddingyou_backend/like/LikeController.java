@@ -11,7 +11,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mysite.weddingyou_backend.item.Item;
 import com.mysite.weddingyou_backend.item.Item.Category1;
 import com.mysite.weddingyou_backend.item.Item.Category2;
+import com.mysite.weddingyou_backend.item.ItemRepository;
 import com.mysite.weddingyou_backend.item.ItemService;
 import com.mysite.weddingyou_backend.plannerLogin.PlannerLogin;
 import com.mysite.weddingyou_backend.plannerLogin.PlannerLoginRepository;
@@ -43,6 +43,9 @@ public class LikeController {
 	
 	@Autowired
 	private PlannerLoginRepository plannerRepository;
+	
+	@Autowired
+	private ItemRepository itemRepository;
 
 	@Autowired
 	private ItemService itemService;
@@ -63,6 +66,8 @@ public class LikeController {
     if(likeList!=null) {
     	for(int i =0;i<likeList.size();i++) {
     		Item targetItem = likeList.get(i).getItem();
+    		targetItem.setLikeWriteDate(likeList.get(i).getLikeWriteDate());
+    		itemRepository.save(targetItem);
     		Category2 category2 = targetItem.getCategory2();
     		
 	    	 String path = "C:/Project/itemImg/"+targetItem.getCategory1()+"/"+category2;
@@ -91,13 +96,14 @@ public class LikeController {
 	
 	//좋아요 생성
 	@PostMapping("/create")
-	public ResponseEntity<Void> createLike(@RequestParam String email, @RequestParam Long itemId ,HttpServletRequest request) {
+	public ResponseEntity<Void> createLike(HttpServletRequest request, @RequestParam String email, @RequestParam Long itemId ) {
 		//, @RequestBody likeDTO user (추가해주기)
+		//@RequestParam String email, @RequestParam Long itemId ,(postman 테스트용)
 //	    HttpSession session = request.getSession();
 //	    UserLogin loggedInUser = (UserLogin) session.getAttribute("loggedInUser");
 		
-//		Long itemId = user.getItemId();
-//		String email = user.getEmail();
+	//	Long itemId = user.getItemId();
+	//	String email = user.getEmail();
 	    LikeEntity likeEntity = new LikeEntity();
 	//    likeEntity.setUser(userRepository.findByEmail(loggedInUser.getEmail()));
 	    likeEntity.setItem(itemService.getItemById(itemId));
@@ -126,10 +132,11 @@ public class LikeController {
 	
 	//좋아요 삭제
 	@PostMapping("/delete")
-	public ResponseEntity<Void> deleteLike(@RequestParam String email, @RequestParam Long itemId) {
+	public ResponseEntity<Void> deleteLike(@RequestBody likeDTO data) {
 		//, @RequestBody likeDTO data (추가해주기)
-//		Long itemId = data.getItemId();
-//		String email = data.getEmail();
+		//@RequestParam String email, @RequestParam Long itemId(postman 테스트용)
+		Long itemId = data.getItemId();
+		String email = data.getEmail();
 		
 		Item item = itemService.getItemById(itemId);
 		if(userRepository.findByEmail(email)!=null) {
