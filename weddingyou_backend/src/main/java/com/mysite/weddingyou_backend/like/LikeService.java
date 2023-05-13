@@ -1,5 +1,6 @@
 package com.mysite.weddingyou_backend.like;
 
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,6 +48,7 @@ public class LikeService {
 
 	//좋아요 추가
     public void addLike(LikeEntity likeEntity) {
+    	likeEntity.setLikeWriteDate(LocalTime.now());
     	likeRepository.save(likeEntity);
     	
         
