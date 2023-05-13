@@ -63,7 +63,7 @@ public class LikeService {
     
     //유저와 item 중복 확인
     public int checkDuplicatedUserAndItem(LikeEntity likeEntity) {
-    	List<LikeEntity> likeEntities = likeRepository.findByUserAndItem(likeEntity.getUser(), likeEntity.getItem());
+    	List<LikeEntity> likeEntities = likeRepository.findAllByUserAndItem(likeEntity.getUser(), likeEntity.getItem());
     	System.out.println(likeEntities);
     	if(likeEntities.size() !=0) { // 중복
     		return 1;
@@ -74,7 +74,7 @@ public class LikeService {
     
   //플래너와 item 중복 확인
     public int checkDuplicatedPlannerAndItem(LikeEntity likeEntity) {
-    	List<LikeEntity> likeEntities = likeRepository.findByPlannerAndItem(likeEntity.getPlanner(), likeEntity.getItem());
+    	List<LikeEntity> likeEntities = likeRepository.findAllByPlannerAndItem(likeEntity.getPlanner(), likeEntity.getItem());
     	System.out.println(likeEntities);
     	if(likeEntities.size() !=0) { // 중복
     		return 1;
@@ -105,12 +105,12 @@ public class LikeService {
     }
     
     public List<LikeEntity> getLikeListByItemIdAndUser(UserLogin user, Item item) {
-    	List<LikeEntity> likeItem = likeRepository.findByUserAndItem(user, item);
+    	List<LikeEntity> likeItem = likeRepository.findAllByUserAndItem(user, item);
     	return likeItem;
     }
     
     public List<LikeEntity> getLikeListByItemIdAndPlanner(PlannerLogin planner, Item item) {
-    	List<LikeEntity> likeItem = likeRepository.findByPlannerAndItem(planner, item);
+    	List<LikeEntity> likeItem = likeRepository.findAllByPlannerAndItem(planner, item);
     	return likeItem;
     }
     

@@ -96,14 +96,14 @@ public class LikeController {
 	
 	//좋아요 생성
 	@PostMapping("/create")
-	public ResponseEntity<Void> createLike(HttpServletRequest request, @RequestParam String email, @RequestParam Long itemId ) {
+	public ResponseEntity<Void> createLike(HttpServletRequest request, @RequestBody likeDTO user ) {
 		//, @RequestBody likeDTO user (추가해주기)
 		//@RequestParam String email, @RequestParam Long itemId ,(postman 테스트용)
 //	    HttpSession session = request.getSession();
 //	    UserLogin loggedInUser = (UserLogin) session.getAttribute("loggedInUser");
 		
-	//	Long itemId = user.getItemId();
-	//	String email = user.getEmail();
+		Long itemId = user.getItemId();
+	 String email = user.getEmail();
 	    LikeEntity likeEntity = new LikeEntity();
 	//    likeEntity.setUser(userRepository.findByEmail(loggedInUser.getEmail()));
 	    likeEntity.setItem(itemService.getItemById(itemId));
@@ -132,13 +132,14 @@ public class LikeController {
 	
 	//좋아요 삭제
 	@PostMapping("/delete")
-	public ResponseEntity<Void> deleteLike(@RequestBody likeDTO data) {
+	public ResponseEntity<Void> deleteLike( @RequestBody likeDTO data) {
 		//, @RequestBody likeDTO data (추가해주기)
 		//@RequestParam String email, @RequestParam Long itemId(postman 테스트용)
 		Long itemId = data.getItemId();
 		String email = data.getEmail();
 		
 		Item item = itemService.getItemById(itemId);
+		
 		if(userRepository.findByEmail(email)!=null) {
 			UserLogin user = userRepository.findByEmail(email);
 			List<LikeEntity> likeItem = likeService.getLikeListByItemIdAndUser(user, item);
@@ -147,6 +148,8 @@ public class LikeController {
 		}else if(plannerRepository.findByEmail(email)!=null) {
 			PlannerLogin planner = plannerRepository.findByEmail(email);
 			List<LikeEntity> likeItem = likeService.getLikeListByItemIdAndPlanner(planner, item);
+			//List<LikeEntity> likeItem = likeService.getLikeList(email);
+			System.out.println("newlikeItem:"+likeItem);
 			likeService.decreaseLikeNum(likeItem);
 			likeService.deleteLike(likeItem.get(0).getLikeId());
 		}
