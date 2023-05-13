@@ -8,8 +8,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Base64;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -22,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.mysite.weddingyou_backend.userUpdateDelete.UserUpdateDelete;
 import com.mysite.weddingyou_backend.userUpdateDelete.UserUpdateDeleteDTO;
 
 @RestController //데이터를 반환
