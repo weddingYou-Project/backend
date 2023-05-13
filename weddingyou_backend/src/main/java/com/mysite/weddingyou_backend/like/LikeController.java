@@ -109,7 +109,7 @@ public class LikeController {
 		 	    likeService.increaseLikeNum(list);
 		 	    likeService.addLike(likeEntity);
 		    }
-	    }else {
+	    }else if(plannerRepository.findByEmail(email)!=null) {
 	    	likeEntity.setPlanner(plannerRepository.findByEmail(email));
 	    	if(likeService.checkDuplicatedPlannerAndItem(likeEntity)==0) {
 		    	 List<LikeEntity> list = likeService.getLikeListByItemId(itemId);
@@ -136,7 +136,7 @@ public class LikeController {
 			List<LikeEntity> likeItem = likeService.getLikeListByItemIdAndUser(user, item);
 			likeService.decreaseLikeNum(likeItem);
 			likeService.deleteLike(likeItem.get(0).getLikeId());
-		}else {
+		}else if(plannerRepository.findByEmail(email)!=null) {
 			PlannerLogin planner = plannerRepository.findByEmail(email);
 			List<LikeEntity> likeItem = likeService.getLikeListByItemIdAndPlanner(planner, item);
 			likeService.decreaseLikeNum(likeItem);
