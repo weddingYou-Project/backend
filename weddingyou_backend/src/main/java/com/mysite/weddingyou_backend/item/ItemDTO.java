@@ -31,7 +31,7 @@ public class ItemDTO {
 	@NotNull
     private String itemName;
     
-	@NotNull
+	
     private LocalDateTime itemWriteDate;
 	
 	@NotNull

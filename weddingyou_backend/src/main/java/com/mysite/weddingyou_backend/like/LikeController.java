@@ -80,6 +80,7 @@ public class LikeController {
 	            
 	         }
 	        encodingDatas.add(String.valueOf(targetItem.getItemId()));
+	        encodingDatas.add(String.valueOf(likeList.get(i).getLikeWriteDate()));
 	        System.out.println(targetItem.getItemId());
     	}
     	
@@ -107,7 +108,7 @@ public class LikeController {
 		 	    likeEntity.setLikeCount(list.size()+1);
 		 	    
 		 	    likeService.increaseLikeNum(list);
-		 	    likeService.addLike(likeEntity);
+		 	    likeService.addLike(likeEntity, itemService.getItemById(itemId));
 		    }
 	    }else if(plannerRepository.findByEmail(email)!=null) {
 	    	likeEntity.setPlanner(plannerRepository.findByEmail(email));
@@ -116,7 +117,7 @@ public class LikeController {
 		 	    likeEntity.setLikeCount(list.size()+1);
 		 	    
 		 	    likeService.increaseLikeNum(list);
-		 	    likeService.addLike(likeEntity);
+		 	    likeService.addLike(likeEntity, itemService.getItemById(itemId));
 		    }
 	    }
 

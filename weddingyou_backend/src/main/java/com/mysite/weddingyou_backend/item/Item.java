@@ -16,6 +16,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -46,8 +47,12 @@ public class Item {
 	@Column(name = "item_name", nullable = false)
     private String itemName;
 	
-	@Column(name = "item_write_date", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", nullable = false)
+	@Column(name = "item_write_date")
     private LocalDateTime itemWriteDate;
+	
+	
+	@Column(name ="like_write_date")
+    private LocalDateTime likeWriteDate;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name = "category1", nullable = false)

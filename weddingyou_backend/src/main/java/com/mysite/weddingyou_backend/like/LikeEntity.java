@@ -1,6 +1,5 @@
 package com.mysite.weddingyou_backend.like;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.mysite.weddingyou_backend.item.Item;
@@ -15,6 +14,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,7 +36,7 @@ public class LikeEntity  {
 	
    
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name = "email", referencedColumnName="email")
+    @JoinColumn(name = "useremail", referencedColumnName="email")
     private UserLogin user;
     
     @ManyToOne(fetch=FetchType.LAZY)
@@ -49,7 +49,8 @@ public class LikeEntity  {
     @Column(name = "location")
     private String location;
     
-    @Column(name = "like_write_date", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", nullable = false)
+   
+    @Column(name = "like_write_date")
     private LocalDateTime likeWriteDate;
 }
 

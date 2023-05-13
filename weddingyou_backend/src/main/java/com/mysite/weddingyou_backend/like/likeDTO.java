@@ -42,7 +42,7 @@ public class likeDTO {
 	@NotNull
 	private Integer likeCount;
 	    
-	@NotNull
+	
 	private String location;
 
 	private String email;

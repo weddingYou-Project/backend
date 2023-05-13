@@ -1,7 +1,6 @@
 package com.mysite.weddingyou_backend.like;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.mysite.weddingyou_backend.item.Item;
 import com.mysite.weddingyou_backend.item.Item.Category1;
 import com.mysite.weddingyou_backend.item.Item.Category2;
+import com.mysite.weddingyou_backend.item.ItemRepository;
 import com.mysite.weddingyou_backend.plannerLogin.PlannerLogin;
 import com.mysite.weddingyou_backend.plannerLogin.PlannerLoginRepository;
 import com.mysite.weddingyou_backend.userLogin.UserLogin;
@@ -31,6 +31,9 @@ public class LikeService {
 	@Autowired
 	PlannerLoginRepository plannerRepository;
 	
+	@Autowired
+	ItemRepository itemRepository;
+	
 	//찜목록 조회
 	public List<LikeEntity> getLikeList(String email) {
 	   UserLogin user = new UserLogin();
@@ -48,8 +51,11 @@ public class LikeService {
     }
 
 	//좋아요 추가
-    public void addLike(LikeEntity likeEntity) {
+    public void addLike(LikeEntity likeEntity, Item item) {
     	likeEntity.setLikeWriteDate(LocalDateTime.now());
+    	likeEntity.setLocation("location");
+    	item.setLikeWriteDate(LocalDateTime.now());
+    	itemRepository.save(item);
     	likeRepository.save(likeEntity);
     	
         
