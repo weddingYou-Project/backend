@@ -1,4 +1,6 @@
 package com.mysite.weddingyou_backend.like;
+import java.time.LocalDateTime;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.mysite.weddingyou_backend.item.Item;
 import com.mysite.weddingyou_backend.plannerLogin.PlannerLogin;
@@ -45,5 +47,8 @@ public class LikeEntity  {
     
     @Column(name = "location")
     private String location;
+    
+    @Column(name = "like_write_date", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", nullable = false)
+    private LocalDateTime likeWriteDate;
 }
 
