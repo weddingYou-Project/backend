@@ -203,6 +203,44 @@ public class LikeController {
 	   // List<LikeEntity> likeList = likeService.getLikeListByCategory(loggedInUser.getEmail(), category1, category2);
 		String email =data.getEmail();
 		Category1 category1 = data.getCategory1();
+		System.out.println(category1.toString());
+		if(category1.toString().equals("전체")) {
+		
+	        List<LikeEntity> likeList = likeService.getLikeList(email);
+	     
+	       
+	        List<String> encodingDatas = new ArrayList<>();
+	        
+	        
+	    if(likeList!=null) {
+	    	for(int i =0;i<likeList.size();i++) {
+	    		Item targetItem = likeList.get(i).getItem();
+	    		targetItem.setLikeWriteDate(likeList.get(i).getLikeWriteDate());
+	    		itemRepository.save(targetItem);
+	    		Category2 category2 = targetItem.getCategory2();
+	    		
+		    	 String path = "C:/Project/itemImg/"+targetItem.getCategory1()+"/"+category2;
+		    	 Path imagePath = Paths.get(path,targetItem.getItemImg());
+		    	 System.out.println(imagePath);
+
+		         try {
+		             byte[] imageBytes = Files.readAllBytes(imagePath);
+		             byte[] base64encodedData = Base64.getEncoder().encode(imageBytes);
+		             
+		             encodingDatas.add(new String(base64encodedData));
+		             
+		         } catch (IOException e) {
+		             e.printStackTrace();
+		            
+		         }
+		        encodingDatas.add(String.valueOf(targetItem.getItemId()));
+		        encodingDatas.add(String.valueOf(likeList.get(i).getLikeWriteDate()));
+		        System.out.println(targetItem.getItemId());
+	    	}
+	    	
+	    }
+	    return encodingDatas;
+		}
 		
 		List<LikeEntity> likeList = likeService.getLikeListByCategory1(email, category1);
 	    
