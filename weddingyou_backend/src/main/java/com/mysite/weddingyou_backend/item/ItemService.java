@@ -36,7 +36,7 @@ public class ItemService {
             Collections.sort(itemList, (a, b) -> b.getItemWriteDate().compareTo(a.getItemWriteDate()));
         } else if (sort.equals("likeCount")) {
         	//likeid로 불러온 like 테이블 내의 likecount를 get하는 함수 쓰기
-         //   Collections.sort(itemList, (a, b) -> b.getLikeCount() - a.getLikeCount());
+       //     Collections.sort(itemList, (a, b) -> b.getLikeCount() - a.getLikeCount());
         } else if (sort.equals("name")) {
             Collections.sort(itemList, (a, b) -> a.getItemName().compareTo(b.getItemName()));
         }

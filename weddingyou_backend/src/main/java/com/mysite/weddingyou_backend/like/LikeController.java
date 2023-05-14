@@ -99,7 +99,7 @@ public class LikeController {
 	public ResponseEntity<Void> createLike(HttpServletRequest request, @RequestBody likeDTO user ) {
 		//, @RequestBody likeDTO user (추가해주기)
 		//@RequestParam String email, @RequestParam Long itemId ,(postman 테스트용)
-//	    HttpSession session = request.getSession();
+//    HttpSession session = request.getSession();
 //	    UserLogin loggedInUser = (UserLogin) session.getAttribute("loggedInUser");
 		
 		Long itemId = user.getItemId();
@@ -158,6 +158,41 @@ public class LikeController {
 	}
 	
 	
+	@RequestMapping("/findlist")
+	public int findLikeListByUserAndItem(@RequestBody likeDTO data){
+		Long itemId = data.getItemId();
+		String email = data.getEmail();
+		
+		Item item = itemService.getItemById(itemId);
+		
+		int res = -1;
+		
+		List<LikeEntity> likeItem = new ArrayList<>();
+		if(userRepository.findByEmail(email)!=null) {
+			UserLogin user = userRepository.findByEmail(email);
+			likeItem = likeService.getLikeListByItemIdAndUser(user, item);
+		
+			if(likeItem.size()!=0) { //찾은 결과가 있을 때
+				res = 1;
+				System.out.println("=========================="+likeItem.get(0).getItem().getItemId());
+			}else {
+				res = 0;
+			}
+		}else if(plannerRepository.findByEmail(email)!=null) {
+			PlannerLogin planner = plannerRepository.findByEmail(email);
+			likeItem = likeService.getLikeListByItemIdAndPlanner(planner, item);
+			
+			if(likeItem.size()!=0) {
+				res = 1;
+				System.out.println("================================="+likeItem.get(0).getItem().getItemId());
+			}else  {
+				res = 0;
+			}
+		
+		}
+	
+		return res;
+	}
 	//필터링
 	@GetMapping("/list/{category1}/{category2}")
 	public List<LikeEntity> getLikeListByCategory(HttpServletRequest request, @RequestParam("email") String email, @PathVariable("category1") Category1 category1, @PathVariable("category2") Category2 category2) {
