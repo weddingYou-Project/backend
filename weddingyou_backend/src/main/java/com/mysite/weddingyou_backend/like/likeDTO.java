@@ -48,6 +48,8 @@ public class likeDTO {
 	private String email;
 	
 	private Long itemId;
+	
+	private Category1 category1;
 
     
 }

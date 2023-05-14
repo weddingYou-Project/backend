@@ -20,6 +20,10 @@ public interface LikeRepository extends JpaRepository<LikeEntity, Long> {
 //	
 	List<LikeEntity> findByUserAndItem_Category1AndItem_Category2(UserLogin user, Category1 category1, Category2 category2);
 	
+	List<LikeEntity> findByUserAndItem_Category1(UserLogin user, Category1 category1);
+	
+	List<LikeEntity> findByPlannerAndItem_Category1(PlannerLogin planner, Category1 category1);
+	
 	List<LikeEntity> findAllByItem(Item item);
 	
 	List<LikeEntity> findAllByUserAndItem(UserLogin user, Item item);

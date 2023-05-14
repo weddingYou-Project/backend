@@ -8,7 +8,9 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
+import org.hibernate.dialect.Database;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -194,14 +196,50 @@ public class LikeController {
 		return res;
 	}
 	//필터링
-	@GetMapping("/list/{category1}/{category2}")
-	public List<LikeEntity> getLikeListByCategory(HttpServletRequest request, @RequestParam("email") String email, @PathVariable("category1") Category1 category1, @PathVariable("category2") Category2 category2) {
+	@PostMapping("/list/category")
+	public List<String> getLikeListByCategory(HttpServletRequest request, @RequestBody likeDTO data) {
 	   // HttpSession session = request.getSession();
 	   // UserLogin loggedInUser = (UserLogin) session.getAttribute("loggedInUser");
 	   // List<LikeEntity> likeList = likeService.getLikeListByCategory(loggedInUser.getEmail(), category1, category2);
-		List<LikeEntity> likeList = likeService.getLikeListByCategory(email, category1, category2);
-	    return likeList;
+		String email =data.getEmail();
+		Category1 category1 = data.getCategory1();
+		
+		List<LikeEntity> likeList = likeService.getLikeListByCategory1(email, category1);
+	    
+		 List<String> encodingDatas = new ArrayList<>();
+	        
+		    if(likeList!=null) {
+		    	for(int i =0;i<likeList.size();i++) {
+		    		Item targetItem = likeList.get(i).getItem();
+		    		targetItem.setLikeWriteDate(likeList.get(i).getLikeWriteDate());
+		    		itemRepository.save(targetItem);
+		    		
+		    		
+			    	 String path = "C:/Project/itemImg/"+targetItem.getCategory1()+"/"+targetItem.getCategory2();
+			    	 Path imagePath = Paths.get(path,targetItem.getItemImg());
+			    	 System.out.println(imagePath);
+
+			         try {
+			             byte[] imageBytes = Files.readAllBytes(imagePath);
+			             byte[] base64encodedData = Base64.getEncoder().encode(imageBytes);
+			             
+			             encodingDatas.add(new String(base64encodedData));
+			             
+			         } catch (IOException e) {
+			             e.printStackTrace();
+			            
+			         }
+			        encodingDatas.add(String.valueOf(targetItem.getItemId()));
+			        encodingDatas.add(String.valueOf(likeList.get(i).getLikeWriteDate()));
+			        System.out.println(targetItem.getItemId());
+		    	}
+		    	
+		    }
+		    return encodingDatas;
+	
 	}
+	
+	
 	//정렬(가나다순, 인기순, 지역순)
 	@GetMapping("/list/sort")
 	public List<LikeEntity> getLikeList(@RequestParam("email") String email, HttpServletRequest request, @RequestParam(required = false) String sortBy) {

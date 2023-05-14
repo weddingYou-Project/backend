@@ -96,6 +96,22 @@ public class LikeService {
         return likeRepository.findByUserAndItem_Category1AndItem_Category2(user, category1, category2);
     }
     
+    //필터링
+    public List<LikeEntity> getLikeListByCategory1(String email, Category1 category1) {
+    	List<LikeEntity> likeList = null;
+    	if(userRepository.findByEmail(email)!=null) {
+    		UserLogin user = new UserLogin();
+    	 	   user.setEmail(email);
+    	 	  return likeRepository.findByUserAndItem_Category1(user, category1);
+    	}else if (plannerRepository.findByEmail(email)!=null) {
+    		PlannerLogin planner = new PlannerLogin();
+    	 	   planner.setEmail(email);
+    	 	  return likeRepository.findByPlannerAndItem_Category1(planner, category1);
+    	}
+    	return likeList;
+        
+    }
+    
     public List<LikeEntity> getLikeListByItemId(Long itemId){
 
    	   Item item = new Item();
