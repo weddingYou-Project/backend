@@ -355,13 +355,12 @@ public class LikeController {
 		  //  List<LikeEntity> likeList = likeService.getLikeList(loggedInUser.getEmail());
 			String sortBy = data.getSortBy();
 			Category1 category1 = data.getCategory1();
-			System.out.println(sortBy + "----------------------------------------------");
-			System.out.println(category1.toString() + "-------------------------------------------");
 			
 			String email = data.getEmail();
 			List<LikeEntity> likeList = null; 
 			if(category1.toString().equals("카테고리") && sortBy.equals("정렬") || category1.toString().equals("전체") && sortBy.equals("정렬")) { //초기상태
 					likeList = likeService.getLikeList(email);
+					  Collections.sort(likeList, (a, b) -> a.getLikeWriteDate().compareTo(b.getLikeWriteDate()));
 			   
 			}
 			if(category1.toString().equals("카테고리") && !sortBy.equals("정렬") || category1.toString().equals("전체") && !sortBy.equals("정렬")) { //정렬만 선택했을 때
@@ -394,6 +393,10 @@ public class LikeController {
 			            case "지역순": //오름차순
 				                Collections.sort(likeList, (a, b) -> a.getLocation().compareTo(b.getLocation()));
 			                break;
+			                
+			            case "정렬":
+			            Collections.sort(likeList, (a, b) -> a.getLikeWriteDate().compareTo(b.getLikeWriteDate()));
+			            break;
 				            default:
 				                // 예외 처리
 			                throw new IllegalArgumentException("Invalid sort option: " + sortBy);
@@ -405,6 +408,7 @@ public class LikeController {
 		|| category1.toString().equals("의상") && sortBy.equals("정렬") || category1.toString().equals("메이크업") && sortBy.equals("정렬") 
 		|| category1.toString().equals("신혼여행") && sortBy.equals("정렬") || category1.toString().equals("부케") && sortBy.equals("정렬") ) { // 카테고리만 선택했을 때
 				likeList = likeService.getLikeListByCategory1(email, category1);
+				  Collections.sort(likeList, (a, b) -> a.getLikeWriteDate().compareTo(b.getLikeWriteDate()));
 			}
 			
 			if(!sortBy.equals("정렬")) { //두조건 모두 선택되었을 때
@@ -439,6 +443,9 @@ public class LikeController {
 			            case "지역순": //오름차순
 				                Collections.sort(likeList, (a, b) -> a.getLocation().compareTo(b.getLocation()));
 			                break;
+			            case "정렬":
+			            	  Collections.sort(likeList, (a, b) -> a.getLikeWriteDate().compareTo(b.getLikeWriteDate()));
+			            	  break;
 				            default:
 				                // 예외 처리
 			                throw new IllegalArgumentException("Invalid sort option: " + sortBy);
