@@ -112,6 +112,12 @@ public class ItemService {
 		//like_count = likeEntities.get(0).getLikeCount();
 		return like_count;
 	 }
+    
+  //검색
+  	public List<Item> searchItems(String keyword) {
+  		keyword = keyword.toLowerCase(); // 검색어를 소문자로 변환
+          return itemRepository.findByItemNameContaining(keyword);
+      }
 
 }
 

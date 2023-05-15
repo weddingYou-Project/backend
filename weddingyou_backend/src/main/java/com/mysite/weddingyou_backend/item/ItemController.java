@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.http.HttpHeaders;
@@ -93,6 +94,108 @@ public class ItemController {
 	    }
 	    return encodingDatas;
 	    }
+	 
+	//검색
+	@RequestMapping("/search/{keyword}")
+	public List<String> searchItems(@PathVariable ("keyword") String keyword) {
+		 List<Item> items =new ArrayList<>();
+	        items = itemService.searchItems(keyword);
+	        System.out.println(items);
+	        System.out.println("----------------------------------------------------------------------");
+	        
+	        List<Item> sortedItems = new ArrayList<>();
+	        List<Integer> sortedCount = new ArrayList<>();
+	        
+	        List<Item> weddingHallItems = new ArrayList<>();
+	        List<Item> studioItems = new ArrayList<>();
+	        List<Item> dressItems = new ArrayList<>();
+	        List<Item> makeupItems = new ArrayList<>();
+	        List<Item> honeymoonItems = new ArrayList<>();
+	        List<Item> bouquetItems = new ArrayList<>();
+	        
+	        if(items.size()!=0) {
+	        	 for(int i =0;i<items.size();i++) {
+	 	        	Category1 category1 = items.get(i).getCategory1();
+	 	        	if(category1.toString().equals("웨딩홀")) {
+	 	        		weddingHallItems.add(items.get(i));
+	 	        	}else if(category1.toString().equals("스튜디오")) {
+	 	        		studioItems.add(items.get(i));
+	 	        	}else if(category1.toString().equals("의상")) {
+	 	        		dressItems.add(items.get(i));
+	 	        	}else if(category1.toString().equals("메이크업")) {
+	 	        		makeupItems.add(items.get(i));
+	 	        	}else if(category1.toString().equals("신혼여행")) {
+	 	        		honeymoonItems.add(items.get(i));
+	 	        	}else if(category1.toString().equals("부케")) {
+	 	        		bouquetItems.add(items.get(i));
+	 	        	}
+	 	        	
+	 	        }
+	        	Collections.sort(weddingHallItems, (a, b) -> a.getItemWriteDate().compareTo(b.getItemWriteDate()));
+	 	        Collections.sort(studioItems, (a, b) -> a.getItemWriteDate().compareTo(b.getItemWriteDate()));
+	 	        Collections.sort(dressItems, (a, b) -> a.getItemWriteDate().compareTo(b.getItemWriteDate()));
+	 	        Collections.sort(makeupItems, (a, b) -> a.getItemWriteDate().compareTo(b.getItemWriteDate()));
+	 	        Collections.sort(honeymoonItems, (a, b) -> a.getItemWriteDate().compareTo(b.getItemWriteDate()));
+	 	        Collections.sort(bouquetItems, (a, b) -> a.getItemWriteDate().compareTo(b.getItemWriteDate()));
+	 	        
+	 	        Item emptyItem = new Item();
+	 	        emptyItem.setItemId(null);
+	 	        
+	 	        sortedItems.addAll(weddingHallItems);
+	 	        sortedItems.add(emptyItem);
+	 	        sortedItems.addAll(studioItems);
+	 	        sortedItems.add(emptyItem);
+	 	        sortedItems.addAll(dressItems); 
+	 	        sortedItems.add(emptyItem);
+	 	        sortedItems.addAll(makeupItems);
+	 	        sortedItems.add(emptyItem);
+	 	        sortedItems.addAll(honeymoonItems);
+	 	        sortedItems.add(emptyItem);
+	 	        sortedItems.addAll(bouquetItems);
+	 	        sortedItems.add(emptyItem);
+	 	        
+	 	        
+	        }
+	        
+	        List<String> encodingDatas = new ArrayList<>();
+	        
+	        
+	    if(items.size()!=0) {
+	    	for(int i =0;i<items.size()+6;i++) {
+	    		
+	    		Item targetItem = sortedItems.get(i);
+	    		System.out.println(targetItem.getItemId());
+	    		if(targetItem.getItemId()!=null) {
+	    			Category2 category2 = targetItem.getCategory2();
+		    		
+			    	 String path = "C:/Project/itemImg/"+targetItem.getCategory1()+"/"+category2;
+			    	 Path imagePath = Paths.get(path,targetItem.getItemImg());
+			    	 System.out.println(imagePath);
+
+			         try {
+			             byte[] imageBytes = Files.readAllBytes(imagePath);
+			             byte[] base64encodedData = Base64.getEncoder().encode(imageBytes);
+			             
+			             encodingDatas.add(new String(base64encodedData));
+			             
+			         } catch (IOException e) {
+			             e.printStackTrace();
+			            
+			         }
+			         encodingDatas.add(String.valueOf(targetItem.getItemId()));
+			         
+	    		}
+	    		else {
+	    			encodingDatas.add("/");
+	    			
+	    		}
+		       
+	    	}
+	    	
+	    }
+	    return encodingDatas;
+		     
+	}
 	        
 	 
 	 
@@ -114,7 +217,7 @@ public class ItemController {
 		 	itemDTO.setCategory1(category1);
 		 	itemDTO.setCategory2(category2);
 		 	itemDTO.setContent(content);
-		 	itemDTO.setItemName(itemName);
+		 	itemDTO.setItemName(itemName.toLowerCase());
 		 	//itemDTO.setItemWriteDate(LocalDateTime.now());
 		 	//itemDTO.setLikeCount(0);
 		 	try {	
@@ -213,6 +316,7 @@ public class ItemController {
 		return likeCount;
 	 }
 	 
+	
 
 }
 
