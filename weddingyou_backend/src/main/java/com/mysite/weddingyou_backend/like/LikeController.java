@@ -307,9 +307,9 @@ public class LikeController {
                     }
             	});
                 break;
-            case "지역순": //오름차순
-	                Collections.sort(likeList, (a, b) -> a.getLocation().compareTo(b.getLocation()));
-                break;
+//            case "지역순": //오름차순
+//	                Collections.sort(likeList, (a, b) -> a.getLocation().compareTo(b.getLocation()));
+//                break;
 	            default:
 	                // 예외 처리
                 throw new IllegalArgumentException("Invalid sort option: " + sortBy);
@@ -390,10 +390,10 @@ public class LikeController {
 			                    }
 			            	});
 			                break;
-			            case "지역순": //오름차순
-				                Collections.sort(likeList, (a, b) -> a.getLocation().compareTo(b.getLocation()));
-			                break;
-			                
+//			            case "지역순": //오름차순
+//				                Collections.sort(likeList, (a, b) -> a.getLocation().compareTo(b.getLocation()));
+//			                break;
+//			                
 			            case "정렬":
 			            Collections.sort(likeList, (a, b) -> a.getLikeWriteDate().compareTo(b.getLikeWriteDate()));
 			            break;
@@ -440,9 +440,9 @@ public class LikeController {
 			                    }
 			            	});
 			                break;
-			            case "지역순": //오름차순
-				                Collections.sort(likeList, (a, b) -> a.getLocation().compareTo(b.getLocation()));
-			                break;
+//			            case "지역순": //오름차순
+//				                Collections.sort(likeList, (a, b) -> a.getLocation().compareTo(b.getLocation()));
+//			                break;
 			            case "정렬":
 			            	  Collections.sort(likeList, (a, b) -> a.getLikeWriteDate().compareTo(b.getLikeWriteDate()));
 			            	  break;
