@@ -7,18 +7,14 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
-import org.hibernate.dialect.Database;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mysite.weddingyou_backend.item.Item;
@@ -279,21 +275,41 @@ public class LikeController {
 	
 	
 	//정렬(가나다순, 인기순, 지역순)
-	@GetMapping("/list/sort")
-	public List<LikeEntity> getLikeList(@RequestParam("email") String email, HttpServletRequest request, @RequestParam(required = false) String sortBy) {
+	@PostMapping("/list/sort")
+	public List<String> getLikeListBySort(@RequestBody likeDTO data, HttpServletRequest request) {
 	  //  HttpSession session = request.getSession();
 	  //  UserLogin loggedInUser = (UserLogin) session.getAttribute("loggedInUser");
 	  //  List<LikeEntity> likeList = likeService.getLikeList(loggedInUser.getEmail());
+		String sortBy = data.getSortBy();
+		System.out.println(sortBy);
+		String email = data.getEmail();
 		List<LikeEntity> likeList = likeService.getLikeList(email);
 	    if (sortBy != null) {
 	        switch (sortBy) {
-	            case "name": //오름차순
-	            	Collections.sort(likeList, (a, b) -> a.getItem().getItemName().compareTo(b.getItem().getItemName()));
+	            case "가나다순": //오름차순
+	            	Collections.sort(likeList, (a, b) -> b.getItem().getItemName().compareTo(a.getItem().getItemName()));
 	                break;
-	            case "popularity": //내림차순
-            	Collections.sort(likeList, (a, b) -> b.getLikeCount().compareTo(a.getLikeCount()));
+	            case "인기순": //내림차순
+            	Collections.sort(likeList, new Comparator<LikeEntity>() {
+                    public int compare(LikeEntity o1, LikeEntity o2) {
+                    	if(o1.getLikeCount() - o2.getLikeCount()>0) {
+                    		return 1;
+                    	}else if(o1.getLikeCount() - o2.getLikeCount()<0) {
+                    		return -1;
+                    	}else {
+                    		if(o1.getItem().getItemName().compareTo(o2.getItem().getItemName())>0) {
+                    			return -1;
+                    		}else if(o1.getItem().getItemName().compareTo(o2.getItem().getItemName())<0) {
+                    			return 1;
+                    		}else {
+                    			return 0;
+                    		}
+                    	}
+                        
+                    }
+            	});
                 break;
-            case "location": //오름차순
+            case "지역순": //오름차순
 	                Collections.sort(likeList, (a, b) -> a.getLocation().compareTo(b.getLocation()));
                 break;
 	            default:
@@ -301,6 +317,35 @@ public class LikeController {
                 throw new IllegalArgumentException("Invalid sort option: " + sortBy);
 	        }
 	    }
-	    return likeList;
+	    List<String> encodingDatas = new ArrayList<>();
+        
+	    if(likeList!=null) {
+	    	for(int i =0;i<likeList.size();i++) {
+	    		Item targetItem = likeList.get(i).getItem();
+	    		targetItem.setLikeWriteDate(likeList.get(i).getLikeWriteDate());
+	    		itemRepository.save(targetItem);
+	    		
+	    		
+		    	 String path = "C:/Project/itemImg/"+targetItem.getCategory1()+"/"+targetItem.getCategory2();
+		    	 Path imagePath = Paths.get(path,targetItem.getItemImg());
+		    	 System.out.println(imagePath);
+
+		         try {
+		             byte[] imageBytes = Files.readAllBytes(imagePath);
+		             byte[] base64encodedData = Base64.getEncoder().encode(imageBytes);
+		             
+		             encodingDatas.add(new String(base64encodedData));
+		             
+		         } catch (IOException e) {
+		             e.printStackTrace();
+		            
+		         }
+		        encodingDatas.add(String.valueOf(targetItem.getItemId()));
+		        encodingDatas.add(String.valueOf(likeList.get(i).getLikeWriteDate()));
+		        System.out.println(targetItem.getItemId());
+	    	}
+	    	
+	    }
+	    return encodingDatas;
 	}
 }

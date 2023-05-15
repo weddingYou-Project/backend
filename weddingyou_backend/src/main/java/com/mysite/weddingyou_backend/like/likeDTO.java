@@ -50,6 +50,8 @@ public class likeDTO {
 	private Long itemId;
 	
 	private Category1 category1;
+	
+	private String sortBy;
 
     
 }
