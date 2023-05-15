@@ -63,7 +63,7 @@ public class Item {
     private Category2 category2;
 	
 	public enum Category1 {
-		전체, 웨딩홀, 의상, 스튜디오, 메이크업, 신혼여행,부케
+		전체, 카테고리, 웨딩홀, 의상, 스튜디오, 메이크업, 신혼여행,부케
 	}
 	
 	public enum Category2 {
