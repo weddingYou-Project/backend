@@ -92,7 +92,11 @@ public class LikeController {
 	    //HttpSession session = request.getSession();
 	    //UserLogin loggedInUser = (UserLogin) session.getAttribute("loggedInUser");
 
+		System.out.println("email: " + email); //확인용
+		
 	    List<LikeEntity> likeList = likeService.getLikeList(email);
+	    
+	    System.out.println("likeList: " + likeList); //확인용
 
 	    if (sortBy != null) {
 	        switch (sortBy) {
