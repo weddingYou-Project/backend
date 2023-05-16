@@ -183,7 +183,9 @@ public class ItemController {
 			            
 			         }
 			         encodingDatas.add(String.valueOf(targetItem.getItemId()));
-			         
+			         encodingDatas.add(String.valueOf(targetItem.getItemName()));
+			         encodingDatas.add(String.valueOf(targetItem.getImgContent()));
+			         encodingDatas.add(String.valueOf(targetItem.getLike().size()));
 	    		}
 	    		else {
 	    			encodingDatas.add("/");
