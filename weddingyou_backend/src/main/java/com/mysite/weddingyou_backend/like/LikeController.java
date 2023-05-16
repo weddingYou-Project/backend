@@ -165,6 +165,10 @@ public class LikeController {
 		
 		int res = -1;
 		
+		if(email==null) {
+			return -1;
+		}
+		
 		List<LikeEntity> likeItem = new ArrayList<>();
 		if(userRepository.findByEmail(email)!=null) {
 			UserLogin user = userRepository.findByEmail(email);

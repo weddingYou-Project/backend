@@ -131,12 +131,12 @@ public class ItemController {
 	 	        	}
 	 	        	
 	 	        }
-	        	Collections.sort(weddingHallItems, (a, b) -> a.getItemWriteDate().compareTo(b.getItemWriteDate()));
-	 	        Collections.sort(studioItems, (a, b) -> a.getItemWriteDate().compareTo(b.getItemWriteDate()));
-	 	        Collections.sort(dressItems, (a, b) -> a.getItemWriteDate().compareTo(b.getItemWriteDate()));
-	 	        Collections.sort(makeupItems, (a, b) -> a.getItemWriteDate().compareTo(b.getItemWriteDate()));
-	 	        Collections.sort(honeymoonItems, (a, b) -> a.getItemWriteDate().compareTo(b.getItemWriteDate()));
-	 	        Collections.sort(bouquetItems, (a, b) -> a.getItemWriteDate().compareTo(b.getItemWriteDate()));
+	        	Collections.sort(weddingHallItems, (a, b) -> b.getItemWriteDate().compareTo(a.getItemWriteDate()));
+	 	        Collections.sort(studioItems, (a, b) -> b.getItemWriteDate().compareTo(a.getItemWriteDate()));
+	 	        Collections.sort(dressItems, (a, b) -> b.getItemWriteDate().compareTo(a.getItemWriteDate()));
+	 	        Collections.sort(makeupItems, (a, b) -> b.getItemWriteDate().compareTo(a.getItemWriteDate()));
+	 	        Collections.sort(honeymoonItems, (a, b) -> b.getItemWriteDate().compareTo(a.getItemWriteDate()));
+	 	        Collections.sort(bouquetItems, (a, b) -> b.getItemWriteDate().compareTo(a.getItemWriteDate()));
 	 	        
 	 	        Item emptyItem = new Item();
 	 	        emptyItem.setItemId(null);
