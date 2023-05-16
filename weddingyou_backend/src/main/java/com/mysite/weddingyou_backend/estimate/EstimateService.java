@@ -23,10 +23,42 @@ public class EstimateService {
 		estimateRepository.save(data);	
 	}
 	
-	public List<Estimate> getlist(){	//전체 견적 게시글 조회
-		List<Estimate> list = estimateRepository.findAll();
+	
+	//전체 견적 게시글 조회
+	public List<Estimate> getlist(){			
+		List<Estimate> list = estimateRepository.findAllByOrderByIdDesc();
 		return list;  
+
 	}
 	
 	
+	
+	//검색어 조회
+	public List<Estimate> getsearchlist(String search) {
+		List<Estimate> list = estimateRepository.getsearchlist(search);
+		return list;
+	}
+	
+	
+	//전체 게시글 수 조회
+	public int getcount() {
+		int count = estimateRepository.getcount();
+		return count;
+	}
+			
 }
+
+
+
+
+
+
+
+
+
+//게시글 조회
+//	public List<Estimate> Getlist(int start){
+//		int end = 7;
+//		List<Estimate> list = estimateRepository.Getlist(start,end);
+//		return list;
+//	}

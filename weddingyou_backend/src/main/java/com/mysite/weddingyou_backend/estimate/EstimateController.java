@@ -73,7 +73,7 @@ public class EstimateController {
 		estimateService.insert(data);
 	}
 	
-
+	//전체 데이터 조회
 	@ResponseBody
 	@GetMapping("/getlist")
 	public ResponseEntity<List<Estimate>> getList() {
@@ -81,6 +81,26 @@ public class EstimateController {
 	    return ResponseEntity.ok().body(list);
 	}
 
+	
+	//전체 데이터 개수 조회
+	@ResponseBody
+	@GetMapping("/getcount")
+	public ResponseEntity<Integer> getCount() {
+		int count = estimateService.getcount();
+		return ResponseEntity.ok().body(count);
+	}
+	
+//	
+	
+	
+	@GetMapping("/getsearchlist")
+	public ResponseEntity<List<Estimate>> getsearchlist(@RequestParam String search){
+		List<Estimate> list = estimateService.getsearchlist(search);
+		return ResponseEntity.ok().body(list);
+	}
+	
+	
+	
 	//이미지를 출력 부분입니다.
 	@RequestMapping("/imageview")
     public ResponseEntity<UrlResource> download(@RequestParam("image") String stored) throws MalformedURLException {
@@ -90,3 +110,15 @@ public class EstimateController {
 
 	
 }
+
+
+
+
+
+
+//무한스크롤을 위한 데이터 조회
+//	@GetMapping("/getlist")
+//	public ResponseEntity<List<Estimate>> getlist(@RequestParam int start) {
+//	  List<Estimate> list = estimateService.Getlist(start);
+//	  return ResponseEntity.ok().body(list);
+//	}
