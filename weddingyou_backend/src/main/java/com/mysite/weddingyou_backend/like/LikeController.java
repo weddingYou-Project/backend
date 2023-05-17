@@ -412,7 +412,7 @@ public class LikeController {
 		|| category1.toString().equals("의상") && sortBy.equals("정렬") || category1.toString().equals("메이크업") && sortBy.equals("정렬") 
 		|| category1.toString().equals("신혼여행") && sortBy.equals("정렬") || category1.toString().equals("부케") && sortBy.equals("정렬") ) { // 카테고리만 선택했을 때
 				likeList = likeService.getLikeListByCategory1(email, category1);
-				  Collections.sort(likeList, (a, b) -> a.getLikeWriteDate().compareTo(b.getLikeWriteDate()));
+				  Collections.sort(likeList, (a, b) -> b.getLikeWriteDate().compareTo(a.getLikeWriteDate()));
 			}
 			
 			if(!sortBy.equals("정렬")) { //두조건 모두 선택되었을 때
