@@ -343,7 +343,7 @@ public class LikeController {
 		            
 		         }
 		        encodingDatas.add(String.valueOf(targetItem.getItemId()));
-		        encodingDatas.add(String.valueOf(likeList.get(i).getLikeWriteDate()));
+		       // encodingDatas.add(String.valueOf(likeList.get(i).getLikeWriteDate()));
 		        System.out.println(targetItem.getItemId());
 	    	}
 	    	
@@ -364,7 +364,7 @@ public class LikeController {
 			List<LikeEntity> likeList = null; 
 			if(category1.toString().equals("카테고리") && sortBy.equals("정렬") || category1.toString().equals("전체") && sortBy.equals("정렬")) { //초기상태
 					likeList = likeService.getLikeList(email);
-					  Collections.sort(likeList, (a, b) -> a.getLikeWriteDate().compareTo(b.getLikeWriteDate()));
+					  Collections.sort(likeList, (a, b) -> b.getLikeWriteDate().compareTo(a.getLikeWriteDate()));
 			   
 			}
 			if(category1.toString().equals("카테고리") && !sortBy.equals("정렬") || category1.toString().equals("전체") && !sortBy.equals("정렬")) { //정렬만 선택했을 때
@@ -372,20 +372,20 @@ public class LikeController {
 				if (sortBy != null) {
 				        switch (sortBy) {
 				            case "가나다순": //오름차순
-				            	Collections.sort(likeList, (a, b) -> b.getItem().getItemName().compareTo(a.getItem().getItemName()));
+				            	Collections.sort(likeList, (a, b) -> a.getItem().getItemName().compareTo(b.getItem().getItemName()));
 				                break;
 				            case "인기순": //내림차순
 			            	Collections.sort(likeList, new Comparator<LikeEntity>() {
 			                    public int compare(LikeEntity o1, LikeEntity o2) {
 			                    	if(o1.getLikeCount() - o2.getLikeCount()>0) {
-			                    		return 1;
-			                    	}else if(o1.getLikeCount() - o2.getLikeCount()<0) {
 			                    		return -1;
+			                    	}else if(o1.getLikeCount() - o2.getLikeCount()<0) {
+			                    		return 1;
 			                    	}else {
 			                    		if(o1.getItem().getItemName().compareTo(o2.getItem().getItemName())>0) {
-			                    			return -1;
-			                    		}else if(o1.getItem().getItemName().compareTo(o2.getItem().getItemName())<0) {
 			                    			return 1;
+			                    		}else if(o1.getItem().getItemName().compareTo(o2.getItem().getItemName())<0) {
+			                    			return -1;
 			                    		}else {
 			                    			return 0;
 			                    		}
@@ -395,11 +395,11 @@ public class LikeController {
 			            	});
 			                break;
 			            case "최신순": //오름차순
-			            	Collections.sort(likeList, (a, b) -> a.getLikeWriteDate().compareTo(b.getLikeWriteDate()));
+			            	Collections.sort(likeList, (a, b) -> b.getLikeWriteDate().compareTo(a.getLikeWriteDate()));
 			                break;
 //			                
 			            case "정렬":
-			            Collections.sort(likeList, (a, b) -> a.getLikeWriteDate().compareTo(b.getLikeWriteDate()));
+			            Collections.sort(likeList, (a, b) -> b.getLikeWriteDate().compareTo(a.getLikeWriteDate()));
 			            break;
 				            default:
 				                // 예외 처리
@@ -422,20 +422,20 @@ public class LikeController {
 					if (sortBy != null) {
 				        switch (sortBy) {
 				            case "가나다순": //오름차순
-				            	Collections.sort(likeList, (a, b) -> b.getItem().getItemName().compareTo(a.getItem().getItemName()));
+				            	Collections.sort(likeList, (a, b) -> a.getItem().getItemName().compareTo(b.getItem().getItemName()));
 				                break;
 				            case "인기순": //내림차순
 			            	Collections.sort(likeList, new Comparator<LikeEntity>() {
 			                    public int compare(LikeEntity o1, LikeEntity o2) {
 			                    	if(o1.getLikeCount() - o2.getLikeCount()>0) {
-			                    		return 1;
-			                    	}else if(o1.getLikeCount() - o2.getLikeCount()<0) {
 			                    		return -1;
+			                    	}else if(o1.getLikeCount() - o2.getLikeCount()<0) {
+			                    		return 1;
 			                    	}else {
 			                    		if(o1.getItem().getItemName().compareTo(o2.getItem().getItemName())>0) {
-			                    			return -1;
-			                    		}else if(o1.getItem().getItemName().compareTo(o2.getItem().getItemName())<0) {
 			                    			return 1;
+			                    		}else if(o1.getItem().getItemName().compareTo(o2.getItem().getItemName())<0) {
+			                    			return -1;
 			                    		}else {
 			                    			return 0;
 			                    		}
@@ -445,10 +445,10 @@ public class LikeController {
 			            	});
 			                break;
 			            case "최신순": //오름차순
-			            	Collections.sort(likeList, (a, b) -> a.getLikeWriteDate().compareTo(b.getLikeWriteDate()));
+			            	Collections.sort(likeList, (a, b) -> b.getLikeWriteDate().compareTo(a.getLikeWriteDate()));
 			                break;
 			            case "정렬":
-			            	  Collections.sort(likeList, (a, b) -> a.getLikeWriteDate().compareTo(b.getLikeWriteDate()));
+			            	  Collections.sort(likeList, (a, b) -> b.getLikeWriteDate().compareTo(a.getLikeWriteDate()));
 			            	  break;
 				            default:
 				                // 예외 처리
@@ -482,7 +482,7 @@ public class LikeController {
 			            
 			         }
 			        encodingDatas.add(String.valueOf(targetItem.getItemId()));
-			        encodingDatas.add(String.valueOf(likeList.get(i).getLikeWriteDate()));
+			      //  encodingDatas.add(String.valueOf(likeList.get(i).getLikeWriteDate()));
 			        System.out.println(targetItem.getItemId());
 		    	}
 		    	

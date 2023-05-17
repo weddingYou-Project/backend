@@ -11,9 +11,8 @@ import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 
-import org.springframework.http.HttpHeaders;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +25,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.mysite.weddingyou_backend.item.Item.Category1;
 import com.mysite.weddingyou_backend.item.Item.Category2;
+import com.mysite.weddingyou_backend.like.LikeEntity;
+import com.mysite.weddingyou_backend.like.LikeService;
+import com.mysite.weddingyou_backend.like.likeDTO;
+import com.mysite.weddingyou_backend.plannerLogin.PlannerLogin;
+import com.mysite.weddingyou_backend.plannerLogin.PlannerLoginRepository;
+import com.mysite.weddingyou_backend.userLogin.UserLogin;
+import com.mysite.weddingyou_backend.userLogin.UserLoginRepository;
 
 @RestController
 @RequestMapping("/item")
@@ -34,9 +40,21 @@ public class ItemController {
 	
 	private ItemService itemService;
 	
+	@Autowired
+	private UserLoginRepository userRepository;
+	
+	@Autowired
+	private PlannerLoginRepository plannerRepository;
+	
+	@Autowired
+	private LikeService likeService;
+	
 	public ItemController(ItemService itemService) {
 	       this.itemService = itemService;
+	     
 	}
+	
+	
 	
 
 	// 이미지 목록 페이지
@@ -97,8 +115,10 @@ public class ItemController {
 	 
 	//검색
 	@RequestMapping("/search/{keyword}")
-	public List<String> searchItems(@PathVariable ("keyword") String keyword) {
-		 List<Item> items =new ArrayList<>();
+	public List<String> searchItems(@PathVariable ("keyword") String keyword, @RequestBody likeDTO like) {
+			String email = like.getEmail();
+			System.out.println("----------------------------------------------------------"+email);
+			List<Item> items =new ArrayList<>();
 	        items = itemService.searchItems(keyword);
 	        System.out.println(items);
 	        System.out.println("----------------------------------------------------------------------");
@@ -167,6 +187,7 @@ public class ItemController {
 	    		System.out.println(targetItem.getItemId());
 	    		if(targetItem.getItemId()!=null) {
 	    			Category2 category2 = targetItem.getCategory2();
+	    			Long itemId = targetItem.getItemId();
 		    		
 			    	 String path = "C:/Project/itemImg/"+targetItem.getCategory1()+"/"+category2;
 			    	 Path imagePath = Paths.get(path,targetItem.getItemImg());
@@ -182,10 +203,45 @@ public class ItemController {
 			             e.printStackTrace();
 			            
 			         }
+			         
+			        
+			        
 			         encodingDatas.add(String.valueOf(targetItem.getItemId()));
 			         encodingDatas.add(String.valueOf(targetItem.getItemName()));
 			         encodingDatas.add(String.valueOf(targetItem.getImgContent()));
 			         encodingDatas.add(String.valueOf(targetItem.getLike().size()));
+			         int res = 0;
+			         if(email==null) { //로그인하지 않았을 경우
+			        	 res = -1;
+			         }else { //로그인했을 경우
+			        	
+					        List<LikeEntity> likeItem = new ArrayList<>();
+					 		if(userRepository.findByEmail(email)!=null) {
+					 			UserLogin user = userRepository.findByEmail(email);
+					 			likeItem = likeService.getLikeListByItemIdAndUser(user, targetItem);
+					 		
+					 			if(likeItem.size()!=0) { //찾은 결과가 있을 때
+					 				res = 1;
+					 				System.out.println("=========================="+likeItem.get(0).getItem().getItemId());
+					 			}else {
+					 				res = 0;
+					 			}
+					 		}else if(plannerRepository.findByEmail(email)!=null) {
+					 			PlannerLogin planner = plannerRepository.findByEmail(email);
+					 			likeItem = likeService.getLikeListByItemIdAndPlanner(planner, targetItem);
+					 			
+					 			if(likeItem.size()!=0) {
+					 				res = 1;
+					 				System.out.println("================================="+likeItem.get(0).getItem().getItemId());
+					 			}else  {
+					 				res = 0;
+					 			}
+					 		
+					 		}
+			         }
+			         encodingDatas.add(String.valueOf(res));
+			         
+			       
 	    		}
 	    		else {
 	    			encodingDatas.add("/");
