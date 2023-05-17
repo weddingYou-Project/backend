@@ -148,10 +148,12 @@ public class LikeService {
     }
     
     public void decreaseLikeNum(List<LikeEntity> list) {
-    	System.out.println(list);
-    	for(int i=0;i<list.size();i++) {
-	    	LikeEntity likeentity = list.get(i);
-	    	likeentity.setLikeCount(list.size()-1);
+  
+    	Item targetItem = list.get(0).getItem();   
+    	List<LikeEntity> targetList = likeRepository.findAllByItem(targetItem);
+    	for(int i=0;i<targetList.size();i++) {
+	    	LikeEntity likeentity = targetList.get(i);
+	    	likeentity.setLikeCount(targetList.size()-1);
 	    	likeRepository.save(likeentity);
 	    }
     }

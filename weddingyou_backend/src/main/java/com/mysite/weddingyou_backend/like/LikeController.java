@@ -141,12 +141,15 @@ public class LikeController {
 		if(userRepository.findByEmail(email)!=null) {
 			UserLogin user = userRepository.findByEmail(email);
 			List<LikeEntity> likeItem = likeService.getLikeListByItemIdAndUser(user, item);
+			System.out.println(likeItem.get(0).getLikeId());
+			System.out.println("newlikeItem:"+likeItem);
 			likeService.decreaseLikeNum(likeItem);
 			likeService.deleteLike(likeItem.get(0).getLikeId());
 		}else if(plannerRepository.findByEmail(email)!=null) {
 			PlannerLogin planner = plannerRepository.findByEmail(email);
 			List<LikeEntity> likeItem = likeService.getLikeListByItemIdAndPlanner(planner, item);
 			//List<LikeEntity> likeItem = likeService.getLikeList(email);
+			System.out.println(likeItem.get(0).getLikeId());
 			System.out.println("newlikeItem:"+likeItem);
 			likeService.decreaseLikeNum(likeItem);
 			likeService.deleteLike(likeItem.get(0).getLikeId());
