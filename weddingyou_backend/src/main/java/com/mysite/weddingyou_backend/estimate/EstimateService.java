@@ -31,20 +31,27 @@ public class EstimateService {
 
 	}
 	
-	
-	
 	//검색어 조회
 	public List<Estimate> getsearchlist(String search) {
 		List<Estimate> list = estimateRepository.getsearchlist(search);
 		return list;
 	}
 	
-	
 	//전체 게시글 수 조회
 	public int getcount() {
 		int count = estimateRepository.getcount();
 		return count;
 	}
+	
+	//견적서 상세조회
+	public Estimate getdetail(int id) {
+		estimateRepository.increaseViewCount(id);
+		Estimate data = estimateRepository.findById(id).orElse(null);
+		return data;
+	}
+	
+	
+	
 			
 }
 

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -81,7 +82,7 @@ public class EstimateController {
 	    return ResponseEntity.ok().body(list);
 	}
 
-	
+
 	//전체 데이터 개수 조회
 	@ResponseBody
 	@GetMapping("/getcount")
@@ -90,9 +91,7 @@ public class EstimateController {
 		return ResponseEntity.ok().body(count);
 	}
 	
-//	
-	
-	
+	//검색 데이터 조회	
 	@GetMapping("/getsearchlist")
 	public ResponseEntity<List<Estimate>> getsearchlist(@RequestParam String search){
 		List<Estimate> list = estimateService.getsearchlist(search);
@@ -100,8 +99,7 @@ public class EstimateController {
 	}
 	
 	
-	
-	//이미지를 출력 부분입니다.
+	//이미지 출력 부분입니다.
 	@RequestMapping("/imageview")
     public ResponseEntity<UrlResource> download(@RequestParam("image") String stored) throws MalformedURLException {
         UrlResource resource = new UrlResource("file:" + uploadDir + "/" + stored);
@@ -109,16 +107,17 @@ public class EstimateController {
     }
 
 	
+	//견적서 상세정보 조회 + 조회수 증가
+	@RequestMapping("/getdetail/{id}")
+	public Estimate getdetail(@PathVariable ("id") int id) {
+	return estimateService.getdetail(id);
+		} 
+		
+	
+	
+	
+	
+	
 }
 
 
-
-
-
-
-//무한스크롤을 위한 데이터 조회
-//	@GetMapping("/getlist")
-//	public ResponseEntity<List<Estimate>> getlist(@RequestParam int start) {
-//	  List<Estimate> list = estimateService.Getlist(start);
-//	  return ResponseEntity.ok().body(list);
-//	}

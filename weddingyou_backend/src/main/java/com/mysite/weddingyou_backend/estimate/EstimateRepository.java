@@ -3,7 +3,10 @@ package com.mysite.weddingyou_backend.estimate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+
+import jakarta.transaction.Transactional;
 
 public interface EstimateRepository extends JpaRepository<Estimate, Integer> {
 
@@ -24,11 +27,17 @@ public interface EstimateRepository extends JpaRepository<Estimate, Integer> {
 	List<Estimate> getsearchlist(String search);
 	
 	
-	
-	
-	  
 	//모든 데이터 조회
 	List<Estimate> findAllByOrderByIdDesc();
+	
+	
+	@Transactional
+	@Modifying
+	@Query(value="update estimate set e_viewcount = e_viewcount+1 where e_id = :num",nativeQuery=true)
+	void increaseViewCount(int num);
+	
+	
+	
 	
 	
 	
