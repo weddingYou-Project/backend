@@ -50,6 +50,10 @@ public class EstimateService {
 		return data;
 	}
 	
+	//견적서 삭제
+	public void delete(int id ) {
+		estimateRepository.deleteById(id);
+	}
 	
 	
 			

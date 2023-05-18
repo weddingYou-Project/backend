@@ -114,6 +114,14 @@ public class EstimateController {
 		} 
 		
 	
+	//견적서 삭제
+	@RequestMapping("/delete")
+	public void delete(@RequestParam int id) {
+		estimateService.delete(id);
+	}
+	
+	
+	
 	
 	
 	
