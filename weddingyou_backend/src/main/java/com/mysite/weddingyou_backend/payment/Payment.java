@@ -27,34 +27,34 @@ public class Payment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "payment_id")
-	private Long paymendId;
+	private Long paymentId; //결제ID
 	
 	@Column(name = "price", precision = 10, scale = 2, nullable = false)
-	private BigDecimal price;
+	private BigDecimal price; //상품 가격
 	
 	@Column(name = "quantity", nullable = false)
-	private Integer quantity;
+	private Integer quantity; //상품 수량
 	
 	@Column(name = "payment_method", nullable = false)
-	private String paymentMethod;
+	private String paymentMethod; //결제 수단
 	
 	@Column(name = "payment_amount", precision = 10, scale = 2, nullable = false)
-	private BigDecimal paymentAmount;
+	private BigDecimal paymentAmount; //결제 금액
 	
 	@Column(name = "payment_status", nullable = false)
-	private String paymentStatus;
+	private String paymentStatus; //결제 상태
 	
 	@Column(name = "payment_date", nullable = false)
-	private LocalDateTime paymentDate;
+	private LocalDateTime paymentDate; //결제 일시
 	
 	@Column(name = "deposit_amount", precision = 10, scale = 2, nullable = false)
-	private BigDecimal depositAmount;
+	private BigDecimal depositAmount; //계약금 결제 금액
 	
 	@Column(name = "deposit_status", nullable = false)
-	private String depositStatus;
+	private String depositStatus; //계약금 결제 상태
 	
 	@Column(name = "deposit_date", nullable = false)
-	private LocalDateTime depositDate;
+	private LocalDateTime depositDate; //계약금 결제 일시
 	
 	@ManyToOne
 	@JoinColumn(name = "user_email", referencedColumnName = "email", nullable = false)
