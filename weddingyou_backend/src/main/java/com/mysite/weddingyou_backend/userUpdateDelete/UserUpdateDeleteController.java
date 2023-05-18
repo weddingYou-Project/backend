@@ -22,6 +22,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDelete;
+import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDeleteDTO;
+
 @RestController //데이터를 반환
 public class UserUpdateDeleteController {
 	
@@ -30,12 +33,18 @@ public class UserUpdateDeleteController {
 	
 
 	 @PostMapping("/user/userSearch")
-	 public UserUpdateDelete searchUser(@RequestBody UserUpdateDeleteDTO user) {
-		 System.out.println(user.getEmail());
+	 public UserUpdateDelete searchUser(@RequestBody UserUpdateDeleteDTO user) throws Exception {
+		
 		 
 		 	UserUpdateDelete searchedUser = service.getUserByEmail(user.getEmail());
-		    return searchedUser;
+		 	if(searchedUser != null) {
+	        	 return searchedUser;
+	        }else {
+	        	throw new Exception("이메일이 중복되지 않습니다!");
+	        }
+		   
 	 }
+
 
 	 @PostMapping("/user/userDelete")
 	    public ResponseEntity<UserUpdateDelete> deleteUser(@RequestBody UserUpdateDeleteDTO user) {
@@ -104,7 +113,7 @@ public class UserUpdateDeleteController {
 	 
 	 @RequestMapping(value="/user/getprofileImg",  produces = MediaType.IMAGE_JPEG_VALUE)
 	 public ResponseEntity<byte[]> getImage(@RequestBody UserUpdateDeleteDTO user) {
-		 System.out.println("유저이메일: " + user.getEmail());
+		// System.out.println("유저이메일: " + user.getEmail());
 		 UserUpdateDelete searchedUser = service.getUserByEmail(user.getEmail());
 	     if (searchedUser != null) {
 	         Path imagePath = Paths.get("C:/Project/profileImg/user",searchedUser.getUserImg());

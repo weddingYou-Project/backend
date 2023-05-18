@@ -29,12 +29,16 @@ public class PlannerUpdateDeleteController {
 	PlannerUpdateDeleteService service;
 	
 	//회원 조회
-	 @PostMapping("/planner/plannerSearch")
-	    public PlannerUpdateDelete searchUser(@RequestBody PlannerUpdateDeleteDTO planner) {
-	        PlannerUpdateDelete searchedPlanner = service.getPlannerByEmail(planner.getEmail());
-	        System.out.println("career:" + searchedPlanner.getPlannerCareerYears());
-	        return searchedPlanner;
-	    }
+	@PostMapping("/planner/plannerSearch")
+    public PlannerUpdateDelete searchUser(@RequestBody PlannerUpdateDeleteDTO planner) throws Exception {
+        PlannerUpdateDelete searchedPlanner = service.getPlannerByEmail(planner.getEmail());
+        if(searchedPlanner != null) {
+        	 return searchedPlanner;
+        }else {
+        	throw new Exception("이메일이 중복되지 않습니다!");
+        }
+       
+    }
 	 
 	 //회원 탈퇴
 	 @PostMapping("/planner/plannerDelete")
