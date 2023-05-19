@@ -113,6 +113,42 @@ public class ItemController {
 	    return encodingDatas;
 	    }
 	 
+	 @RequestMapping(value="/itemList/{category1}/{category2}")
+	 public List<String> getImagesByCategory1AndCategory2(@PathVariable Category1 category1, @PathVariable Category2 category2) {
+		 List<ItemDTO> items =null;
+	        items = itemService.getItemsByCategory1AndCategory2(category1, category2);
+	       
+	        List<String> encodingDatas = new ArrayList<>();
+	        
+	        
+	    if(items!=null) {
+	    	for(int i =0;i<items.size();i++) {
+	    		ItemDTO targetItem = items.get(i);
+	    		
+		    	 String path = "C:/Project/itemImg/"+targetItem.getCategory1()+"/"+targetItem.getCategory2();
+		    	 Path imagePath = Paths.get(path,targetItem.getItemImg());
+		    	 System.out.println(imagePath);
+
+		         try {
+		             byte[] imageBytes = Files.readAllBytes(imagePath);
+		             byte[] base64encodedData = Base64.getEncoder().encode(imageBytes);
+		             
+		             encodingDatas.add(new String(base64encodedData));
+		             
+		         } catch (IOException e) {
+		             e.printStackTrace();
+		            
+		         }
+		        encodingDatas.add(String.valueOf(targetItem.getItemId()));
+		        encodingDatas.add(String.valueOf(targetItem.getItemName()));
+		        encodingDatas.add(String.valueOf(targetItem.getContent()));
+		      
+	    	}
+	    	
+	    }
+	    return encodingDatas;
+	    }
+	 
 	//검색
 	@RequestMapping("/search/{keyword}")
 	public List<String> searchItems(@PathVariable ("keyword") String keyword, @RequestBody likeDTO like) {
