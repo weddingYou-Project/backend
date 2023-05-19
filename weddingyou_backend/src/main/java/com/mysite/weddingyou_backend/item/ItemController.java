@@ -311,7 +311,7 @@ public class ItemController {
 	 @RequestMapping("/insertItem")
 	 public ResponseEntity<Item> createItem(@RequestParam("file") MultipartFile file,@RequestParam("category1") Category1 category1, 
 			 @RequestParam("category2") Category2 category2,@RequestParam("itemName") String itemName,
-			 @RequestParam("content")String content ) {
+			 @RequestParam("content")String content ) throws Exception {
 		 	ItemDTO itemDTO = new ItemDTO();
 		 	itemDTO.setCategory1(category1);
 		 	itemDTO.setCategory2(category2);
@@ -336,9 +336,12 @@ public class ItemController {
 		    		}
 		    	}
 		    	
-		    
-		        Files.copy(file.getInputStream(), Paths.get(path3, file.getOriginalFilename()),StandardCopyOption.REPLACE_EXISTING); //request에서 들어온 파일을 uploads 라는 경로에 originalfilename을 String 으로 올림
-		       
+		    	try {
+		    		Files.copy(file.getInputStream(), Paths.get(path3, file.getOriginalFilename())); //request에서 들어온 파일을 uploads 라는 경로에 originalfilename을 String 으로 올림
+		    	}catch(Exception e) {
+		    		throw new Exception("파일이 중복됩니다!");
+		    	}
+
 		        itemDTO.setItemImg(file.getOriginalFilename()); //itemimg에다가 이미지 파일 이름 저장
 		        Item newItem = itemService.createItem(itemDTO); // 이미지파일이름 데이터베이스에 업데이트함
 		        return ResponseEntity.ok(newItem);
