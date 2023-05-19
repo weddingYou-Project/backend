@@ -20,6 +20,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.mysite.weddingyou_backend.like.LikeRepository;
+import com.mysite.weddingyou_backend.plannerLogin.PlannerLoginRepository;
+import com.mysite.weddingyou_backend.userLogin.UserLoginRepository;
 import com.mysite.weddingyou_backend.userUpdateDelete.UserUpdateDeleteDTO;
 
 @RestController //데이터를 반환
@@ -27,6 +30,15 @@ public class PlannerUpdateDeleteController {
 	
 	@Autowired
 	PlannerUpdateDeleteService service;
+	
+	@Autowired
+	PlannerLoginRepository plannerRepository;
+	
+	@Autowired
+	UserLoginRepository userRepository;
+	
+	@Autowired
+	LikeRepository likeRepository;
 	
 	//회원 조회
 	@PostMapping("/planner/plannerSearch")

@@ -8,8 +8,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Base64;
 
-import javax.tools.FileObject;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -22,14 +20,26 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDelete;
-import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDeleteDTO;
+import com.mysite.weddingyou_backend.like.LikeRepository;
+import com.mysite.weddingyou_backend.plannerLogin.PlannerLoginRepository;
+import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDeleteService;
+import com.mysite.weddingyou_backend.userLogin.UserLoginRepository;
 
 @RestController //데이터를 반환
 public class UserUpdateDeleteController {
 	
 	@Autowired
 	UserUpdateDeleteService service;
+
+	
+	@Autowired
+	PlannerLoginRepository plannerRepository;
+	
+	@Autowired
+	UserLoginRepository userRepository;
+	
+	@Autowired
+	LikeRepository likeRepository;
 	
 
 	 @PostMapping("/user/userSearch")
