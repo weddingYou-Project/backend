@@ -32,6 +32,7 @@ import com.mysite.weddingyou_backend.like.LikeService;
 import com.mysite.weddingyou_backend.like.likeDTO;
 import com.mysite.weddingyou_backend.plannerLogin.PlannerLogin;
 import com.mysite.weddingyou_backend.plannerLogin.PlannerLoginRepository;
+import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDelete;
 import com.mysite.weddingyou_backend.userLogin.UserLogin;
 import com.mysite.weddingyou_backend.userLogin.UserLoginRepository;
 import com.mysite.weddingyou_backend.userUpdateDelete.UserUpdateDelete;
@@ -351,26 +352,29 @@ public class ItemController {
 	
 	 
 	 // 이미지 수정(사진 이름 카테고리)
-	 @RequestMapping("/updateItem")
-	 public ResponseEntity<Item> updateItem(@RequestParam("file") MultipartFile file,@RequestParam(value = "itemId") Long itemId,  @RequestBody ItemDTO itemDTO) {
+	 @PostMapping("/updateItem/{itemId}")
+	 public ResponseEntity<Item> updateItem(@RequestParam(value="file", required=false) MultipartFile file,@PathVariable Long itemId,  @RequestParam("itemName") String itemName, 
+			 @RequestParam("content") String content) {
 		 
 		 	try {	
 		 		
-		    	String path = "C:\\Project\\itemImg\\"+itemDTO.getCategory1()+"\\"+itemDTO.getCategory2();
-//		    	File folder = new File(path);
-//		    	if(!folder.exists()) {
-//		    		try {
-//		    			folder.mkdir();
-//		    		}catch(Exception e) {
-//		    			e.getStackTrace();
-//		    		}
-//		    	}
-		    	Item deleteItem = itemService.getItemById(itemId);
-		    	Path deleteFilePath = Paths.get(path, deleteItem.getItemImg());
-		    	Files.delete(deleteFilePath);
-		        Files.copy(file.getInputStream(), Paths.get(path, file.getOriginalFilename()),StandardCopyOption.REPLACE_EXISTING); //request에서 들어온 파일을 uploads 라는 경로에 originalfilename을 String 으로 올림
-		        System.out.println(file.getInputStream());
-		        itemDTO.setItemImg(file.getOriginalFilename()); //itemimg에다가 이미지 파일 이름 저장
+		 		ItemDTO itemDTO = new ItemDTO();
+		 		 Item searchedItem = itemService.getItemById(itemId);
+		    	String path = "C:\\Project\\itemImg\\"+searchedItem.getCategory1()+"\\"+searchedItem.getCategory2();
+		    	
+		    	if(file!=null) {
+		    		Item deleteItem = itemService.getItemById(itemId);
+			    	Path deleteFilePath = Paths.get(path, deleteItem.getItemImg());
+			    	Files.delete(deleteFilePath);
+			        Files.copy(file.getInputStream(), Paths.get(path, file.getOriginalFilename()),StandardCopyOption.REPLACE_EXISTING); //request에서 들어온 파일을 uploads 라는 경로에 originalfilename을 String 으로 올림
+			        System.out.println(file.getInputStream());
+			        itemDTO.setItemImg(file.getOriginalFilename()); //itemimg에다가 이미지 파일 이름 저장
+		    	}
+		    	
+		        itemDTO.setCategory1(searchedItem.getCategory1());
+		        itemDTO.setCategory2(searchedItem.getCategory2());
+		        itemDTO.setContent(content);
+		        itemDTO.setItemName(itemName);
 		        Item updatedItemDTO = itemService.updateItem(itemId,itemDTO); // 이미지파일이름 데이터베이스에 업데이트함
 		        return ResponseEntity.ok().body(updatedItemDTO);
 		    } catch (IOException e) {
@@ -379,6 +383,8 @@ public class ItemController {
 		    }
 	
 	 }
+	 
+	 
     
 	 // 이미지 삭제
 	 @PostMapping("/deleteItem")
@@ -436,6 +442,8 @@ public class ItemController {
 	 
 	    
 	 }
+	 
+	 
 	
 
 }
