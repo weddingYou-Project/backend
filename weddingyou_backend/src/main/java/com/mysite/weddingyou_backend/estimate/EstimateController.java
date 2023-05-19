@@ -121,7 +121,61 @@ public class EstimateController {
 	}
 	
 	
+	//견적서 수정
+	@PostMapping(value = "/modify", produces = "multipart/form-data")
+	public void modifyData(@RequestParam(value = "uploadfiles", required = false) MultipartFile[] uploadfiles,
+	                       @RequestParam("weddingdate") String weddingdate,
+	                       @RequestParam("budget") int budget,
+	                       @RequestParam("region") String region,
+	                       @RequestParam("honeymoon") String honeymoon,
+	                       @RequestParam("makeup") String makeup,
+	                       @RequestParam("dress") String dress,
+	                       @RequestParam("requirement") String requirement,
+	                       @RequestParam("studio") String studio,
+	                       @RequestParam("writer") String writer,  
+	                       @RequestParam("previmage") String[] previmage,
+	                       @RequestParam("id") long id)
+	                    		   throws IOException {
+	    // 이미지 데이터 처리 로직
+		List<String> list = new ArrayList<>();
+		for(int i = 0; i < previmage.length; i++) {
+			list.add("\"" + previmage[i] + "\"");
+		}
+		if(!(uploadfiles == null)) {
+        for (MultipartFile file : uploadfiles) {
+            if (!file.isEmpty()) {
+                File storedFilename = new File(UUID.randomUUID().toString() + "_" + file.getOriginalFilename());
+                list.add("\"" + storedFilename.toString() + "\"");
+                file.transferTo(storedFilename); //업로드
+            }
+        }
+		}
+		Estimate data = new Estimate();
+		data.setWeddingdate(weddingdate);
+		data.setBudget(budget);
+		data.setRegion(region);
+		data.setHoneymoon(honeymoon);
+		data.setMakeup(makeup);
+		data.setDress(dress);
+		data.setRequirement(requirement);
+		data.setStudio(studio);
+		data.setWriter(writer);
+		data.setImg(list.toString());
+		data.setMatchstatus(false);
+		data.setTitle(writer + "님의 견적서");
+		data.setDate(LocalDate.now());
+		data.setViewcount(0);		
+		data.setId(id);
+		estimateService.insert(data);
+	}
 	
+	
+	//가져온이미지경로를 받는다. [124124ㄷㄱ314_파일명,35235dfsdf3423_파일명]
+	//새로 들어온 이미지 파일의 파일명을 받는다 [파일명 , 파일명]
+	
+	
+	//먼저 리스트에다가 가져온이미지경로 문자열을 json화 해서 집어 넣는다.
+	//그리고 새로 들어온 이미지 파일명을 uuid화 해서 add 한다.
 	
 	
 	
