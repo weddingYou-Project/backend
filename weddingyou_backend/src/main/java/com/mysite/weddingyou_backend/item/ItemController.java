@@ -12,7 +12,9 @@ import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,6 +34,8 @@ import com.mysite.weddingyou_backend.plannerLogin.PlannerLogin;
 import com.mysite.weddingyou_backend.plannerLogin.PlannerLoginRepository;
 import com.mysite.weddingyou_backend.userLogin.UserLogin;
 import com.mysite.weddingyou_backend.userLogin.UserLoginRepository;
+import com.mysite.weddingyou_backend.userUpdateDelete.UserUpdateDelete;
+import com.mysite.weddingyou_backend.userUpdateDelete.UserUpdateDeleteDTO;
 
 @RestController
 @RequestMapping("/item")
@@ -410,6 +414,28 @@ public class ItemController {
 		return likeCount;
 	 }
 	 
+	 @RequestMapping(value="/getitemImg/{itemId}",  produces = MediaType.IMAGE_JPEG_VALUE)
+	 public ResponseEntity<byte[]> getImage(@PathVariable Long itemId) {
+		
+		 Item searchedItem = itemService.getItemById(itemId);
+		 String path = "C:\\Project\\itemImg\\"+searchedItem.getCategory1()+"\\"+searchedItem.getCategory2();
+	     
+	         Path imagePath = Paths.get(path,searchedItem.getItemImg());
+
+	         try {
+	             byte[] imageBytes = Files.readAllBytes(imagePath);
+	             byte[] base64encodedData = Base64.getEncoder().encode(imageBytes);
+	              return ResponseEntity.ok()
+	                      .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + 
+	                    		  searchedItem.getItemImg() + "\"")
+	                      .body(base64encodedData);
+	         } catch (IOException e) {
+	             e.printStackTrace();
+	             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	         }
+	 
+	    
+	 }
 	
 
 }
