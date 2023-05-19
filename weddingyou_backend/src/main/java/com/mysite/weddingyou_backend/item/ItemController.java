@@ -307,7 +307,7 @@ public class ItemController {
 	     return ResponseEntity.ok().body(items);
 	 }
     
-	 // 새로운 이미지 생성
+	 // 새로운 아이템 생성
 	 @RequestMapping("/insertItem")
 	 public ResponseEntity<Item> createItem(@RequestParam("file") MultipartFile file,@RequestParam("category1") Category1 category1, 
 			 @RequestParam("category2") Category2 category2,@RequestParam("itemName") String itemName,
@@ -351,7 +351,7 @@ public class ItemController {
 	 
 	
 	 
-	 // 이미지 수정(사진 이름 카테고리)
+	 // 아이템 수정
 	 @PostMapping("/updateItem/{itemId}")
 	 public ResponseEntity<Item> updateItem(@RequestParam(value="file", required=false) MultipartFile file,@PathVariable Long itemId,  @RequestParam("itemName") String itemName, 
 			 @RequestParam("content") String content) {
@@ -386,21 +386,14 @@ public class ItemController {
 	 
 	 
     
-	 // 이미지 삭제
-	 @PostMapping("/deleteItem")
-	 public ResponseEntity<String> deleteItem(@RequestParam(value = "itemId") Long itemId, @RequestBody ItemDTO itemDTO) {
+	 // 아이템 삭제
+	 @PostMapping("/deleteItem/{itemId}")
+	 public ResponseEntity<String> deleteItem(@PathVariable Long itemId) {
 		 try {	
-		 		
-		    	String path = "C:\\Project\\itemImg\\"+itemDTO.getCategory1()+"\\"+itemDTO.getCategory2();
-//		    	File folder = new File(path);
-//		    	if(!folder.exists()) {
-//		    		try {
-//		    			folder.mkdir();
-//		    		}catch(Exception e) {
-//		    			e.getStackTrace();
-//		    		}
-//		    	}
-		    	Item deleteItem = itemService.getItemById(itemId);
+			 
+	 		 	Item deleteItem = itemService.getItemById(itemId);
+		    	String path = "C:\\Project\\itemImg\\"+deleteItem.getCategory1()+"\\"+deleteItem.getCategory2();
+
 		    	Path deleteFilePath = Paths.get(path, deleteItem.getItemImg());
 		    	Files.delete(deleteFilePath);
 		       
@@ -420,6 +413,7 @@ public class ItemController {
 		return likeCount;
 	 }
 	 
+	 //아이템 가져오기
 	 @RequestMapping(value="/getitemImg/{itemId}",  produces = MediaType.IMAGE_JPEG_VALUE)
 	 public ResponseEntity<byte[]> getImage(@PathVariable Long itemId) {
 		
