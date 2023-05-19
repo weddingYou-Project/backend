@@ -9,6 +9,7 @@ import com.mysite.weddingyou_backend.userLogin.UserLogin;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -56,15 +57,18 @@ public class Payment {
 	@Column(name = "deposit_date", nullable = false)
 	private LocalDateTime depositDate; //계약금 결제 일시
 	
-	@ManyToOne
+	@Column(name = "payment_type", nullable = false)
+	private String paymentType; //계약금or전체금액
+	
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name = "user_email", referencedColumnName = "email", nullable = false)
 	private UserLogin user;
 
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name = "planner_email", referencedColumnName = "email", nullable = false)
 	private PlannerLogin planner;
 
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name = "item_id", referencedColumnName = "item_id", nullable = false)
 	private Item item;
 	

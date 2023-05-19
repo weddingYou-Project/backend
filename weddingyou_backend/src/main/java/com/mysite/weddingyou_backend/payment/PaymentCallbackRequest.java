@@ -3,7 +3,8 @@ package com.mysite.weddingyou_backend.payment;
 public class PaymentCallbackRequest {
 	
     private Long paymentId;
-    private PaymentStatus status;
+    private PaymentStatus paymentStatus;
+    private PaymentStatus depositStatus;
     private String paymentType;
 
     public Long getPaymentId() {
@@ -31,9 +32,9 @@ public class PaymentCallbackRequest {
 //    }
     
     public enum PaymentStatus {
-        PAID("paid"),
-        CANCELLED("cancelled"),
-        OTHER("other");
+        PAID("paid"), //결제 완료
+        CANCELLED("cancelled"), //결제 취소
+        OTHER("other"); //기타(결제 실패, 결제 보류중 등)
 
         private final String value;
 
@@ -46,7 +47,11 @@ public class PaymentCallbackRequest {
         }
     }
 
-	public PaymentStatus getStatus() {
-		return status;
+	public PaymentStatus getPaymentStatus() {
+		return paymentStatus;
+	}
+	
+	public PaymentStatus getDepositStatus() {
+		return depositStatus;
 	}
 }
