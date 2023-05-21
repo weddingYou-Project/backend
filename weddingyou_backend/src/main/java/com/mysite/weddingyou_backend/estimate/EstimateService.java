@@ -58,18 +58,3 @@ public class EstimateService {
 	
 			
 }
-
-
-
-
-
-
-
-
-
-//게시글 조회
-//	public List<Estimate> Getlist(int start){
-//		int end = 7;
-//		List<Estimate> list = estimateRepository.Getlist(start,end);
-//		return list;
-//	}

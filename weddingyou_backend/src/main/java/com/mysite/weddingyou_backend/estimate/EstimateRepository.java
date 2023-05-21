@@ -35,21 +35,10 @@ public interface EstimateRepository extends JpaRepository<Estimate, Integer> {
 	@Modifying
 	@Query(value="update estimate set e_viewcount = e_viewcount+1 where e_id = :num",nativeQuery=true)
 	void increaseViewCount(int num);
-	
-	
-	
-	
-	
-	
-	
-	
-	
+		
 }
 
 
 
 
 
-//	//무한 스크롤 게시글 조회
-//	@Query(value = "select * from estimate order by e_id desc LIMIT :start, :end",nativeQuery=true)
-//	List<Estimate> Getlist(int start, int end);

@@ -36,14 +36,14 @@ public class Estimate {
     @Column(name = "e_budget")
     private int budget;			//예산
 
-    @Column(name = "e_writer")
+    @Column(name = "e_writer") //글쓴이
     private String writer;
     
     @Column(name= "e_weddingdate")	//결혼 예정일
     private String weddingdate;
     
     
-    @Column(name = "e_img",length=2000)
+    @Column(name = "e_img",length=5000)
     private String img;			//추가 이미지
 
     @Column(name = "e_date")
@@ -61,10 +61,10 @@ public class Estimate {
     @Column(name = "e_honeymoon")
     private String honeymoon;	//신혼여행지
 	
-    @Column (name = "e_studio")
+    @Column (name = "e_studio") //스튜디오
     private String studio;
     
-    @Column (name = "e_matchstatus")
+    @Column (name = "e_matchstatus")//매칭상태
     private boolean matchstatus;     
     
     @Column (name = "e_viewcount") //조회수
