@@ -16,6 +16,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -46,8 +47,12 @@ public class Item {
 	@Column(name = "item_name", nullable = false)
     private String itemName;
 	
-	@Column(name = "item_write_date", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", nullable = false)
+	@Column(name = "item_write_date")
     private LocalDateTime itemWriteDate;
+	
+	
+	@Column(name ="like_write_date")
+    private LocalDateTime likeWriteDate;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name = "category1", nullable = false)
@@ -58,18 +63,18 @@ public class Item {
     private Category2 category2;
 	
 	public enum Category1 {
-		웨딩홀, 의상, 스튜디오, 메이크업, 신혼여행,부케
+		전체, 카테고리, 웨딩홀, 의상, 스튜디오, 메이크업, 신혼여행,부케
 	}
 	
 	public enum Category2 {
 		//웨딩홀
 		일반, 호텔, 채플, 스몰, 야외, 전통혼례,
 		//의상
-		한복, 드레스, 남성예복,
+		한복, 머메이드, A라인, H라인, 벨라인, 엠파이어, 프린세스, 남성예복, 
 		//스튜디오
 		인물중심, 배경중심, 균형적인,
 		//메이크업
-		헤어, 메이크업,
+		헤어, 스모키, 러블리, 큐티, 네추럴, 포인트, 로맨틱한,
 		//신혼여행
 		국내, 해외,
 		//부케
