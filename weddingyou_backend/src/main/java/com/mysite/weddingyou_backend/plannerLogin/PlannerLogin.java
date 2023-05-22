@@ -2,8 +2,12 @@ package com.mysite.weddingyou_backend.plannerLogin;
 
 import java.time.LocalDateTime;
 
+import com.mysite.weddingyou_backend.plannerRegister.PlannerRegister.Gender;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -36,6 +40,9 @@ public class PlannerLogin {
 
 	@Column(name = "planner_img", nullable = true)
 	private String plannerImg;
+	
+	 @Enumerated(EnumType.STRING) // Enum 값을 String 형태로 저장
+	    private Gender gender;
 	
 	@Column(name = "planner_career_years", nullable = false)
 	private String plannerCareerYears;

@@ -8,8 +8,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Base64;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -22,7 +20,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.mysite.weddingyou_backend.userUpdateDelete.UserUpdateDelete;
+import com.mysite.weddingyou_backend.like.LikeRepository;
+import com.mysite.weddingyou_backend.plannerLogin.PlannerLoginRepository;
+import com.mysite.weddingyou_backend.userLogin.UserLoginRepository;
 import com.mysite.weddingyou_backend.userUpdateDelete.UserUpdateDeleteDTO;
 
 @RestController //데이터를 반환
@@ -31,13 +31,26 @@ public class PlannerUpdateDeleteController {
 	@Autowired
 	PlannerUpdateDeleteService service;
 	
+	@Autowired
+	PlannerLoginRepository plannerRepository;
+	
+	@Autowired
+	UserLoginRepository userRepository;
+	
+	@Autowired
+	LikeRepository likeRepository;
+	
 	//회원 조회
-	 @PostMapping("/planner/plannerSearch")
-	    public PlannerUpdateDelete searchUser(@RequestBody PlannerUpdateDeleteDTO planner) {
-	        PlannerUpdateDelete searchedPlanner = service.getPlannerByEmail(planner.getEmail());
-	        System.out.println("career:" + searchedPlanner.getPlannerCareerYears());
-	        return searchedPlanner;
-	    }
+	@PostMapping("/planner/plannerSearch")
+    public PlannerUpdateDelete searchUser(@RequestBody PlannerUpdateDeleteDTO planner) throws Exception {
+        PlannerUpdateDelete searchedPlanner = service.getPlannerByEmail(planner.getEmail());
+        if(searchedPlanner != null) {
+        	 return searchedPlanner;
+        }else {
+        	throw new Exception("이메일이 중복되지 않습니다!");
+        }
+       
+    }
 	 
 	 //회원 탈퇴
 	 @PostMapping("/planner/plannerDelete")

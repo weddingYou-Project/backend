@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 import com.mysite.weddingyou_backend.item.Item.Category1;
 import com.mysite.weddingyou_backend.item.Item.Category2;
 
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,11 +28,11 @@ public class ItemDTO {
 	@NotNull
     private String itemImg;
    
-    
+	
 	@NotNull
     private String itemName;
     
-	@NotNull
+	
     private LocalDateTime itemWriteDate;
 	
 	@NotNull
@@ -49,6 +50,7 @@ public class ItemDTO {
         itemDTO.setItemId(item.getItemId());
         itemDTO.setItemName(item.getItemName());
         itemDTO.setItemImg(item.getItemImg());
+        itemDTO.setContent(item.getImgContent());
         itemDTO.setItemWriteDate(item.getItemWriteDate());
         itemDTO.setCategory1(item.getCategory1());
         itemDTO.setCategory2(item.getCategory2());
