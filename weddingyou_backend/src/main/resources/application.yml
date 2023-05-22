@@ -34,4 +34,5 @@ spring:
     multipart: 
       max-file-size: 1000MB  #최대 파일 사이즈를 100MB로 지정
       max-request-size: 1000MB
+      location: c:\\Project\\upload
 
