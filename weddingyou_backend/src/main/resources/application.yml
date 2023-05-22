@@ -36,4 +36,3 @@ spring:
       max-request-size: 1000MB
       location: c:\\Project\\upload
 
-   
