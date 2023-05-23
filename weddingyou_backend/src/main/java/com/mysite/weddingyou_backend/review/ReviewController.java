@@ -2,10 +2,8 @@ package com.mysite.weddingyou_backend.review;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,8 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.mysite.weddingyou_backend.plannerLogin.PlannerLogin;
 import com.mysite.weddingyou_backend.userLogin.UserLogin;
-
-import jakarta.persistence.EntityManager;
 
 
 @RestController
@@ -30,8 +26,8 @@ public class ReviewController {
 	public Review createReview(@RequestBody ReviewDTO reviewDTO,
 			@RequestParam("file") MultipartFile file) throws IOException {
 		
-		UserLogin userEmail = reviewDTO.getUserEmail();
-	    PlannerLogin plannerEmail = reviewDTO.getPlannerEmail();
+		UserLogin user = reviewDTO.getUserEmail();
+	    PlannerLogin planner = reviewDTO.getPlannerEmail();
 	    // userEmail과 plannerEmail을 사용하여 리뷰 작성 및 처리
 	    
 	    // 리뷰 생성 및 데이터베이스 저장
