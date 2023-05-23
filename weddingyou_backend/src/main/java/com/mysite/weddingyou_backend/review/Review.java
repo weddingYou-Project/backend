@@ -27,7 +27,7 @@ public class Review {
     @Column(name = "review_id")
     private Long reviewId;
 	
-	@Column(name = "review_img",length=2000)
+	@Column(name = "review_img", nullable = true)
     private String reviewImg;
 	
 	@Column(name = "review_text", nullable = false)
@@ -39,11 +39,18 @@ public class Review {
 	@Column(name = "review_date", nullable = false)
 	private LocalDateTime reviewDate;
 	
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name = "user_email", referencedColumnName = "email", nullable = false)
-	private UserLogin user;
+	@Column(name = "user_email", nullable = false)
+	private String userEmail;
 
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name = "planner_email", referencedColumnName = "email", nullable = false)
-	private PlannerLogin planner;
+	@Column(name = "planner_email", nullable = false)
+	private String plannerEmail;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_email", referencedColumnName = "email", insertable = false, updatable = false, nullable = false)
+	private UserLogin userLogin;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "planner_email", referencedColumnName = "email", insertable = false, updatable = false, nullable = false)
+	private PlannerLogin plannerLogin;
+
 }

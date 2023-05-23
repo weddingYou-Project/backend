@@ -2,11 +2,14 @@ package com.mysite.weddingyou_backend.review;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,39 +19,46 @@ import com.mysite.weddingyou_backend.userLogin.UserLogin;
 
 
 @RestController
-@RequestMapping("/reviews")
+
 public class ReviewController {
 	
 	@Autowired
 	ReviewService reviewService;
 	
-	@PostMapping
-	public Review createReview(@RequestBody ReviewDTO reviewDTO,
-			@RequestParam("file") MultipartFile file) throws IOException {
-		
-		UserLogin user = reviewDTO.getUserEmail();
-	    PlannerLogin planner = reviewDTO.getPlannerEmail();
-	    // userEmail과 plannerEmail을 사용하여 리뷰 작성 및 처리
-	    
-	    // 리뷰 생성 및 데이터베이스 저장
-	    Review createdReview = reviewService.createReview(reviewDTO, file);
-	    
-		
-//	    // 플래너 정보를 사용하여 작업 수행
-//	    PlannerLogin planner = entityManager.find(PlannerLogin.class, plannerEmail);
-//	    // 사용자 정보 추가
-//	    Review reviewUser = reviewService.getUserEmail(userEmail); // 로그인한 사용자의 email를 가져옴
+	@PostMapping(value = "/reviews", produces = "multipart/form-data")
+	public void createReview(@RequestParam("reviewText") String reviewText,
+	        @RequestParam("reviewStarts") int reviewStarts,
+	        @RequestParam(value = "reviewImg", required = false) MultipartFile[] reviewImg,
+	        @RequestParam("userEmail") String userEmail,
+	        @RequestParam("plannerEmail") String plannerEmail) throws IOException {
 	    
 	    // 파일 저장
-	 	if (!file.isEmpty()) {
-	 		String fileName = file.getOriginalFilename();
-	 		String filePath = "c:\\Project\\upload";
-	 		File destFile = new File(filePath, fileName);
-	 		file.transferTo(destFile); // 파일을 지정된 경로에 저장
-	 		// 파일 경로를 리뷰 객체에 저장
-	 		createdReview.setReviewImg(destFile.getAbsolutePath());
+		List<String> list = new ArrayList<>();
+	 	if (!(reviewImg == null)) {
+	 	for (MultipartFile file : reviewImg) {
+	 		if (!file.isEmpty()) {
+	 			File storedFilename = new File(UUID.randomUUID().toString() + "_" + file.getOriginalFilename());
+	 			list.add("\"" + storedFilename.toString() + "\"");
+                file.transferTo(storedFilename); //업로드
+	 		}
 	 	}
-	    return createdReview;
+	 	}
+	 	
+	 	Review review = new Review();
+	 	review.setReviewText(reviewText);
+	 	review.setReviewStars(reviewStarts);
+	 	review.setReviewImg(reviewText);
+	 	review.setReviewImg(list.toString());
+	 	review.setUserEmail(userEmail);
+	 	review.setPlannerEmail(plannerEmail);
+	 	review.setReviewDate(LocalDateTime.now());
+	 	
+	 	System.out.println(review);
+	 	
+	 	
+	    // 리뷰 생성 및 데이터베이스 저장
+	    reviewService.save(review);
+	    
 	}
 
 }
