@@ -31,9 +31,9 @@ public class MypageAdmin {
 	@Column(name = "UsersType")
 	private String type;
 	
-	public void setType(String type) {
-        this.type = type;
-    }
+//	public void setType(String type) {
+//        this.type = type;
+//    }
 	
 	@Column(name = "user_email"/*, nullable = false*/)
 	private String userEmail;
