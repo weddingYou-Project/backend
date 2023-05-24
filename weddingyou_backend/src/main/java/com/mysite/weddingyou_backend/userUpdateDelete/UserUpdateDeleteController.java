@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.mysite.weddingyou_backend.like.LikeRepository;
 import com.mysite.weddingyou_backend.plannerLogin.PlannerLoginRepository;
+import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDelete;
 import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDeleteService;
 import com.mysite.weddingyou_backend.userLogin.UserLoginRepository;
 
@@ -65,18 +66,19 @@ public class UserUpdateDeleteController {
 	 
 	 @PostMapping("/user/userUpdate")
 	    public UserUpdateDelete updateUser(@RequestBody UserUpdateDeleteDTO user) throws Exception {
-		 UserUpdateDelete searchedUser = service.getUserByEmail(user.getPreemail());
-		 UserUpdateDelete emailDuplicateUser = service.getUserByEmail(user.getEmail());
-		 if(user.getPreemail().equals(user.getEmail()) || emailDuplicateUser==null) {
+		 UserUpdateDelete searchedUser = service.getUserByEmail(user.getEmail());
+			
+		 if(searchedUser!= null) {
 			 searchedUser.setEmail(user.getEmail());
 			 searchedUser.setPassword(user.getPassword());
 			 searchedUser.setPhoneNum(user.getPhoneNum());
+			 searchedUser.setName(user.getName());
 			 searchedUser.setGender(user.getGender());
-			service.save(searchedUser);
+			
+			 service.save(searchedUser);
 		 }else {
-			 throw new Exception("이메일이 중복됩니다!");
+			 throw new Exception("변경할 이메일이 존재하지 않습니다!");
 		 }
-		
 		 return searchedUser;
 		
 	    }

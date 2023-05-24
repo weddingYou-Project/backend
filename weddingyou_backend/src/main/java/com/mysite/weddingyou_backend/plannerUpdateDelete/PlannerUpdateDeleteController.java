@@ -63,19 +63,33 @@ public class PlannerUpdateDeleteController {
 	 //회원 업데이트
 	 @PostMapping("/planner/userUpdate")
 	    public PlannerUpdateDelete updateUser(@RequestBody PlannerUpdateDeleteDTO planner) throws Exception {
-		 System.out.println(planner.getPreemail());
-		 System.out.println(planner.getEmail());
-		 PlannerUpdateDelete searchedPlanner = service.getPlannerByEmail(planner.getPreemail());
-		 PlannerUpdateDelete emailDuplicatePlanner = service.getPlannerByEmail(planner.getEmail());
-		 if(planner.getPreemail().equals(planner.getEmail())||emailDuplicatePlanner==null) {
+		
+//		 PlannerUpdateDelete searchedPlanner = service.getPlannerByEmail(planner.getPreemail());
+//		 PlannerUpdateDelete emailDuplicatePlanner = service.getPlannerByEmail(planner.getEmail());
+//		 if(planner.getPreemail().equals(planner.getEmail())||emailDuplicatePlanner==null) {
+//			 searchedPlanner.setEmail(planner.getEmail());
+//			 searchedPlanner.setPassword(planner.getPassword());
+//			 searchedPlanner.setPhoneNum(planner.getPhoneNum());
+//			 searchedPlanner.setGender(planner.getGender());
+//			 searchedPlanner.setPlannerCareerYears(planner.getCareer());
+//			 service.save(searchedPlanner);
+//		 }else {
+//			 throw new Exception("이메일이 중복됩니다!");
+//		 }
+		 
+		 PlannerUpdateDelete searchedPlanner = service.getPlannerByEmail(planner.getEmail());
+	
+		 if(searchedPlanner!= null) {
 			 searchedPlanner.setEmail(planner.getEmail());
 			 searchedPlanner.setPassword(planner.getPassword());
 			 searchedPlanner.setPhoneNum(planner.getPhoneNum());
+			 searchedPlanner.setName(planner.getName());
 			 searchedPlanner.setGender(planner.getGender());
 			 searchedPlanner.setPlannerCareerYears(planner.getCareer());
+			 System.out.println(planner.getCareer());
 			 service.save(searchedPlanner);
 		 }else {
-			 throw new Exception("이메일이 중복됩니다!");
+			 throw new Exception("변경할 이메일이 존재하지 않습니다!");
 		 }
 		
 		return searchedPlanner;
