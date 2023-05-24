@@ -6,6 +6,7 @@ import java.net.MalformedURLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -134,6 +134,8 @@ public class EstimateController {
 	                       @RequestParam("studio") String studio,
 	                       @RequestParam("writer") String writer,  
 	                       @RequestParam("previmage") String[] previmage,
+	                       @RequestParam("date") String date,
+	                       @RequestParam("viewcount") int viewcount,
 	                       @RequestParam("id") long id)
 	                    		   throws IOException {
 	    // 이미지 데이터 처리 로직
@@ -163,12 +165,21 @@ public class EstimateController {
 		data.setImg(list.toString());
 		data.setMatchstatus(false);
 		data.setTitle(writer + "님의 견적서");
-		data.setDate(LocalDate.now());
-		data.setViewcount(0);		
+		data.setDate(LocalDate.parse(date));
+		data.setViewcount(viewcount);		
 		data.setId(id);
 		estimateService.insert(data);
 	}
+
+
 	
+	@PostMapping("/pageinglist")
+	public List<Estimate> pageinglist(@RequestBody Map<String, Object> requestParams) {
+	  int page_num = (int) requestParams.get("page_num");
+	  int limit = (int) requestParams.get("limit");
+	  
+	  return estimateService.pageinglist(page_num, limit);
+	}
 	
 	
 	

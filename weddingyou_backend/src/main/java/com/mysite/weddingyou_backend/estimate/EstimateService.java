@@ -55,6 +55,9 @@ public class EstimateService {
 		estimateRepository.deleteById(id);
 	}
 	
-	
+	public List<Estimate> pageinglist(int page_num, int limit) {
+		int start = (page_num - 1) * limit;
+		return estimateRepository.pageinglist(start, limit);
+	}
 			
 }
