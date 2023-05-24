@@ -20,7 +20,13 @@ public class PlannerRegisterController {
 
     @PostMapping("/planner/register")
     public ResponseEntity<PlannerRegister> createPlanner(@Valid @RequestBody PlannerRegisterDTO plannerDTO) {
-        PlannerRegister createdPlanner = plannerService.createPlanner(plannerDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdPlanner);
+        PlannerRegister createdPlanner = null;
+		try {
+			createdPlanner = plannerService.createPlanner(plannerDTO);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 return ResponseEntity.status(HttpStatus.CREATED).body(createdPlanner);
     }
 }

@@ -8,8 +8,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Base64;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -22,7 +20,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.mysite.weddingyou_backend.userUpdateDelete.UserUpdateDelete;
+import com.mysite.weddingyou_backend.like.LikeRepository;
+import com.mysite.weddingyou_backend.plannerLogin.PlannerLoginRepository;
+import com.mysite.weddingyou_backend.userLogin.UserLoginRepository;
 import com.mysite.weddingyou_backend.userUpdateDelete.UserUpdateDeleteDTO;
 
 @RestController //데이터를 반환
@@ -31,13 +31,26 @@ public class PlannerUpdateDeleteController {
 	@Autowired
 	PlannerUpdateDeleteService service;
 	
+	@Autowired
+	PlannerLoginRepository plannerRepository;
+	
+	@Autowired
+	UserLoginRepository userRepository;
+	
+	@Autowired
+	LikeRepository likeRepository;
+	
 	//회원 조회
-	 @PostMapping("/planner/plannerSearch")
-	    public PlannerUpdateDelete searchUser(@RequestBody PlannerUpdateDeleteDTO planner) {
-	        PlannerUpdateDelete searchedPlanner = service.getPlannerByEmail(planner.getEmail());
-	        System.out.println("career:" + searchedPlanner.getPlannerCareerYears());
-	        return searchedPlanner;
-	    }
+	@PostMapping("/planner/plannerSearch")
+    public PlannerUpdateDelete searchUser(@RequestBody PlannerUpdateDeleteDTO planner) throws Exception {
+        PlannerUpdateDelete searchedPlanner = service.getPlannerByEmail(planner.getEmail());
+        if(searchedPlanner != null) {
+        	 return searchedPlanner;
+        }else {
+        	throw new Exception("이메일이 중복되지 않습니다!");
+        }
+       
+    }
 	 
 	 //회원 탈퇴
 	 @PostMapping("/planner/plannerDelete")
@@ -71,16 +84,25 @@ public class PlannerUpdateDeleteController {
 	 public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("useremail") String email) {
 		    try {	
 		    	PlannerUpdateDelete searchedPlanner = service.getPlannerByEmail(email);
-		    	String path = "C:\\Project\\profileImg\\planner";
-		    	File folder = new File(path);
-		    	if(!folder.exists()) {
+		    	String path1 = "C:\\Project";
+		    	String path2 = "C:\\Project\\profileImg";
+		    	String path3 = "C:\\Project\\profileImg\\planner";
+		    	File folder1 = new File(path1);
+		    	File folder2 = new File(path2);
+		    	File folder3 = new File(path3);
+		    	if(!folder1.exists() || !folder2.exists() || !folder3.exists()) {
 		    		try {
-		    			folder.mkdir();
+		    			folder1.mkdir();
+		    			folder2.mkdir();
+		    			folder3.mkdir();
 		    		}catch(Exception e) {
 		    			e.getStackTrace();
 		    		}
 		    	}
-		    	
+		    	if(searchedPlanner.getPlannerImg() != null) {
+		    		Path deleteFilePath = Paths.get(path3, searchedPlanner.getPlannerImg());
+		    		Files.delete(deleteFilePath);
+		    	}
 		        Files.copy(file.getInputStream(), Paths.get("C:/Project/profileImg/planner", file.getOriginalFilename()),StandardCopyOption.REPLACE_EXISTING); //request에서 들어온 파일을 uploads 라는 경로에 originalfilename을 String 으로 올림
 		        System.out.println(file.getInputStream());
 		        searchedPlanner.setPlannerImg(file.getOriginalFilename()); //searchedPlanner에다가 이미지 파일 이름 저장

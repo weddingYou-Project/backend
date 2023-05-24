@@ -30,7 +30,7 @@ public class PlannerUpdateDeleteService {
 	private PlannerUpdateDeleteRepository plannerRepository;
 	
 	public PlannerUpdateDelete getPlannerByEmail(String email) {
-		System.out.println(plannerRepository.findByEmail(email));
+		//System.out.println(plannerRepository.findByEmail(email));
         return plannerRepository.findByEmail(email);
     }
 	
