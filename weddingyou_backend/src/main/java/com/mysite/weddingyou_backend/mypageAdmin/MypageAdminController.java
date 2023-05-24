@@ -44,6 +44,11 @@ public class MypageAdminController {
 	            MypageAdmin userMypageAdmin = new MypageAdmin();
 	            userMypageAdmin.setType("user");
 	            userMypageAdmin.setUserEmail(user.getEmail());
+	            userMypageAdmin.setUserName(user.getName());
+	            userMypageAdmin.setUserPassword(user.getPassword());
+	            userMypageAdmin.setUserGender(user.getGender());
+	            userMypageAdmin.setUserPhoneNum(user.getPhoneNum());
+	            userMypageAdmin.setUserJoinDate(user.getUserJoinDate());
 
 	            mypageAdmins.add(userMypageAdmin);
 	            mypageAdminRepository.save(userMypageAdmin);
@@ -56,6 +61,11 @@ public class MypageAdminController {
 	            MypageAdmin plannerMypageAdmin = new MypageAdmin();
 	            plannerMypageAdmin.setType("planner");
 	            plannerMypageAdmin.setPlannerEmail(planner.getEmail());
+	            plannerMypageAdmin.setPlannerName(planner.getName());
+	            plannerMypageAdmin.setPlannerPassword(planner.getPassword());
+	            plannerMypageAdmin.setPlannerGender(planner.getGender());
+	            plannerMypageAdmin.setPlannerPhoneNum(planner.getPhoneNum());
+	            plannerMypageAdmin.setPlannerJoinDate(planner.getPlannerJoinDate());
 
 	            mypageAdmins.add(plannerMypageAdmin);
 	            mypageAdminRepository.save(plannerMypageAdmin);
