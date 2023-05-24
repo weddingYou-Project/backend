@@ -22,4 +22,10 @@ public interface PlannerLoginRepository extends JpaRepository<PlannerLogin, Long
 	@Transactional
 	@Query(value="update planner set password = :password where email = :email", nativeQuery=true)
 	public int updatePassword(String email, String password);
+	
+	//mypageAdmin 부분에서 이름, 비밀번호, 휴대폰번호 수정시 사용
+	@Modifying
+	@Transactional
+	@Query(value="update planner set password = :password, phone_number = :phone_number, name = :name where email = :email", nativeQuery=true)
+	public int updatePlanner(String email, String password, String phone_number, String name);
 }
