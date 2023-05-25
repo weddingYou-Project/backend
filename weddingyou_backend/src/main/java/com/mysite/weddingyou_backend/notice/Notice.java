@@ -1,5 +1,7 @@
 package com.mysite.weddingyou_backend.notice;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,7 +22,7 @@ public class Notice {
     private long noticeId;
 	
 	@Column(name = "notice_img")
-	private byte[] noticeImg;
+    private String noticeImg;
 	
 	@Column(name = "notice_title")
 	private String noticeTitle;
@@ -28,4 +30,6 @@ public class Notice {
 	@Column(name = "notice_content")
 	private String noticeContent;
 	
+	@Column(name = "notice_write_date")
+    private LocalDateTime noticeWriteDate;
 }

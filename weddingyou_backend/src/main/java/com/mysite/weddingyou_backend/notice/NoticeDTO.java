@@ -1,16 +1,42 @@
 package com.mysite.weddingyou_backend.notice;
 
+import java.time.LocalDateTime;
+
+import javax.validation.constraints.NotNull;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class NoticeDTO {
-	 private long noticeId;
-	    
-	    private byte[] noticeImg;
-	    
-	    private String noticeTitle;
-	    
-	    private String noticeContent;
+	
+	@NotNull
+	private Long noticeId;
+	
+	@NotNull
+    private String noticeTitle;
+    
+	@NotNull
+    private String noticeContent;
+    
+    private String noticeImg;
+
+    private LocalDateTime noticeWriteDate;
+    
+	public static NoticeDTO fromEntity(Notice notice) {
+		NoticeDTO NoticeDTO = new NoticeDTO();
+		NoticeDTO.setNoticeId(notice.getNoticeId());
+		NoticeDTO.setNoticeTitle(notice.getNoticeTitle());
+		NoticeDTO.setNoticeContent(notice.getNoticeContent());
+		NoticeDTO.setNoticeImg(notice.getNoticeImg());
+		NoticeDTO.setNoticeWriteDate(notice.getNoticeWriteDate());
+        return NoticeDTO;
+	}
 }
