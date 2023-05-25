@@ -1,13 +1,13 @@
 package com.mysite.weddingyou_backend.estimate;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -69,6 +69,9 @@ public class Estimate {
     
     @Column (name = "e_viewcount") //조회수
     private int viewcount;
+    
+    @Column (name = "e_plannerMatching") //plannermatching
+    private String plannermatching;
 }
 	
 	

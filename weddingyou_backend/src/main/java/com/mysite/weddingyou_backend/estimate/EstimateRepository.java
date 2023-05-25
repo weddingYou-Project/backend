@@ -35,6 +35,8 @@ public interface EstimateRepository extends JpaRepository<Estimate, Integer> {
 	@Modifying
 	@Query(value="update estimate set e_viewcount = e_viewcount+1 where e_id = :num",nativeQuery=true)
 	void increaseViewCount(int num);
+	
+	Estimate findById(Long id);
 		
 }
 

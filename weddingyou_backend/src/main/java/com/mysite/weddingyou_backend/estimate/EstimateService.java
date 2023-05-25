@@ -50,6 +50,19 @@ public class EstimateService {
 		return data;
 	}
 	
+	//견적서 상세조회
+		public Estimate getEstimateDetail(Long id) {
+			Estimate data = estimateRepository.findById(id);
+			return data;
+		}
+		
+		//견적서 매칭 플래너 업데이트
+	public Estimate save(Estimate data) {
+			System.out.println("service:"+data.getPlannermatching());
+			estimateRepository.save(data);
+			return data;
+	}
+	
 	//견적서 삭제
 	public void delete(int id ) {
 		estimateRepository.deleteById(id);

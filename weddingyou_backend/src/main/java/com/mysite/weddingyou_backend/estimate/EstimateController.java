@@ -121,6 +121,7 @@ public class EstimateController {
 	}
 	
 	
+	
 	//견적서 수정
 	@PostMapping(value = "/modify", produces = "multipart/form-data")
 	public void modifyData(@RequestParam(value = "uploadfiles", required = false) MultipartFile[] uploadfiles,
@@ -169,10 +170,31 @@ public class EstimateController {
 		estimateService.insert(data);
 	}
 	
+	//견적서 매칭원하는 플래너 삽입하기
+		@PostMapping(value = "/insert/matchingplanner")
+		public void updateData(
+		                       @RequestParam("id") Long id,
+								@RequestParam("plannermatching") String plannermatching)
+		                    		   throws IOException {
+		    
+			Estimate targetData = estimateService.getEstimateDetail(id);
+			
+			System.out.println("targetData.plannermatching:"+plannermatching);
+			
+			
+			Estimate data = new Estimate();
+			data.setPlannermatching(plannermatching);
+			System.out.println("---------"+data.getPlannermatching());
+			targetData.setPlannermatching(data.getPlannermatching());
+			
+			estimateService.save(targetData);
+			System.out.println("after:"+targetData.getPlannermatching());
+		}
 	
 	
 	
 	
+
 	
 	
 }
