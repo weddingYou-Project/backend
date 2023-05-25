@@ -2,11 +2,15 @@ package com.mysite.weddingyou_backend.mypageAdmin;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.mysite.weddingyou_backend.plannerLogin.PlannerLogin;
@@ -29,6 +33,7 @@ public class MypageAdminController {
 	
 	@Autowired
 	PlannerLoginRepository plannerLoginRepository;
+	
 
 	//전체 사용자 정보 리스트 조회
 	@GetMapping("/all")
@@ -79,4 +84,32 @@ public class MypageAdminController {
 	        return ResponseEntity.notFound().build();
 	    }   
 	}
+	
+	// 사용자 정보 수정
+	@PutMapping("/user/{id}")
+	public ResponseEntity<?> updateUser(@PathVariable("id") Long id, @RequestBody MypageAdmin updatedAdmin) {
+	    int rowsAffected = mypageAdminService.updateUser(updatedAdmin.getUserName(), updatedAdmin.getUserPassword(),
+	            updatedAdmin.getUserPhoneNum(), updatedAdmin.getUserEmail());
+	    if (rowsAffected > 0) {
+	        // 업데이트 성공 시
+	        List<UserLogin> updatedUser = userLoginRepository.findAll(); // 업데이트된 정보 가져오기
+	        System.out.println("업데이트된 사용자 정보: " + updatedUser); // print문 추가
+	        return ResponseEntity.ok().build();
+	    } else {
+	        return ResponseEntity.notFound().build();
+	    }
+	}
+  
+    @PutMapping("/planner/{id}")
+    public ResponseEntity<?> updatePlanner(@PathVariable("id") Long id, @RequestBody MypageAdmin updatedAdmin) {
+        int rowsAffected = mypageAdminService.updatePlanner(updatedAdmin.getPlannerName(), updatedAdmin.getPlannerPassword(),
+                updatedAdmin.getPlannerPhoneNum(), updatedAdmin.getPlannerEmail());
+        if (rowsAffected > 0) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
 }

@@ -17,5 +17,13 @@ public class MypageAdminService {
 	public List<MypageAdmin> getAllUsersAndPlanners() {
         return mypageAdminRepository.findAll();
     }
+	
+	public int updateUser(String name, String password, String phoneNum, String email) {
+		return mypageAdminRepository.updateUser(name, password, phoneNum, email);
+	}
+	
+	public int updatePlanner(String name, String password, String phoneNum, String email) {
+		return mypageAdminRepository.updatePlanner(name, password, phoneNum, email);
+	}
 
 }

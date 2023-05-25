@@ -123,6 +123,14 @@ public class MypageAdmin {
     @JoinColumn(name = "planner_join_date", referencedColumnName="planner_join_date", insertable = false, updatable = false, nullable = false)
     private PlannerLogin plannerJoin;
 
+	public UserLogin getUserLogin() {
+		return null;
+	}
+	
+	public PlannerLogin getPlannerLogin() {
+		return null;
+	}
+
     
 //    @ManyToOne(fetch=FetchType.LAZY)
 //    @JoinColumn(name = "estimate_id", referencedColumnName="e_id")
