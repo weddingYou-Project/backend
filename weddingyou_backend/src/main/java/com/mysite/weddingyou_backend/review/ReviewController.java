@@ -25,12 +25,14 @@ public class ReviewController {
 	@Autowired
 	ReviewService reviewService;
 	
-	@PostMapping(value = "/reviews", produces = "multipart/form-data")
-	public void createReview(@RequestParam("reviewText") String reviewText,
-	        @RequestParam("reviewStars") int reviewStars,
+	@PostMapping(value = "/reviews")
+	public int createReview(@RequestParam("reviewText") String reviewText,
+	        @RequestParam("reviewStars") Integer reviewStars,
 	        @RequestParam(value = "reviewImg", required = false) MultipartFile[] reviewImg,
 	        @RequestParam("userEmail") String userEmail,
 	        @RequestParam("plannerEmail") String plannerEmail) throws IOException {
+		
+		int res = 0;
 	    
 	    // 파일 저장
 		List<String> list = new ArrayList<>();
@@ -57,6 +59,9 @@ public class ReviewController {
 	 	
 	    // 리뷰 생성 및 데이터베이스 저장
 	    reviewService.save(review);
+	    res=1;
+	    
+	    return res;
 	    
 	}
 
