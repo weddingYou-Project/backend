@@ -45,12 +45,12 @@ public class Review {
 	@Column(name = "planner_email", nullable = false)
 	private String plannerEmail;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_email", referencedColumnName = "email", insertable = false, updatable = false, nullable = false)
-	private UserLogin userLogin;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "planner_email", referencedColumnName = "email", insertable = false, updatable = false, nullable = false)
-	private PlannerLogin plannerLogin;
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	@JoinColumn(name = "user_email", referencedColumnName = "email", insertable = false, updatable = false, nullable = false)
+//	private UserLogin userLogin;
+//
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	@JoinColumn(name = "planner_email", referencedColumnName = "email", insertable = false, updatable = false, nullable = false)
+//	private PlannerLogin plannerLogin;
 
 }

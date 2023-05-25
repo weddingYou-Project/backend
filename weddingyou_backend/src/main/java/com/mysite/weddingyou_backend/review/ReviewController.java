@@ -47,7 +47,6 @@ public class ReviewController {
 	 	Review review = new Review();
 	 	review.setReviewText(reviewText);
 	 	review.setReviewStars(reviewStars);
-	 	review.setReviewImg(reviewText);
 	 	review.setReviewImg(list.toString());
 	 	review.setUserEmail(userEmail);
 	 	review.setPlannerEmail(plannerEmail);
