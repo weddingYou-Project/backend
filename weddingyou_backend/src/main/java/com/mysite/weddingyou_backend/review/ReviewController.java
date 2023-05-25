@@ -27,7 +27,7 @@ public class ReviewController {
 	
 	@PostMapping(value = "/reviews", produces = "multipart/form-data")
 	public void createReview(@RequestParam("reviewText") String reviewText,
-	        @RequestParam("reviewStarts") int reviewStarts,
+	        @RequestParam("reviewStars") int reviewStars,
 	        @RequestParam(value = "reviewImg", required = false) MultipartFile[] reviewImg,
 	        @RequestParam("userEmail") String userEmail,
 	        @RequestParam("plannerEmail") String plannerEmail) throws IOException {
@@ -46,7 +46,7 @@ public class ReviewController {
 	 	
 	 	Review review = new Review();
 	 	review.setReviewText(reviewText);
-	 	review.setReviewStars(reviewStarts);
+	 	review.setReviewStars(reviewStars);
 	 	review.setReviewImg(reviewText);
 	 	review.setReviewImg(list.toString());
 	 	review.setUserEmail(userEmail);
