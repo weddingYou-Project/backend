@@ -191,7 +191,19 @@ public class EstimateController {
 			System.out.println("after:"+targetData.getPlannermatching());
 		}
 	
-	
+		//견적서 매칭원하는 플래너 삽입하기
+				@GetMapping(value = "/getuserdetail")
+				public List<Estimate> getUserDetail(@RequestParam("userEmail") String userEmail) throws Exception {
+				    
+					List<Estimate> targetData = estimateService.getEstimateDetailByEmail(userEmail);
+					if(targetData!=null) {
+						return targetData;
+					}
+					else {
+						throw new Exception("정보가 존재하지 않습니다!");
+					}
+				}
+			
 	
 	
 

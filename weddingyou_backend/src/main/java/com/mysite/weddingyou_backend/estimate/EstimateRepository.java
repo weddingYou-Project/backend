@@ -37,6 +37,9 @@ public interface EstimateRepository extends JpaRepository<Estimate, Integer> {
 	void increaseViewCount(int num);
 	
 	Estimate findById(Long id);
+
+
+	List<Estimate> findAllByWriter(String userEmail);
 		
 }
 
