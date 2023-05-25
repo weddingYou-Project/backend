@@ -19,6 +19,7 @@ spring:
     show-sql: true # 콘솔창에 sql 명령문을 출력
     properties:
       hibernate.format_sql: true # sql명령문을 보기 좋게 보여준다.
+      hibernate.globally_quoted_identifiers: true
 
   mail:
     host: smtp.naver.com
@@ -31,6 +32,7 @@ spring:
       
   servlet:
     multipart: 
-      max-file-size: 100MB  #최대 파일 사이즈를 100MB로 지정
-      max-request-size: 100MB
+      max-file-size: 1000MB  #최대 파일 사이즈를 100MB로 지정
+      max-request-size: 1000MB
+      location: c:\\Project\\upload
 

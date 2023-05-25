@@ -8,8 +8,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Base64;
 
-import javax.tools.FileObject;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -22,20 +20,41 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.mysite.weddingyou_backend.like.LikeRepository;
+import com.mysite.weddingyou_backend.plannerLogin.PlannerLoginRepository;
+import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDeleteService;
+import com.mysite.weddingyou_backend.userLogin.UserLoginRepository;
+
 @RestController //데이터를 반환
 public class UserUpdateDeleteController {
 	
 	@Autowired
 	UserUpdateDeleteService service;
+
+	
+	@Autowired
+	PlannerLoginRepository plannerRepository;
+	
+	@Autowired
+	UserLoginRepository userRepository;
+	
+	@Autowired
+	LikeRepository likeRepository;
 	
 
 	 @PostMapping("/user/userSearch")
-	 public UserUpdateDelete searchUser(@RequestBody UserUpdateDeleteDTO user) {
-		 System.out.println(user.getEmail());
+	 public UserUpdateDelete searchUser(@RequestBody UserUpdateDeleteDTO user) throws Exception {
+		
 		 
 		 	UserUpdateDelete searchedUser = service.getUserByEmail(user.getEmail());
-		    return searchedUser;
+		 	if(searchedUser != null) {
+	        	 return searchedUser;
+	        }else {
+	        	throw new Exception("이메일이 중복되지 않습니다!");
+	        }
+		   
 	 }
+
 
 	 @PostMapping("/user/userDelete")
 	    public ResponseEntity<UserUpdateDelete> deleteUser(@RequestBody UserUpdateDeleteDTO user) {
@@ -66,14 +85,26 @@ public class UserUpdateDeleteController {
 	 public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("useremail") String email) {
 		    try {	
 		    	UserUpdateDelete searchedUser = service.getUserByEmail(email);
-		    	String path = "C:\\Project\\profileImg\\user";
-		    	File folder = new File(path);
-		    	if(!folder.exists()) {
+		    	String path1 = "C:\\Project";
+		    	String path2 = "C:\\Project\\profileImg";
+		    	String path3 = "C:\\Project\\profileImg\\user";
+		    	File folder1 = new File(path1);
+		    	File folder2 = new File(path2);
+		    	File folder3 = new File(path3);
+		    	if(!folder1.exists() || !folder2.exists() || !folder3.exists()) {
 		    		try {
-		    			folder.mkdir();
+		    			folder1.mkdir();
+		    			folder2.mkdir();
+		    			folder3.mkdir();
 		    		}catch(Exception e) {
 		    			e.getStackTrace();
 		    		}
+		    	}
+		    	
+		    	
+		    	if(searchedUser.getUserImg() != null) {
+		    		Path deleteFilePath = Paths.get(path3, searchedUser.getUserImg());
+		    		Files.delete(deleteFilePath);
 		    	}
 		    	
 		        Files.copy(file.getInputStream(), Paths.get("C:/Project/profileImg/user", file.getOriginalFilename()),StandardCopyOption.REPLACE_EXISTING); //request에서 들어온 파일을 uploads 라는 경로에 originalfilename을 String 으로 올림
@@ -92,7 +123,7 @@ public class UserUpdateDeleteController {
 	 
 	 @RequestMapping(value="/user/getprofileImg",  produces = MediaType.IMAGE_JPEG_VALUE)
 	 public ResponseEntity<byte[]> getImage(@RequestBody UserUpdateDeleteDTO user) {
-		 System.out.println("유저이메일: " + user.getEmail());
+		// System.out.println("유저이메일: " + user.getEmail());
 		 UserUpdateDelete searchedUser = service.getUserByEmail(user.getEmail());
 	     if (searchedUser != null) {
 	         Path imagePath = Paths.get("C:/Project/profileImg/user",searchedUser.getUserImg());

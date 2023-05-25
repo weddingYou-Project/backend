@@ -1,14 +1,22 @@
 package com.mysite.weddingyou_backend.item;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.mysite.weddingyou_backend.like.LikeEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,46 +30,55 @@ public class Item {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "item_id")
-    private int itemId;
+    private Long itemId;
 
-	@Column(name = "item_img"
-//			, nullable = false
-			)
-    private byte[] itemImg;
+	@Column(name = "item_img")
+    private String itemImg;
+
 	
-//	@ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_id")
-//    private UserRegister userRegister;
+	@Column(name="img_content",nullable=false)
+	private String imgContent;
 	
-	@Column(name = "like_count", nullable = false)
-    private int likeCount;
-	
+	@JsonManagedReference
+	@OneToMany(fetch = FetchType.LAZY)
+	@JoinColumn(name = "item_id")
+	private List<LikeEntity> like;
+	 
 	@Column(name = "item_name", nullable = false)
     private String itemName;
 	
-	@Column(name = "item_write_date", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", nullable = false)
+	@Column(name = "item_write_date")
     private LocalDateTime itemWriteDate;
 	
-	@Enumerated(EnumType.STRING)
-	@Column(name = "category", nullable = false)
-    private Category category;
-
 	
-	public enum Category {
+	@Column(name ="like_write_date")
+    private LocalDateTime likeWriteDate;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "category1", nullable = false)
+    private Category1 category1;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "category2", nullable = false)
+    private Category2 category2;
+	
+	public enum Category1 {
+		전체, 카테고리, 웨딩홀, 의상, 스튜디오, 메이크업, 신혼여행,부케
+	}
+	
+	public enum Category2 {
 		//웨딩홀
-		일반, 호텔, 채플, 스몰, 야외, 전통혼례, 
-		//스튜디오
-		인물중심, 배경, 인물and배경,
+		일반, 호텔, 채플, 스몰, 야외, 전통혼례,
 		//의상
-		한복, 드레스, 남성예복,
+		한복, 머메이드, A라인, H라인, 벨라인, 엠파이어, 프린세스, 남성예복, 
+		//스튜디오
+		인물중심, 배경중심, 균형적인,
 		//메이크업
-		헤어, 피부, 색조,
+		헤어, 스모키, 러블리, 큐티, 네추럴, 포인트, 로맨틱한,
 		//신혼여행
 		국내, 해외,
 		//부케
-	    라운드, 드롭, 케스케이드, 핸드타이드
+		라운드, 드롭,케스케이드, 핸드타이드
 	}
-	
-//	@OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<Like> likes = new ArrayList<>();
+
 }
