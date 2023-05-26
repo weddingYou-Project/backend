@@ -2,21 +2,18 @@ package com.mysite.weddingyou_backend.payment;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mysite.weddingyou_backend.item.Item;
 import com.mysite.weddingyou_backend.item.ItemRepository;
 import com.mysite.weddingyou_backend.payment.PaymentCallbackRequest.PaymentStatus;
 import com.mysite.weddingyou_backend.plannerLogin.PlannerLogin;
 import com.mysite.weddingyou_backend.plannerLogin.PlannerLoginRepository;
 import com.mysite.weddingyou_backend.userLogin.UserLogin;
 import com.mysite.weddingyou_backend.userLogin.UserLoginRepository;
-import com.siot.IamportRestClient.IamportClient;
 
 
 @RestController
@@ -43,13 +40,16 @@ public class PaymentController {
     @PostMapping(value = "/deposit/callback")
     public int handlePaymentCallback(@RequestBody PaymentCallbackRequest callbackRequest) {
         // 콜백 이벤트 처리 로직
+    	PaymentCallbackRequest temp = new PaymentCallbackRequest();
     	BigDecimal price = callbackRequest.getPrice();
     	Integer quantity = callbackRequest.getQuantity();
     	String paymentMethod = callbackRequest.getPaymentMethod();
     	BigDecimal paymentAmount = callbackRequest.getPaymentAmount();
-        PaymentStatus paymentStatus = callbackRequest.getPaymentStatus();
+    	callbackRequest.setPaymentStatus(callbackRequest.getTempPaymentStatus());
+        String paymentStatus = callbackRequest.getPaymentStatus();
         BigDecimal depositAmount = callbackRequest.getDepositAmount();
-        PaymentStatus depositStatus = callbackRequest.getDepositStatus();
+        callbackRequest.setDepositStatus(callbackRequest.getTempDepositStatus());
+        String depositStatus = callbackRequest.getPaymentStatus();
         String paymentType = callbackRequest.getPaymentType();
         String userEmail = callbackRequest.getUserEmail(); // userEmail 추가
         String plannerEmail = callbackRequest.getPlannerEmail(); // plannerEmail 추가
@@ -76,10 +76,8 @@ public class PaymentController {
         payment.setPaymentMethod(paymentMethod);
         payment.setPaymentAmount(paymentAmount);
         payment.setPaymentStatus(paymentStatus);
-        payment.setPaymentDate(currentTime);
         payment.setDepositAmount(depositAmount);
         payment.setDepositStatus(depositStatus);
-        payment.setDepositDate(currentTime);
         payment.setPaymentType(paymentType);
         payment.setUserEmail(userEmail);
         payment.setPlannerEmail(plannerEmail);
@@ -90,9 +88,8 @@ public class PaymentController {
         
         if (paymentType.equals("deposit")) {
             payment.setDepositDate(currentTime);
-            payment.setPaymentDate(null);
-        } else {
-            payment.setDepositDate(null);
+            
+        } else {   
             payment.setPaymentDate(currentTime);
         }
         
@@ -110,8 +107,8 @@ public class PaymentController {
     public void handleDepositCallback(@RequestBody PaymentCallbackRequest callbackRequest) {
         // 콜백 이벤트 처리 로직
         Long paymentId = callbackRequest.getPaymentId();
-        PaymentStatus paymentStatus = callbackRequest.getPaymentStatus();
-        PaymentStatus depositStatus = callbackRequest.getDepositStatus();
+        String paymentStatus = callbackRequest.getTempPaymentStatus();
+        String depositStatus = callbackRequest.getTempDepositStatus();
         String paymentType = callbackRequest.getPaymentType();
 
         // 현재 시간 가져옴

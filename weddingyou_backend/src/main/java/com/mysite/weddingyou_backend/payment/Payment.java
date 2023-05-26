@@ -44,7 +44,7 @@ public class Payment {
 	private BigDecimal paymentAmount; //결제 금액
 	
 	@Column(name = "payment_status", nullable = false)
-	private PaymentStatus paymentStatus; //결제 상태
+	private String paymentStatus; //결제 상태
 	
 	@Column(name = "payment_date", nullable = true)
 	private LocalDateTime paymentDate; //결제 일시
@@ -53,7 +53,7 @@ public class Payment {
 	private BigDecimal depositAmount; //계약금 결제 금액
 	
 	@Column(name = "deposit_status", nullable = false)
-	private PaymentStatus depositStatus; //계약금 결제 상태
+	private String depositStatus; //계약금 결제 상태
 	
 	@Column(name = "deposit_date", nullable = true)
 	private LocalDateTime depositDate; //계약금 결제 일시
