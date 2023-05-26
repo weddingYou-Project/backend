@@ -102,8 +102,6 @@ public class MypageAdminController {
 		// user 테이블도 업데이트
         userLoginRepository.updateUserByEmail(mypageAdmin.getUserEmail(), mypageAdmin.getUserName(), 
                 mypageAdmin.getUserPassword(), mypageAdmin.getUserPhoneNum());
-        
-        System.out.println("확인"+mypageAdmin.getUserEmail());
 		
 		return update;
 	}
