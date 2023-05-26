@@ -267,8 +267,34 @@ public class EstimateController {
 					return res;
 				
 				}
-
-	
+				
+				//견적서 매칭원하는 플래너 이름 삭제하기
+				@PostMapping(value = "/matching")
+				public int matchingPlanner(@RequestParam("matchingPlanner") String matchingPlanner, 
+						@RequestParam("targetEstimateId") Long estimateId, @RequestParam("userEmail") String userEmail) throws Exception {
+				    int res = 0;
+				    List<Estimate> targetData = estimateService.getEstimateDetailByEmail(userEmail);
+					Estimate targetEstimate = estimateService.getEstimateDetail(estimateId);
+					
+					for(int i=0;i<targetData.size();i++) {
+						ArrayList<String> cleanList= new ArrayList<>();
+						Estimate cleanEstimate = targetData.get(i);
+						cleanEstimate.setPlannermatching(String.valueOf(cleanList));
+						estimateService.save(cleanEstimate);
+					}
+				
+					System.out.println(targetEstimate.getPlannermatching());
+					
+					
+					JSONParser parser = new JSONParser();
+					ArrayList<String> obj = (ArrayList<String>) parser.parse(targetEstimate.getPlannermatching());
+				    obj.add(matchingPlanner);
+					targetEstimate.setPlannermatching(String.valueOf(obj));
+				    estimateService.save(targetEstimate);
+					res=1;
+					return res;
+				
+				}
 	
 }
 
