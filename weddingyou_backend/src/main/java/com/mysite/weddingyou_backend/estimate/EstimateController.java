@@ -78,6 +78,7 @@ public class EstimateController {
 		data.setTitle(writer + "님의 견적서");
 		data.setDate(LocalDate.now());
 		data.setViewcount(0);		
+		data.setPlannermatching("[]");
 		estimateService.insert(data);
 	}
 	
@@ -290,15 +291,15 @@ public class EstimateController {
 				public String matchingPlanner(@RequestParam("matchingPlanner") String matchingPlanner, 
 						@RequestParam("targetEstimateId") Long estimateId, @RequestParam("userEmail") String userEmail) throws Exception {
 				    
-				    List<Estimate> targetData = estimateService.getEstimateDetailByEmail(userEmail);
+//				    List<Estimate> targetData = estimateService.getEstimateDetailByEmail(userEmail);
 					Estimate targetEstimate = estimateService.getEstimateDetail(estimateId);
 					
-					for(int i=0;i<targetData.size();i++) {
+//					for(int i=0;i<targetData.size();i++) {
 						ArrayList<String> cleanList= new ArrayList<>();
-						Estimate cleanEstimate = targetData.get(i);
+						Estimate cleanEstimate = targetEstimate;
 						cleanEstimate.setPlannermatching(String.valueOf(cleanList));
 						estimateService.save(cleanEstimate);
-					}
+//					}
 				
 					System.out.println(targetEstimate.getPlannermatching());
 					
