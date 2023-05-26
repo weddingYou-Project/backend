@@ -127,6 +127,12 @@ public class MypageAdminController {
 
 	
 	//사용자 정보 검색
+	@GetMapping("/search")
+	public ResponseEntity<List<MypageAdmin>> getSearchList(@RequestParam String search){
+	List<MypageAdmin> list = mypageAdminService.getSearchList(search);
+
+	return ResponseEntity.ok().body(list);
+	}
 	
 	//사용자 정보 삭제
 

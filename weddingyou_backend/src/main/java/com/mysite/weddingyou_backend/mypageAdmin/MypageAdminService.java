@@ -25,5 +25,11 @@ public class MypageAdminService {
 	public int updatePlanner(Long admin_id, String planner_name, String planner_password, String planner_phoneNum) {
 		return mypageAdminRepository.updatePlanner(admin_id, planner_name, planner_password, planner_phoneNum);
 	}
+	
+	//검색
+	public List<MypageAdmin> getSearchList(String search){
+		List<MypageAdmin> list = mypageAdminRepository.getSearchList(search);
+		return list;
+	}
 
 }
