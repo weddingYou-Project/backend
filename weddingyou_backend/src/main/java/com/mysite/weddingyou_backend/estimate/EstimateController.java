@@ -8,19 +8,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.hibernate.internal.build.AllowSysOut;
+import org.json.simple.parser.JSONParser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDelete;
+import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDeleteService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,6 +34,9 @@ import lombok.RequiredArgsConstructor;
 public class EstimateController {
 
 	public final EstimateService estimateService;
+	
+	@Autowired
+	private PlannerUpdateDeleteService plannerService ;
 	
 	@Value("${spring.servlet.multipart.location}")
     String uploadDir;
@@ -202,10 +209,43 @@ public class EstimateController {
 					else {
 						throw new Exception("정보가 존재하지 않습니다!");
 					}
+				
 				}
 			
-	
-	
+			
+				//견적서 매칭원하는 플래너 삽입하기
+				@GetMapping(value = "/getPlannerName")
+				public ArrayList<ArrayList<String>> getPlannerName(@RequestParam("userEmail") String userEmail) throws Exception {
+				    
+					List<Estimate> targetData = estimateService.getEstimateDetailByEmail(userEmail);
+					if(targetData!=null) {
+						ArrayList<ArrayList<String>> result = new ArrayList<>();
+						for(int i =0;i<targetData.size();i++) {
+							String plannerArr = targetData.get(i).getPlannermatching();
+						    JSONParser parser = new JSONParser();
+						    ArrayList<String> obj = (ArrayList<String>) parser.parse(plannerArr); 
+						    ArrayList<String> temp = new ArrayList<>();
+							for(int j = 0;j<obj.size();j++) {
+								
+								PlannerUpdateDelete data = plannerService.getPlannerByEmail(obj.get(j));
+								
+								temp.add(data.getName());
+//								temp.concat(eachPlannerName);
+//								if(j!=obj.size()-1) {
+//									temp.concat(",");
+//								}
+								System.out.println(temp);
+							}
+							result.add(temp);
+						}
+						
+						return result;
+					}
+					else {
+						throw new Exception("정보가 존재하지 않습니다!");
+					}
+				
+				}
 
 	
 	
