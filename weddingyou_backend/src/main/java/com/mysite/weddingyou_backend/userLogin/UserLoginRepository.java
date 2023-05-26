@@ -32,4 +32,10 @@ public interface UserLoginRepository extends JpaRepository<UserLogin, Long> {
 	
 	// 사용자 정보 저장
     UserLogin save(UserLogin user);
+    
+    //사용자 정보 삭제
+    @Modifying
+    @Transactional
+    @Query(value="DELETE FROM user WHERE email = :user_email", nativeQuery=true)
+    public int deleteByEmail(@Param("user_email") String email);
 }

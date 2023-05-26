@@ -32,4 +32,10 @@ public interface PlannerLoginRepository extends JpaRepository<PlannerLogin, Long
 	
 	//사용자 정보 저장
 	PlannerLogin save(PlannerLogin planner);
+	
+    //사용자 정보 삭제
+    @Modifying
+    @Transactional
+    @Query(value="DELETE FROM planner WHERE email = :planner_email", nativeQuery=true)
+    public int deleteByEmail(@Param("planner_email") String email);
 }

@@ -20,6 +20,7 @@ import com.mysite.weddingyou_backend.plannerLogin.PlannerLogin;
 import com.mysite.weddingyou_backend.plannerLogin.PlannerLoginRepository;
 import com.mysite.weddingyou_backend.userLogin.UserLogin;
 import com.mysite.weddingyou_backend.userLogin.UserLoginRepository;
+import com.mysite.weddingyou_backend.userLogin.UserLoginService;
 
 @RestController
 @RequestMapping("/mypageAdmin")
@@ -153,5 +154,22 @@ public class MypageAdminController {
 	}
 	
 	//사용자 정보 삭제
+	@RequestMapping("/delete")
+	public void delete(@RequestParam Long adminId) {
+		// adminId에 해당하는 이메일 가져오기
+	    MypageAdmin mypageAdmin = mypageAdminService.getMypageAdmin(adminId);
+	    String userEmail = mypageAdmin.getUserEmail();
+	    String plannerEmail = mypageAdmin.getPlannerEmail();
+	    
+	    // admin 테이블에서 삭제
+	 	mypageAdminService.delete(adminId);
+
+	    // user 테이블에서 해당 이메일로 정보 삭제
+	    userLoginRepository.deleteByEmail(userEmail);
+	    
+	    //planer 테이블에서 해당 이메일로 정보 삭제
+	    plannerLoginRepository.deleteByEmail(plannerEmail);
+
+	}
 
 }

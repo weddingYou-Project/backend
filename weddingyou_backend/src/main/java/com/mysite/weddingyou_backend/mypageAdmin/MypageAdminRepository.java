@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+
 import jakarta.transaction.Transactional;
 
 
@@ -54,4 +55,5 @@ public interface MypageAdminRepository extends JpaRepository<MypageAdmin, Long> 
   			+ "OR planner_phoneNum LIKE CONCAT('%', :search, '%') \r\n"
   			+ "OR UsersType LIKE CONCAT('%', :search, '%'))", nativeQuery=true)
   	int getSearchCount(String search);
+  	
 }

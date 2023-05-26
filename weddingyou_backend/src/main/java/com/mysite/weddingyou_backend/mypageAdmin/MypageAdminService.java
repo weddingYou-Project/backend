@@ -45,5 +45,15 @@ public class MypageAdminService {
 		int count = mypageAdminRepository.getSearchCount(search);
 		return count;
 	}
+	
+	//사용자 정보 삭제
+	public void delete(Long adminId) {
+		mypageAdminRepository.deleteById(adminId);
+	}
+	
+	public MypageAdmin getMypageAdmin(Long adminId) {
+        return mypageAdminRepository.findById(adminId)
+                .orElseThrow(() -> new IllegalArgumentException("MypageAdmin not found with adminId: " + adminId));
+    }
 
 }
