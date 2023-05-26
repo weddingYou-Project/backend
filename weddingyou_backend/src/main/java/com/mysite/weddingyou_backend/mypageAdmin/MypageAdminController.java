@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mysite.weddingyou_backend.plannerLogin.PlannerLogin;
@@ -98,6 +99,14 @@ public class MypageAdminController {
 	        return ResponseEntity.noContent().build();
 	    }  
 	    
+	}
+	
+	//전체 데이터 개수 조회
+	@ResponseBody
+	@GetMapping("/count")
+	public ResponseEntity<Integer> getCount(){
+		int count = mypageAdminService.getCount();
+		return ResponseEntity.ok().body(count);
 	}
 	
 	//사용자 정보 수정

@@ -27,6 +27,10 @@ public interface MypageAdminRepository extends JpaRepository<MypageAdmin, Long> 
   	@Query(value="update MypageAdmin set planner_name = :planner_name, planner_password = :planner_password, planner_phoneNum = :planner_phoneNum where admin_id = :admin_id", nativeQuery=true)
   	public int updatePlanner(Long admin_id, String planner_name, String planner_password, String planner_phoneNum);
   	
+  	//전체 데이터 개수 조회
+  	@Query(value = "select count(*) from mypageAdmin", nativeQuery=true)
+  	int getCount();
+  	
   	//검색
   	@Query(value = "SELECT * FROM mypageAdmin WHERE (user_name LIKE CONCAT('%', :search, '%') \r\n"
             + "OR user_email LIKE CONCAT('%', :search, '%') \r\n"

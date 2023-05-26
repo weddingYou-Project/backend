@@ -26,6 +26,12 @@ public class MypageAdminService {
 		return mypageAdminRepository.updatePlanner(admin_id, planner_name, planner_password, planner_phoneNum);
 	}
 	
+	//전체 데이터 개수 조회
+	public int getCount() {
+		int count = mypageAdminRepository.getCount();
+		return count;
+	}
+	
 	//검색
 	public List<MypageAdmin> getSearchList(String search){
 		List<MypageAdmin> list = mypageAdminRepository.getSearchList(search);
