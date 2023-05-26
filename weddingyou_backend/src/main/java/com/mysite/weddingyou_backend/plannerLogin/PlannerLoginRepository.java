@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.mysite.weddingyou_backend.plannerLogin.PlannerLogin;
@@ -26,6 +27,9 @@ public interface PlannerLoginRepository extends JpaRepository<PlannerLogin, Long
 	//mypageAdmin 부분에서 이름, 비밀번호, 휴대폰번호 수정시 사용
 	@Modifying
 	@Transactional
-	@Query(value="update planner set password = :password, phone_number = :phone_number, name = :name where email = :email", nativeQuery=true)
-	public int updatePlanner(String email, String password, String phone_number, String name);
+	@Query(value="update planner set name = :planner_name, password = :planner_password, phone_number = :planner_phoneNum where email = :planner_email", nativeQuery=true)
+	public int updatePlannerByEmail(@Param("planner_email") String email, @Param("planner_name") String plannerName, @Param("planner_password") String plannerPassword, @Param("planner_phoneNum") String plannerPhoneNum);
+	
+	//사용자 정보 저장
+	PlannerLogin save(PlannerLogin planner);
 }

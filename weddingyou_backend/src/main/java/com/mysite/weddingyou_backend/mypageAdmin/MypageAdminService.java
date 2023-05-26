@@ -22,8 +22,8 @@ public class MypageAdminService {
 		return mypageAdminRepository.updateUser(admin_id, user_name, user_password, user_phoneNum);
 	}
 	
-//	public int updatePlanner(String name, String password, String phoneNum, String email) {
-//		return mypageAdminRepository.updatePlanner(name, password, phoneNum, email);
-//	}
+	public int updatePlanner(Long admin_id, String planner_name, String planner_password, String planner_phoneNum) {
+		return mypageAdminRepository.updatePlanner(admin_id, planner_name, planner_password, planner_phoneNum);
+	}
 
 }

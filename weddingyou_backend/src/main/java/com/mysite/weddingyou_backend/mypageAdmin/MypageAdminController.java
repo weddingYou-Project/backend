@@ -103,22 +103,32 @@ public class MypageAdminController {
 	//사용자 정보 수정
 	@PostMapping("/modify")
 	public int updateUser(@RequestBody MypageAdmin mypageAdmin) {
-		int update = 0;
-		
-		//mypageAdmin 테이블의 회원정보 업데이트
-		update = mypageAdminService.updateUser(mypageAdmin.getAdminId(), mypageAdmin.getUserName(), 
-				mypageAdmin.getUserPassword(), mypageAdmin.getUserPhoneNum());
-		
-		// user 테이블도 업데이트
-        userLoginRepository.updateUserByEmail(mypageAdmin.getUserEmail(), mypageAdmin.getUserName(), 
-                mypageAdmin.getUserPassword(), mypageAdmin.getUserPhoneNum());
-		
-		return update;
+	    int update = 0;
+
+	    if ("user".equals(mypageAdmin.getType())) {
+	        // mypageAdmin 테이블의 회원정보 업데이트
+	        update = mypageAdminService.updateUser(mypageAdmin.getAdminId(), mypageAdmin.getUserName(),
+	                mypageAdmin.getUserPassword(), mypageAdmin.getUserPhoneNum());
+
+	        // user 테이블도 업데이트
+	        userLoginRepository.updateUserByEmail(mypageAdmin.getUserEmail(), mypageAdmin.getUserName(),
+	                mypageAdmin.getUserPassword(), mypageAdmin.getUserPhoneNum());
+	    } else if ("planner".equals(mypageAdmin.getType())) {
+	        // mypageAdmin 테이블의 플래너 정보 업데이트
+	        update = mypageAdminService.updatePlanner(mypageAdmin.getAdminId(), mypageAdmin.getPlannerName(),
+	                mypageAdmin.getPlannerPassword(), mypageAdmin.getPlannerPhoneNum());
+
+	        // planner 테이블도 업데이트
+	        plannerLoginRepository.updatePlannerByEmail(mypageAdmin.getPlannerEmail(), mypageAdmin.getPlannerName(),
+	                mypageAdmin.getPlannerPassword(), mypageAdmin.getPlannerPhoneNum());
+	    }
+	    return update;
 	}
-	
-	//사용자 정보 삭제
 
 	
 	//사용자 정보 검색
+	
+	//사용자 정보 삭제
+
 
 }
