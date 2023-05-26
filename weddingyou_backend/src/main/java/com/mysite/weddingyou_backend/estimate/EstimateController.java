@@ -182,20 +182,24 @@ public class EstimateController {
 		public void updateData(
 		                       @RequestParam("id") Long id,
 								@RequestParam("plannermatching") String plannermatching)
-		                    		   throws IOException {
+		                    		   throws Exception {
 		    
 			Estimate targetData = estimateService.getEstimateDetail(id);
 			
 			System.out.println("targetData.plannermatching:"+plannermatching);
 			
+			if(!targetData.getPlannermatching().contains(plannermatching)) {
+				Estimate data = new Estimate();
+				data.setPlannermatching(plannermatching);
+				System.out.println("---------"+data.getPlannermatching());
+				targetData.setPlannermatching(data.getPlannermatching());
+				
+				estimateService.save(targetData);
+				System.out.println("after:"+targetData.getPlannermatching());
+			}else {
+				throw new Exception("중복됩니다!");
+			}
 			
-			Estimate data = new Estimate();
-			data.setPlannermatching(plannermatching);
-			System.out.println("---------"+data.getPlannermatching());
-			targetData.setPlannermatching(data.getPlannermatching());
-			
-			estimateService.save(targetData);
-			System.out.println("after:"+targetData.getPlannermatching());
 		}
 	
 		//견적서 매칭원하는 플래너 삽입하기
@@ -268,11 +272,11 @@ public class EstimateController {
 				
 				}
 				
-				//견적서 매칭원하는 플래너 이름 삭제하기
+				//매칭하기
 				@PostMapping(value = "/matching")
-				public int matchingPlanner(@RequestParam("matchingPlanner") String matchingPlanner, 
+				public String matchingPlanner(@RequestParam("matchingPlanner") String matchingPlanner, 
 						@RequestParam("targetEstimateId") Long estimateId, @RequestParam("userEmail") String userEmail) throws Exception {
-				    int res = 0;
+				    
 				    List<Estimate> targetData = estimateService.getEstimateDetailByEmail(userEmail);
 					Estimate targetEstimate = estimateService.getEstimateDetail(estimateId);
 					
@@ -290,9 +294,63 @@ public class EstimateController {
 					ArrayList<String> obj = (ArrayList<String>) parser.parse(targetEstimate.getPlannermatching());
 				    obj.add(matchingPlanner);
 					targetEstimate.setPlannermatching(String.valueOf(obj));
+					targetEstimate.setMatchstatus(true);
 				    estimateService.save(targetEstimate);
-					res=1;
-					return res;
+					PlannerUpdateDelete data = plannerService.getPlannerByEmail(matchingPlanner);
+					String plannerName = data.getName();
+					
+					return plannerName;
+				
+				}
+				
+				//매칭하기
+				@PostMapping(value = "/getMatchedPlanner")
+				public String matchingPlanner(@RequestParam("userEmail") String userEmail
+						) throws Exception {
+				    
+				    List<Estimate> targetData = estimateService.getEstimateDetailByEmail(userEmail);
+				    String matchedPlanner ="";
+					for(int i=0;i<targetData.size();i++) {
+						Boolean matchStatus = targetData.get(i).isMatchstatus();
+						if(matchStatus) {
+							JSONParser parser = new JSONParser();
+							ArrayList<String> obj = (ArrayList<String>) parser.parse(targetData.get(i).getPlannermatching());
+							matchedPlanner = obj.get(0);
+							break;
+						}
+					}
+				
+					
+					PlannerUpdateDelete data = plannerService.getPlannerByEmail(matchedPlanner);
+					String plannerName = data.getName();
+					
+					return plannerName;
+				
+				}
+				
+				//매칭취소하기
+				@PostMapping(value = "/cancelMatchedPlanner")
+				public int cancelMatchedPlanner(@RequestParam("userEmail") String userEmail
+						) throws Exception {
+				    
+					 List<Estimate> targetData = estimateService.getEstimateDetailByEmail(userEmail);
+					    int res = 0;
+						for(int i=0;i<targetData.size();i++) {
+							Boolean matchStatus = targetData.get(i).isMatchstatus();
+							if(matchStatus) {
+								ArrayList<String> cleanList= new ArrayList<>();
+								Estimate cleanEstimate = targetData.get(i);
+								cleanEstimate.setPlannermatching(String.valueOf(cleanList));
+								cleanEstimate.setMatchstatus(false);
+								estimateService.save(cleanEstimate);
+								res = 1;
+								break;
+							}
+						}
+					
+						
+						
+						return res;
 				
 				}
 	

@@ -72,6 +72,8 @@ public class Estimate {
     
     @Column (name = "e_plannerMatching") //plannermatching
     private String plannermatching;
+
+	
 }
 	
 	
