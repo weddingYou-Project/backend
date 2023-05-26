@@ -132,7 +132,7 @@ public class PlannerUpdateDeleteController {
 	 
 	 @RequestMapping(value="/planner/getprofileImg",  produces = MediaType.IMAGE_JPEG_VALUE)
 	 public ResponseEntity<byte[]> getImage(@RequestBody UserUpdateDeleteDTO user) {
-		 System.out.println("유저이메일: " + user.getEmail());
+		// System.out.println("유저이메일: " + user.getEmail());
 		 PlannerUpdateDelete searchedPlanner = service.getPlannerByEmail(user.getEmail());
 	     if (searchedPlanner != null) {
 	         Path imagePath = Paths.get("C:/Project/profileImg/planner",searchedPlanner.getPlannerImg());

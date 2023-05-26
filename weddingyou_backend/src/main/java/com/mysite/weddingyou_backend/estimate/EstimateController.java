@@ -3,16 +3,21 @@ package com.mysite.weddingyou_backend.estimate;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
-import org.hibernate.internal.build.AllowSysOut;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +30,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDelete;
 import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDeleteService;
+import com.mysite.weddingyou_backend.userUpdateDelete.UserUpdateDelete;
+import com.mysite.weddingyou_backend.userUpdateDelete.UserUpdateDeleteService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -37,6 +44,9 @@ public class EstimateController {
 	
 	@Autowired
 	private PlannerUpdateDeleteService plannerService ;
+	
+	@Autowired
+	private UserUpdateDeleteService userService ;
 	
 	@Value("${spring.servlet.multipart.location}")
     String uploadDir;
@@ -292,7 +302,7 @@ public class EstimateController {
 				public String matchingPlanner(@RequestParam("matchingPlanner") String matchingPlanner, 
 						@RequestParam("targetEstimateId") Long estimateId, @RequestParam("userEmail") String userEmail
 						) throws Exception {
-				    
+				    String result="";
 				    List<Estimate> targetData = estimateService.getEstimateDetailByEmail(userEmail);
 					Estimate targetEstimate = estimateService.getEstimateDetail(estimateId);
 					for(int i=0;i<targetData.size();i++) {
@@ -315,10 +325,35 @@ public class EstimateController {
 					targetEstimate.setPlannermatching(String.valueOf(obj));
 					targetEstimate.setMatchstatus(true);
 				    estimateService.save(targetEstimate);
-					PlannerUpdateDelete data = plannerService.getPlannerByEmail(matchingPlanner);
-					String plannerName = data.getName();
+				    
+					UserUpdateDelete data = userService.getUserByEmail(userEmail);
+					PlannerUpdateDelete plannerData = plannerService.getPlannerByEmail(matchingPlanner);
 					
-					return plannerName;
+					System.out.println(data.getName());
+					String userName = data.getName()+"/";
+					result= userName;
+					System.out.println(data.getPhoneNum());
+					String userPhone = data.getPhoneNum()+"]";
+					result+= userPhone;
+					String plannerName = plannerData.getName()+",";
+					result+=plannerName;
+				         
+				    try {
+				    	if(plannerData.getPlannerImg()!=null) {
+				    		Path imagePath = Paths.get("C:/Project/profileImg/planner",plannerData.getPlannerImg());
+					        byte[] imageBytes = Files.readAllBytes(imagePath);
+					        byte[] base64encodedData = Base64.getEncoder().encode(imageBytes);
+					        result += String.valueOf(new String(base64encodedData));
+				    	}
+				    	
+				       
+				    } catch (IOException e) {
+				           e.printStackTrace();
+				        
+				    }
+
+					System.out.println("result"+result);
+					return result;
 				
 				}
 				
