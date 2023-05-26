@@ -2,18 +2,14 @@ package com.mysite.weddingyou_backend.mypageAdmin;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -97,8 +93,7 @@ public class MypageAdminController {
 	    } else {
 	        // 사용자 또는 플래너 정보가 없는 경우에 대한 처리
 	        return ResponseEntity.noContent().build();
-	    }  
-	    
+	    }    
 	}
 	
 	//전체 데이터 개수 조회

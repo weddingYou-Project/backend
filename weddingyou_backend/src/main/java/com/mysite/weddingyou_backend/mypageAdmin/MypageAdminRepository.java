@@ -35,8 +35,8 @@ public interface MypageAdminRepository extends JpaRepository<MypageAdmin, Long> 
   	@Query(value = "SELECT * FROM mypageAdmin WHERE (user_name LIKE CONCAT('%', :search, '%') \r\n"
             + "OR user_email LIKE CONCAT('%', :search, '%') \r\n"
             + "OR planner_name LIKE CONCAT('%', :search, '%') \r\n"
-            + "OR planner_email LIKE CONCAT('%', :search, '%')"
-            + "ORDER BY adminId DESC",
+            + "OR planner_email LIKE CONCAT('%', :search, '%'))"
+            + "ORDER BY admin_id ASC",
             nativeQuery = true)
     List<MypageAdmin> getSearchList(@Param("search") String search);
 }
