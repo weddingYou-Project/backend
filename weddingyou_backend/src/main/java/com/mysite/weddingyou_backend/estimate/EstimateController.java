@@ -186,9 +186,17 @@ public class EstimateController {
 		    
 			Estimate targetData = estimateService.getEstimateDetail(id);
 			
-			System.out.println("targetData.plannermatching:"+plannermatching);
+			System.out.println("targetData.plannermatching:"+targetData.getPlannermatching());
+			JSONParser parser = new JSONParser();
+			ArrayList<String> obj = (ArrayList<String>) parser.parse(plannermatching);
+			ArrayList<String> plannerList = null;
+			if(targetData.getPlannermatching()!=null) {
+				plannerList = (ArrayList<String>) parser.parse(targetData.getPlannermatching());
+				System.out.println(plannerList);
+			}
+			 
 			
-			if(!targetData.getPlannermatching().contains(plannermatching)) {
+			if(plannerList == null) {
 				Estimate data = new Estimate();
 				data.setPlannermatching(plannermatching);
 				System.out.println("---------"+data.getPlannermatching());
@@ -196,7 +204,16 @@ public class EstimateController {
 				
 				estimateService.save(targetData);
 				System.out.println("after:"+targetData.getPlannermatching());
-			}else {
+			}
+			else if(plannerList!=null && !plannerList.containsAll(obj)) {
+				Estimate data = new Estimate();
+				data.setPlannermatching(plannermatching);
+				System.out.println("---------"+data.getPlannermatching());
+				targetData.setPlannermatching(data.getPlannermatching());
+				
+				estimateService.save(targetData);
+				System.out.println("after:"+targetData.getPlannermatching());
+			}else if(plannerList!=null && plannerList.containsAll(obj)){
 				throw new Exception("중복됩니다!");
 			}
 			
