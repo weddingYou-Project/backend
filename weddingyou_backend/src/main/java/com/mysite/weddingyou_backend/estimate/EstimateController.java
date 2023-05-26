@@ -345,7 +345,7 @@ public class EstimateController {
 					
 					PlannerUpdateDelete data = plannerService.getPlannerByEmail(matchedPlanner);
 					String plannerName = data.getName();
-					plannerName = plannerName.concat(String.valueOf(estimateNum));
+					plannerName = plannerName.concat("/"+String.valueOf(estimateNum));
 					return plannerName;
 				
 				}
