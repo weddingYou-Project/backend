@@ -134,7 +134,7 @@ public class MypageAdminController {
 	@GetMapping("/search")
 	public ResponseEntity<Page<MypageAdmin>> getSearchList(@RequestParam String search,
 			@RequestParam(defaultValue = "0") int page,
-	        @RequestParam(defaultValue = "1") int size){
+	        @RequestParam(defaultValue = "10") int size){
 		
 		//페이징 기능
 		Pageable pageable = PageRequest.of(page, size);
@@ -153,6 +153,5 @@ public class MypageAdminController {
 	}
 	
 	//사용자 정보 삭제
-
 
 }
