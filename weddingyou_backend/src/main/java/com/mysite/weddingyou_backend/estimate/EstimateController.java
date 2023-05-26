@@ -182,9 +182,22 @@ public class EstimateController {
 	}
 	
 	
+	@RequestMapping("/getsearchlistcount")
+	public int getsearchlistcount(@RequestBody Map<String, Object> requestParams) {
+		System.out.println("여기"+requestParams.get("search"));
+		String search = (String)requestParams.get("search");
+		return estimateService.getsearchlistcount(search);
+	}
 	
 	
-	
+	//검색어도 보내야 하고 페이징을 위한 데이터 몇 개 가져올지 그것도 필요할듯.
+	@RequestMapping("/getsearchlistpageing")
+	public List<Estimate> getsearchlistpageing(@RequestBody Map<String,Object> requestParams){
+		int page_num = (int)requestParams.get("page_num");
+		int limit = (int)requestParams.get("limit");
+		String search = (String)requestParams.get("search");
+		return estimateService.getsearchlistpageing(page_num,limit,search);
+	}
 	
 }
 
