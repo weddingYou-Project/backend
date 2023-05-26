@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import com.mysite.weddingyou_backend.item.Item;
+import com.mysite.weddingyou_backend.payment.PaymentCallbackRequest.PaymentStatus;
 import com.mysite.weddingyou_backend.plannerLogin.PlannerLogin;
 import com.mysite.weddingyou_backend.userLogin.UserLogin;
 
@@ -43,33 +44,42 @@ public class Payment {
 	private BigDecimal paymentAmount; //결제 금액
 	
 	@Column(name = "payment_status", nullable = false)
-	private String paymentStatus; //결제 상태
+	private PaymentStatus paymentStatus; //결제 상태
 	
-	@Column(name = "payment_date", nullable = false)
+	@Column(name = "payment_date", nullable = true)
 	private LocalDateTime paymentDate; //결제 일시
 	
 	@Column(name = "deposit_amount", precision = 10, scale = 2, nullable = false)
 	private BigDecimal depositAmount; //계약금 결제 금액
 	
 	@Column(name = "deposit_status", nullable = false)
-	private String depositStatus; //계약금 결제 상태
+	private PaymentStatus depositStatus; //계약금 결제 상태
 	
-	@Column(name = "deposit_date", nullable = false)
+	@Column(name = "deposit_date", nullable = true)
 	private LocalDateTime depositDate; //계약금 결제 일시
 	
 	@Column(name = "payment_type", nullable = false)
 	private String paymentType; //계약금or전체금액
 	
+	@Column(name = "user_email", nullable = false)
+	private String userEmail;
+
+	@Column(name = "planner_email", nullable = false)
+	private String plannerEmail;
+	
+//	@Column(name = "item_id", nullable = false)
+//	private Long itemId;
+	
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name = "user_email", referencedColumnName = "email", nullable = false)
+	@JoinColumn(name = "user_email", referencedColumnName = "email", insertable = false, updatable = false, nullable = false)
 	private UserLogin user;
 
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name = "planner_email", referencedColumnName = "email", nullable = false)
+	@JoinColumn(name = "planner_email", referencedColumnName = "email", insertable = false, updatable = false, nullable = false)
 	private PlannerLogin planner;
 
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name = "item_id", referencedColumnName = "item_id", nullable = false)
-	private Item item;
+//	@ManyToOne(fetch=FetchType.LAZY)
+//	@JoinColumn(name = "item_id", referencedColumnName = "item_id", insertable = false, updatable = false, nullable = false)
+//	private Item item;
 	
 }

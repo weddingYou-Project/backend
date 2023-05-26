@@ -335,8 +335,12 @@ public class EstimateController {
 					System.out.println(data.getPhoneNum());
 					String userPhone = data.getPhoneNum()+"]";
 					result+= userPhone;
+
+					String plannerEmail = plannerData.getEmail()+"[";
+					result +=plannerEmail;
 					String plannerName = plannerData.getName()+",";
 					result+=plannerName;
+					
 				         
 				    try {
 				    	if(plannerData.getPlannerImg()!=null) {
@@ -351,6 +355,7 @@ public class EstimateController {
 				           e.printStackTrace();
 				        
 				    }
+				    
 
 					System.out.println("result"+result);
 					return result;
