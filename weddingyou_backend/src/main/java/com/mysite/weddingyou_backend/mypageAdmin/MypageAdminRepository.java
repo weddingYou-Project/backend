@@ -36,18 +36,22 @@ public interface MypageAdminRepository extends JpaRepository<MypageAdmin, Long> 
   	//검색
   	@Query(value = "SELECT * FROM mypageAdmin WHERE (user_name LIKE CONCAT('%', :search, '%') \r\n"
             + "OR user_email LIKE CONCAT('%', :search, '%') \r\n"
+            + "OR user_phoneNum LIKE CONCAT('%', :search, '%') \r\n"
             + "OR planner_name LIKE CONCAT('%', :search, '%') \r\n"
-            + "OR planner_email LIKE CONCAT('%', :search, '%') \r\n)"
-            + "OR UsersType LIKE CONCAT('%', :search, '%')"
-            + "ORDER BY admin_id ASC",
+            + "OR planner_email LIKE CONCAT('%', :search, '%') \r\n"
+            + "OR planner_phoneNum LIKE CONCAT('%', :search, '%') \r\n"
+            + "OR UsersType LIKE CONCAT('%', :search, '%'))"
+            + "ORDER BY admin_id ASC \r\n" ,
             nativeQuery = true)
     Page<MypageAdmin> getSearchList(@Param("search") String search, Pageable pageable);
   	
     //검색 데이터 개수 조회
   	@Query(value = "select count(*) from mypageAdmin where (user_name LIKE CONCAT('%', :search, '%') \r\n"
   			+ "OR user_email LIKE CONCAT('%', :search, '%') \r\n"
+  			+ "OR user_phoneNum LIKE CONCAT('%', :search, '%') \r\n"
   			+ "OR planner_name LIKE CONCAT('%', :search, '%') \r\n"
   			+ "OR planner_email LIKE CONCAT('%', :search, '%') \r\n"
+  			+ "OR planner_phoneNum LIKE CONCAT('%', :search, '%') \r\n"
   			+ "OR UsersType LIKE CONCAT('%', :search, '%'))", nativeQuery=true)
   	int getSearchCount(String search);
 }
