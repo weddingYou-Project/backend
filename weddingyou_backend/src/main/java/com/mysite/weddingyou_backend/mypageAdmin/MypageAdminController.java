@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mysite.weddingyou_backend.plannerLogin.PlannerLogin;
@@ -39,7 +43,13 @@ public class MypageAdminController {
 
 	//전체 사용자 정보 리스트 조회
 	@GetMapping("/all")
-	public ResponseEntity<List<MypageAdmin>> getAllUsersAndPlanners() {
+	public ResponseEntity<Page<MypageAdmin>> getAllUsersAndPlanners(
+			@RequestParam(defaultValue = "0") int page,
+	        @RequestParam(defaultValue = "10") int size) {
+		
+		//페이징 기능
+		Pageable pageable = PageRequest.of(page, size);
+		
 	    List<UserLogin> users = userLoginRepository.findAll();
 	    List<PlannerLogin> planners = plannerLoginRepository.findAll();
 
@@ -79,10 +89,10 @@ public class MypageAdminController {
 	        }
 	    }
 	    
-	    mypageAdmins = mypageAdminRepository.findAll();
+	    Page<MypageAdmin> mypageAdminPage = mypageAdminRepository.findAll(pageable);
 	    
-	    if (!mypageAdmins.isEmpty()) {
-	        return ResponseEntity.ok().body(mypageAdmins);
+	    if (!mypageAdminPage.isEmpty()) {
+	        return ResponseEntity.ok().body(mypageAdminPage);
 	    } else {
 	        // 사용자 또는 플래너 정보가 없는 경우에 대한 처리
 	        return ResponseEntity.noContent().build();
@@ -105,5 +115,10 @@ public class MypageAdminController {
 		
 		return update;
 	}
+	
+	//사용자 정보 삭제
+
+	
+	//사용자 정보 검색
 
 }
