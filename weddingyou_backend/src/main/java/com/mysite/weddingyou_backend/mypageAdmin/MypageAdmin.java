@@ -8,6 +8,8 @@ import com.mysite.weddingyou_backend.userLogin.UserLogin;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -73,63 +75,56 @@ public class MypageAdmin {
 	@Column(name = "planner_join_date")
 	private LocalDateTime plannerJoinDate;
 	
-	// user 테이블
-	@ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name = "user_email", referencedColumnName="email", insertable = false, updatable = false, nullable = false)
-    private UserLogin userE;
 	
-	@ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name = "user_name", referencedColumnName="name", insertable = false, updatable = false, nullable = false)
-    private UserLogin userN;
-	
-	@ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name = "user_password", referencedColumnName="password", insertable = false, updatable = false, nullable = false)
-    private UserLogin userPW;
-	
-	@ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name = "user_gender", referencedColumnName="gender", insertable = false, updatable = false, nullable = false)
-    private UserLogin userG;
-	
-	@ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name = "user_phoneNum", referencedColumnName="phone_number", insertable = false, updatable = false, nullable = false)
-    private UserLogin userPhone;
-	
-	@ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name = "user_join_date", referencedColumnName="user_join_date", insertable = false, updatable = false, nullable = false)
-    private UserLogin userJoin;
+//	// user 테이블
+//	@ManyToOne(fetch=FetchType.LAZY)
+//    @JoinColumn(name = "user_email", referencedColumnName="email", insertable = false, updatable = false, nullable = false)
+//    private UserLogin userE;
+//	
+//	@ManyToOne(fetch=FetchType.LAZY)
+//    @JoinColumn(name = "user_name", referencedColumnName="name", insertable = false, updatable = false, nullable = false)
+//    private UserLogin userN;
+//	
+//	@ManyToOne(fetch=FetchType.LAZY)
+//    @JoinColumn(name = "user_password", referencedColumnName="password", insertable = false, updatable = false, nullable = false)
+//    private UserLogin userPW;
+//	
+//	@ManyToOne(fetch=FetchType.LAZY)
+//    @JoinColumn(name = "user_gender", referencedColumnName="gender", insertable = false, updatable = false, nullable = false)
+//    private UserLogin userG;
+//	
+//	@ManyToOne(fetch=FetchType.LAZY)
+//    @JoinColumn(name = "user_phoneNum", referencedColumnName="phone_number", insertable = false, updatable = false, nullable = false)
+//    private UserLogin userPhone;
+//	
+//	@ManyToOne(fetch=FetchType.LAZY)
+//    @JoinColumn(name = "user_join_date", referencedColumnName="user_join_date", insertable = false, updatable = false, nullable = false)
+//    private UserLogin userJoin;
     
-	// planner 테이블
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name = "planner_email", referencedColumnName="email", insertable = false, updatable = false, nullable = false)
-    private PlannerLogin plannerE;
-    
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name = "planner_name", referencedColumnName="name", insertable = false, updatable = false, nullable = false)
-    private PlannerLogin plannerN;
-	
-	@ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name = "planner_password", referencedColumnName="password", insertable = false, updatable = false, nullable = false)
-    private PlannerLogin plannerPW;
-	
-	@ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name = "planner_gender", referencedColumnName="gender", insertable = false, updatable = false, nullable = false)
-    private PlannerLogin plannerG;
-	
-	@ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name = "planner_phoneNum", referencedColumnName="phone_number", insertable = false, updatable = false, nullable = false)
-    private PlannerLogin plannerPhone;
-	
-	@ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name = "planner_join_date", referencedColumnName="planner_join_date", insertable = false, updatable = false, nullable = false)
-    private PlannerLogin plannerJoin;
-
-	public UserLogin getUserLogin() {
-		return null;
-	}
-	
-	public PlannerLogin getPlannerLogin() {
-		return null;
-	}
+//	// planner 테이블
+//    @ManyToOne(fetch=FetchType.LAZY)
+//    @JoinColumn(name = "planner_email", referencedColumnName="email", insertable = false, updatable = false, nullable = false)
+//    private PlannerLogin plannerE;
+//    
+//    @ManyToOne(fetch=FetchType.LAZY)
+//    @JoinColumn(name = "planner_name", referencedColumnName="name", insertable = false, updatable = false, nullable = false)
+//    private PlannerLogin plannerN;
+//	
+//	@ManyToOne(fetch=FetchType.LAZY)
+//    @JoinColumn(name = "planner_password", referencedColumnName="password", insertable = false, updatable = false, nullable = false)
+//    private PlannerLogin plannerPW;
+//	
+//	@ManyToOne(fetch=FetchType.LAZY)
+//    @JoinColumn(name = "planner_gender", referencedColumnName="gender", insertable = false, updatable = false, nullable = false)
+//    private PlannerLogin plannerG;
+//	
+//	@ManyToOne(fetch=FetchType.LAZY)
+//    @JoinColumn(name = "planner_phoneNum", referencedColumnName="phone_number", insertable = false, updatable = false, nullable = false)
+//    private PlannerLogin plannerPhone;
+//	
+//	@ManyToOne(fetch=FetchType.LAZY)
+//    @JoinColumn(name = "planner_join_date", referencedColumnName="planner_join_date", insertable = false, updatable = false, nullable = false)
+//    private PlannerLogin plannerJoin;
 
     
 //    @ManyToOne(fetch=FetchType.LAZY)

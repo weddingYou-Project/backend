@@ -14,16 +14,16 @@ public class MypageAdminService {
 	@Autowired
 	MypageAdminRepository mypageAdminRepository;
 	
-	public List<MypageAdmin> getAllUsersAndPlanners() {
-        return mypageAdminRepository.findAll();
-    }
+//	public List<MypageAdmin> getAllUsersAndPlanners() {
+//        return mypageAdminRepository.findAll();
+//    }
 	
-	public int updateUser(String name, String password, String phoneNum, String email) {
-		return mypageAdminRepository.updateUser(name, password, phoneNum, email);
+	public int updateUser(Long admin_id, String user_name, String user_password, String user_phoneNum) {
+		return mypageAdminRepository.updateUser(admin_id, user_name, user_password, user_phoneNum);
 	}
 	
-	public int updatePlanner(String name, String password, String phoneNum, String email) {
-		return mypageAdminRepository.updatePlanner(name, password, phoneNum, email);
-	}
+//	public int updatePlanner(String name, String password, String phoneNum, String email) {
+//		return mypageAdminRepository.updatePlanner(name, password, phoneNum, email);
+//	}
 
 }

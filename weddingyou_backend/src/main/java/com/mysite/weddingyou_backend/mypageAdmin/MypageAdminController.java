@@ -9,16 +9,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.mysite.weddingyou_backend.plannerLogin.PlannerLogin;
 import com.mysite.weddingyou_backend.plannerLogin.PlannerLoginRepository;
 import com.mysite.weddingyou_backend.userLogin.UserLogin;
 import com.mysite.weddingyou_backend.userLogin.UserLoginRepository;
 
-@Controller
+@RestController
 @RequestMapping("/mypageAdmin")
 public class MypageAdminController {
 	
@@ -55,8 +57,8 @@ public class MypageAdminController {
 	            userMypageAdmin.setUserPhoneNum(user.getPhoneNum());
 	            userMypageAdmin.setUserJoinDate(user.getUserJoinDate());
 
-	            mypageAdmins.add(userMypageAdmin);
-	            mypageAdminRepository.save(userMypageAdmin);
+	            mypageAdmins.add(userMypageAdmin); //userMypageAdmin객체를 mypageAdmins 리스트에 추가하는 역할
+	            mypageAdminRepository.save(userMypageAdmin); //db에 저장하는 역할
 	        }
 	    }
 
@@ -76,40 +78,34 @@ public class MypageAdminController {
 	            mypageAdminRepository.save(plannerMypageAdmin);
 	        }
 	    }
-
+	    
+	    mypageAdmins = mypageAdminRepository.findAll();
+	    
 	    if (!mypageAdmins.isEmpty()) {
 	        return ResponseEntity.ok().body(mypageAdmins);
 	    } else {
 	        // 사용자 또는 플래너 정보가 없는 경우에 대한 처리
-	        return ResponseEntity.notFound().build();
-	    }   
+	        return ResponseEntity.noContent().build();
+	    }  
+	    
 	}
 	
-	// 사용자 정보 수정
-	@PutMapping("/user/{id}")
-	public ResponseEntity<?> updateUser(@PathVariable("id") Long id, @RequestBody MypageAdmin updatedAdmin) {
-	    int rowsAffected = mypageAdminService.updateUser(updatedAdmin.getUserName(), updatedAdmin.getUserPassword(),
-	            updatedAdmin.getUserPhoneNum(), updatedAdmin.getUserEmail());
-	    if (rowsAffected > 0) {
-	        // 업데이트 성공 시
-	        List<UserLogin> updatedUser = userLoginRepository.findAll(); // 업데이트된 정보 가져오기
-	        System.out.println("업데이트된 사용자 정보: " + updatedUser); // print문 추가
-	        return ResponseEntity.ok().build();
-	    } else {
-	        return ResponseEntity.notFound().build();
-	    }
+	//사용자 정보 수정
+	@PostMapping("/modify")
+	public int updateUser(@RequestBody MypageAdmin mypageAdmin) {
+		int update = 0;
+		
+		//mypageAdmin 테이블의 회원정보 업데이트
+		update = mypageAdminService.updateUser(mypageAdmin.getAdminId(), mypageAdmin.getUserName(), 
+				mypageAdmin.getUserPassword(), mypageAdmin.getUserPhoneNum());
+		
+		// user 테이블도 업데이트
+        userLoginRepository.updateUserByEmail(mypageAdmin.getUserEmail(), mypageAdmin.getUserName(), 
+                mypageAdmin.getUserPassword(), mypageAdmin.getUserPhoneNum());
+        
+        System.out.println("확인"+mypageAdmin.getUserEmail());
+		
+		return update;
 	}
-  
-    @PutMapping("/planner/{id}")
-    public ResponseEntity<?> updatePlanner(@PathVariable("id") Long id, @RequestBody MypageAdmin updatedAdmin) {
-        int rowsAffected = mypageAdminService.updatePlanner(updatedAdmin.getPlannerName(), updatedAdmin.getPlannerPassword(),
-                updatedAdmin.getPlannerPhoneNum(), updatedAdmin.getPlannerEmail());
-        if (rowsAffected > 0) {
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
 
 }
