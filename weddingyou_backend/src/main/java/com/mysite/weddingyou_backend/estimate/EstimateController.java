@@ -289,10 +289,14 @@ public class EstimateController {
 				    JSONParser parser = new JSONParser();
 				    ArrayList<String> obj = (ArrayList<String>) parser.parse(targetEstimate.getPlannermatching());
 				    obj.remove(deletePlanner);
+				    if(targetEstimate.isMatchstatus()) {
+				    	targetEstimate.setMatchstatus(false);
+				    	res=2;
+				    }
 				    newEstimate.setPlannermatching(String.valueOf(obj));
 				    targetEstimate.setPlannermatching(String.valueOf(obj));
 				    estimateService.save(targetEstimate);
-					res=1;
+					
 					return res;
 				
 				}
@@ -370,46 +374,83 @@ public class EstimateController {
 				    List<Estimate> targetData = estimateService.getEstimateDetailByEmail(userEmail);
 				    String matchedPlanner ="";
 				    int estimateNum = 0;
+				    String result = "";
 					for(int i=0;i<targetData.size();i++) {
 						Boolean matchStatus = targetData.get(i).isMatchstatus();
 						Boolean assigned = targetData.get(i).getAssigned();
-						if(matchStatus && assigned ) {
+						if(matchStatus) {
 							JSONParser parser = new JSONParser();
 							ArrayList<String> obj = (ArrayList<String>) parser.parse(targetData.get(i).getPlannermatching());
 							matchedPlanner = obj.get(0);
 							estimateNum = i+1;
-							break;
+							System.out.println(estimateNum);
+							PlannerUpdateDelete data = plannerService.getPlannerByEmail(matchedPlanner);
+							String plannerName = data.getName();
+							result += plannerName + "/" + String.valueOf(estimateNum)+"|";
 						}
 					}
-				
+					System.out.println(result);
 					
-					PlannerUpdateDelete data = plannerService.getPlannerByEmail(matchedPlanner);
-					String plannerName = data.getName();
-					plannerName = plannerName.concat("/"+String.valueOf(estimateNum));
-					return plannerName;
+					
+					return result;
 				
 				}
 				
 				//매칭취소하기
 				@PostMapping(value = "/cancelMatchedPlanner")
 				public int cancelMatchedPlanner(@RequestParam("userEmail") String userEmail
+						,@RequestParam("deleteTargetEstimateId") Long EstimateId
 						) throws Exception {
 				    
 					 List<Estimate> targetData = estimateService.getEstimateDetailByEmail(userEmail);
+					 
 					    int res = 0;
-						for(int i=0;i<targetData.size();i++) {
-							Boolean matchStatus = targetData.get(i).isMatchstatus();
-							if(matchStatus) {
-								ArrayList<String> cleanList= new ArrayList<>();
-								Estimate cleanEstimate = targetData.get(i);
-								cleanEstimate.setPlannermatching(String.valueOf(cleanList));
-								cleanEstimate.setMatchstatus(false);
-								estimateService.save(cleanEstimate);
-								res = 1;
-								break;
-							}
+
+						Estimate targetEstimate = estimateService.getEstimateDetail(EstimateId);
+						ArrayList<String> cleanList= new ArrayList<>();
+						targetEstimate.getPlannermatching();
+						targetEstimate.setPlannermatching(String.valueOf(cleanList));
+						targetEstimate.setMatchstatus(false);
+						estimateService.save(targetEstimate);
+						
+//						for(int i=0;i<targetData.size();i++) {
+//						
+//							Boolean matchStatus = targetData.get(i).isMatchstatus();
+//							if(matchStatus) {
+//								ArrayList<String> cleanList= new ArrayList<>();
+//								Estimate cleanEstimate = targetData.get(i);
+//								cleanEstimate.setPlannermatching(String.valueOf(cleanList));
+//								cleanEstimate.setMatchstatus(false);
+//								estimateService.save(cleanEstimate);
+//								res = 1;
+//								break;
+//							}
+//						}
+						res = 1;
+						
+						return res;
+				
+				}
+				
+				//매칭취소하기
+				@PostMapping(value = "/cancelMatchedPlanner2")
+				public int cancelMatchedPlanner2(@RequestParam("userEmail") String userEmail
+						,@RequestParam("estimateNum") int estimateNum
+						) throws Exception {
+				    
+					 List<Estimate> targetData = estimateService.getEstimateDetailByEmail(userEmail);
+					 
+					    int res = 0;
+
+					    Boolean matchStatus = targetData.get(estimateNum).isMatchstatus();
+						if(matchStatus) {
+							ArrayList<String> cleanList= new ArrayList<>();
+							Estimate cleanEstimate = targetData.get(estimateNum);
+							cleanEstimate.setPlannermatching(String.valueOf(cleanList));
+							cleanEstimate.setMatchstatus(false);
+							estimateService.save(cleanEstimate);
+							res = 1;
 						}
-					
 						
 						
 						return res;
