@@ -132,10 +132,24 @@ public class MypageAdminController {
 	
 	//사용자 정보 검색
 	@GetMapping("/search")
-	public ResponseEntity<List<MypageAdmin>> getSearchList(@RequestParam String search){
-	List<MypageAdmin> list = mypageAdminService.getSearchList(search);
+	public ResponseEntity<Page<MypageAdmin>> getSearchList(@RequestParam String search,
+			@RequestParam(defaultValue = "0") int page,
+	        @RequestParam(defaultValue = "1") int size){
+		
+		//페이징 기능
+		Pageable pageable = PageRequest.of(page, size);
+		
+		Page<MypageAdmin> list = mypageAdminService.getSearchList(search, pageable);
 
-	return ResponseEntity.ok().body(list);
+		return ResponseEntity.ok().body(list);
+	}
+	
+	//검색 데이터 개수 조회
+	@ResponseBody
+	@GetMapping("/searchCount")
+	public ResponseEntity<Integer> getSearchCount(@RequestParam String search){
+		int count = mypageAdminService.getSearchCount(search);
+		return ResponseEntity.ok().body(count);
 	}
 	
 	//사용자 정보 삭제

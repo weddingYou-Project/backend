@@ -3,6 +3,8 @@ package com.mysite.weddingyou_backend.mypageAdmin;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,9 +35,15 @@ public class MypageAdminService {
 	}
 	
 	//검색
-	public List<MypageAdmin> getSearchList(String search){
-		List<MypageAdmin> list = mypageAdminRepository.getSearchList(search);
+	public Page<MypageAdmin> getSearchList(String search, Pageable pageable){
+		Page<MypageAdmin> list = mypageAdminRepository.getSearchList(search, pageable);
 		return list;
+	}
+	
+	//검색 데이터 개수 조회
+	public int getSearchCount(String search) {
+		int count = mypageAdminRepository.getSearchCount(search);
+		return count;
 	}
 
 }

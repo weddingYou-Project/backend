@@ -2,6 +2,8 @@ package com.mysite.weddingyou_backend.mypageAdmin;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -38,5 +40,12 @@ public interface MypageAdminRepository extends JpaRepository<MypageAdmin, Long> 
             + "OR planner_email LIKE CONCAT('%', :search, '%'))"
             + "ORDER BY admin_id ASC",
             nativeQuery = true)
-    List<MypageAdmin> getSearchList(@Param("search") String search);
+    Page<MypageAdmin> getSearchList(@Param("search") String search, Pageable pageable);
+  	
+    //검색 데이터 개수 조회
+  	@Query(value = "select count(*) from mypageAdmin where (user_name LIKE CONCAT('%', :search, '%') \r\n"
+  			+ "OR user_email LIKE CONCAT('%', :search, '%') \r\n"
+  			+ "OR planner_name LIKE CONCAT('%', :search, '%') \r\n"
+  			+ "OR planner_email LIKE CONCAT('%', :search, '%'))", nativeQuery=true)
+  	int getSearchCount(String search);
 }
