@@ -79,6 +79,7 @@ public class EstimateController {
 		data.setDate(LocalDate.now());
 		data.setViewcount(0);		
 		data.setPlannermatching("[]");
+		data.setAssigned(false);
 		estimateService.insert(data);
 	}
 	
@@ -197,20 +198,20 @@ public class EstimateController {
 			}
 			 
 			
-			if(plannerList == null) {
+			if(plannerList.size() == 0) {
 				Estimate data = new Estimate();
 				data.setPlannermatching(plannermatching);
 				targetData.setPlannermatching(data.getPlannermatching());
 				
 				estimateService.save(targetData);
 			}
-			else if(plannerList!=null && !plannerList.containsAll(obj)) {
+			else if(plannerList.size()!=0 && !plannerList.containsAll(obj)) {
 				Estimate data = new Estimate();
 				data.setPlannermatching(plannermatching);
 				targetData.setPlannermatching(data.getPlannermatching());
 				
 				estimateService.save(targetData);
-			}else if(plannerList!=null && plannerList.containsAll(obj)){
+			}else if(plannerList.size()!=0  && plannerList.containsAll(obj)){
 				throw new Exception("중복됩니다!");
 			}
 			
@@ -289,15 +290,19 @@ public class EstimateController {
 				//매칭하기
 				@PostMapping(value = "/matching")
 				public String matchingPlanner(@RequestParam("matchingPlanner") String matchingPlanner, 
-						@RequestParam("targetEstimateId") Long estimateId, @RequestParam("userEmail") String userEmail) throws Exception {
+						@RequestParam("targetEstimateId") Long estimateId, @RequestParam("userEmail") String userEmail
+						) throws Exception {
 				    
-//				    List<Estimate> targetData = estimateService.getEstimateDetailByEmail(userEmail);
+				    List<Estimate> targetData = estimateService.getEstimateDetailByEmail(userEmail);
 					Estimate targetEstimate = estimateService.getEstimateDetail(estimateId);
-					
+					for(int i=0;i<targetData.size();i++) {
+						targetData.get(i).setAssigned(false);
+					}
 //					for(int i=0;i<targetData.size();i++) {
 						ArrayList<String> cleanList= new ArrayList<>();
 						Estimate cleanEstimate = targetEstimate;
 						cleanEstimate.setPlannermatching(String.valueOf(cleanList));
+						cleanEstimate.setAssigned(true);
 						estimateService.save(cleanEstimate);
 //					}
 				
@@ -324,12 +329,15 @@ public class EstimateController {
 				    
 				    List<Estimate> targetData = estimateService.getEstimateDetailByEmail(userEmail);
 				    String matchedPlanner ="";
+				    int estimateNum = 0;
 					for(int i=0;i<targetData.size();i++) {
 						Boolean matchStatus = targetData.get(i).isMatchstatus();
-						if(matchStatus) {
+						Boolean assigned = targetData.get(i).getAssigned();
+						if(matchStatus && assigned ) {
 							JSONParser parser = new JSONParser();
 							ArrayList<String> obj = (ArrayList<String>) parser.parse(targetData.get(i).getPlannermatching());
 							matchedPlanner = obj.get(0);
+							estimateNum = i+1;
 							break;
 						}
 					}
@@ -337,7 +345,7 @@ public class EstimateController {
 					
 					PlannerUpdateDelete data = plannerService.getPlannerByEmail(matchedPlanner);
 					String plannerName = data.getName();
-					
+					plannerName = plannerName.concat(String.valueOf(estimateNum));
 					return plannerName;
 				
 				}
