@@ -213,7 +213,7 @@ public class EstimateController {
 				}
 			
 			
-				//견적서 매칭원하는 플래너 삽입하기
+				//견적서 매칭원하는 플래너 이름 가져오기
 				@GetMapping(value = "/getPlannerName")
 				public ArrayList<ArrayList<String>> getPlannerName(@RequestParam("userEmail") String userEmail) throws Exception {
 				    
@@ -244,6 +244,27 @@ public class EstimateController {
 					else {
 						throw new Exception("정보가 존재하지 않습니다!");
 					}
+				
+				}
+				
+				//견적서 매칭원하는 플래너 이름 삭제하기
+				@PostMapping(value = "/deleteMatchingPlanner")
+				public int deleteMatchingPlanner(@RequestParam("deletePlanner") String deletePlanner, 
+						@RequestParam("deleteTargetEstimateId") Long estimateId) throws Exception {
+				    int res = 0;
+				    
+					Estimate targetEstimate = estimateService.getEstimateDetail(estimateId);
+					
+					Estimate newEstimate = new Estimate();
+					System.out.println(targetEstimate.getPlannermatching());
+				    JSONParser parser = new JSONParser();
+				    ArrayList<String> obj = (ArrayList<String>) parser.parse(targetEstimate.getPlannermatching());
+				    obj.remove(deletePlanner);
+				    newEstimate.setPlannermatching(String.valueOf(obj));
+				    targetEstimate.setPlannermatching(String.valueOf(obj));
+				    estimateService.save(targetEstimate);
+					res=1;
+					return res;
 				
 				}
 
