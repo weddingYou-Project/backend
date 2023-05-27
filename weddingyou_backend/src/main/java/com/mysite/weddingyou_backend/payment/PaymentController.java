@@ -1,19 +1,33 @@
 package com.mysite.weddingyou_backend.payment;
 
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.List;
 
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mysite.weddingyou_backend.estimate.Estimate;
+import com.mysite.weddingyou_backend.estimate.EstimateService;
 import com.mysite.weddingyou_backend.item.ItemRepository;
 import com.mysite.weddingyou_backend.plannerLogin.PlannerLogin;
 import com.mysite.weddingyou_backend.plannerLogin.PlannerLoginRepository;
+import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDelete;
+import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDeleteService;
 import com.mysite.weddingyou_backend.userLogin.UserLogin;
 import com.mysite.weddingyou_backend.userLogin.UserLoginRepository;
+import com.mysite.weddingyou_backend.userUpdateDelete.UserUpdateDelete;
+import com.mysite.weddingyou_backend.userUpdateDelete.UserUpdateDeleteService;
 
 
 @RestController
@@ -30,6 +44,15 @@ public class PaymentController {
 	
 	@Autowired
 	ItemRepository itemRepository;
+	
+	@Autowired
+	EstimateService estimateService;
+	
+	@Autowired
+	UserUpdateDeleteService userService;
+	
+	@Autowired
+	PlannerUpdateDeleteService plannerService ;
 	
 //    private IamportClient api;
 //
@@ -130,6 +153,63 @@ public class PaymentController {
 //        return ResponseEntity.ok(response);
         
         return 1;
+    }
+    
+    @PostMapping(value = "/deposit/check")
+    public String depositCheck(@RequestParam(value="estimateNum") int estimateNum, @RequestParam(value="userEmail") String userEmail) {
+    	List<Payment> paymentData = paymentService.getEstimateList(userEmail);
+    	for(int i =0;i<paymentData.size();i++) {
+    		Payment targetPayment = paymentData.get(i);
+    		if(i==estimateNum) {
+    			String depositStatus = targetPayment.getDepositStatus();
+    			if(depositStatus.equals("cancelled") || depositStatus.equals("other")) {
+    				String result="";
+    				
+					UserUpdateDelete data = userService.getUserByEmail(userEmail);
+					PlannerUpdateDelete plannerData = plannerService.getPlannerByEmail(targetPayment.getPlannerEmail());
+					
+					System.out.println(data.getName());
+					
+					String estimateId = targetPayment.getEstimateId() + "*";
+					result +=estimateId;
+					String userName = data.getName()+"/";
+					result += userName;
+					System.out.println(data.getPhoneNum());
+					String userPhone = data.getPhoneNum()+"]";
+					result+= userPhone;
+
+					String plannerEmail = plannerData.getEmail()+"[";
+					result +=plannerEmail;
+					String plannerName = plannerData.getName()+",";
+					result+=plannerName;
+					
+				         
+				    try {
+				    	if(plannerData.getPlannerImg()!=null) {
+				    		Path imagePath = Paths.get("C:/Project/profileImg/planner",plannerData.getPlannerImg());
+					        byte[] imageBytes = Files.readAllBytes(imagePath);
+					        byte[] base64encodedData = Base64.getEncoder().encode(imageBytes);
+					        result += String.valueOf(new String(base64encodedData));
+				    	}
+				    	
+				       
+				    } catch (IOException e) {
+				           e.printStackTrace();
+				        
+				    }
+				    
+
+					System.out.println("result"+result);
+					return result;
+    				
+    			}else if(depositStatus.equals("paid")) {
+    				return "1";
+    			}else {
+    				return "-1";
+    			}
+    		}
+    	}
+    	return "-1";
     }
     
     @PostMapping(value = "/payment/callback")

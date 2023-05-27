@@ -32,5 +32,10 @@ public class PaymentService {
     public Payment getPaymentData(Long estimateId){
     	return paymentRepository.findByEstimateId(estimateId);
     }
+    
+    public List<Payment> getEstimateList(String userEmail){
+    	return paymentRepository.findAllByUserEmail(userEmail);
+    }
+
    
 }
