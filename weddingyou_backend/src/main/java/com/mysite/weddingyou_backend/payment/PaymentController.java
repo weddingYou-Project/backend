@@ -163,93 +163,98 @@ public class PaymentController {
     	}
     		
     			Payment targetPayment = paymentService.getPaymentData(searchedEstimate.getId());
-    			String depositStatus = targetPayment.getDepositStatus();
-    			System.out.println(depositStatus);
-    			if(depositStatus.equals("cancelled") || depositStatus.equals("other")) {
-    				String result="";
-    				
-					UserUpdateDelete data = userService.getUserByEmail(userEmail);
-					PlannerUpdateDelete plannerData = plannerService.getPlannerByEmail(targetPayment.getPlannerEmail());
-					
-					System.out.println(data.getName());
-					
-					String estimateId = targetPayment.getEstimateId() + "*";
-					result +=estimateId;
-					String userName = data.getName()+"/";
-					result += userName;
-					System.out.println(data.getPhoneNum());
-					String userPhone = data.getPhoneNum()+"]";
-					result+= userPhone;
+    			if(targetPayment!=null) {
+    				String depositStatus = targetPayment.getDepositStatus();
+        			System.out.println(depositStatus);
+        			if(depositStatus.equals("cancelled") || depositStatus.equals("other")) {
+        				String result="";
+        				
+    					UserUpdateDelete data = userService.getUserByEmail(userEmail);
+    					PlannerUpdateDelete plannerData = plannerService.getPlannerByEmail(targetPayment.getPlannerEmail());
+    					
+    					System.out.println(data.getName());
+    					
+    					String estimateId = targetPayment.getEstimateId() + "*";
+    					result +=estimateId;
+    					String userName = data.getName()+"/";
+    					result += userName;
+    					System.out.println(data.getPhoneNum());
+    					String userPhone = data.getPhoneNum()+"]";
+    					result+= userPhone;
 
-					String plannerEmail = plannerData.getEmail()+"[";
-					result +=plannerEmail;
-					String plannerName = plannerData.getName()+",";
-					result+=plannerName;
-					
-				         
-				    try {
-				    	if(plannerData.getPlannerImg()!=null) {
-				    		Path imagePath = Paths.get("C:/Project/profileImg/planner",plannerData.getPlannerImg());
-					        byte[] imageBytes = Files.readAllBytes(imagePath);
-					        byte[] base64encodedData = Base64.getEncoder().encode(imageBytes);
-					        result += String.valueOf(new String(base64encodedData));
-				    	}
-				    	
-				       
-				    } catch (IOException e) {
-				           e.printStackTrace();
-				        
-				    }
-				    String depositStatusMsg = "[deposit";
-				    result += depositStatusMsg;
-				    
+    					String plannerEmail = plannerData.getEmail()+"[";
+    					result +=plannerEmail;
+    					String plannerName = plannerData.getName()+",";
+    					result+=plannerName;
+    					
+    				         
+    				    try {
+    				    	if(plannerData.getPlannerImg()!=null) {
+    				    		Path imagePath = Paths.get("C:/Project/profileImg/planner",plannerData.getPlannerImg());
+    					        byte[] imageBytes = Files.readAllBytes(imagePath);
+    					        byte[] base64encodedData = Base64.getEncoder().encode(imageBytes);
+    					        result += String.valueOf(new String(base64encodedData));
+    				    	}
+    				    	
+    				       
+    				    } catch (IOException e) {
+    				           e.printStackTrace();
+    				        
+    				    }
+    				    String depositStatusMsg = "[deposit";
+    				    result += depositStatusMsg;
+    				    
 
-					System.out.println("result"+result);
-					return result;
-    				
-    			}else if(depositStatus.equals("paid")) {
-    				String result="";
-    				
-					UserUpdateDelete data = userService.getUserByEmail(userEmail);
-					PlannerUpdateDelete plannerData = plannerService.getPlannerByEmail(targetPayment.getPlannerEmail());
-					
-					System.out.println(data.getName());
-					
-					String estimateId = targetPayment.getEstimateId() + "*";
-					result +=estimateId;
-					String userName = data.getName()+"/";
-					result += userName;
-					System.out.println(data.getPhoneNum());
-					String userPhone = data.getPhoneNum()+"]";
-					result+= userPhone;
+    					System.out.println("result"+result);
+    					return result;
+        				
+        			}else if(depositStatus.equals("paid")) {
+        				String result="";
+        				
+    					UserUpdateDelete data = userService.getUserByEmail(userEmail);
+    					PlannerUpdateDelete plannerData = plannerService.getPlannerByEmail(targetPayment.getPlannerEmail());
+    					
+    					System.out.println(data.getName());
+    					
+    					String estimateId = targetPayment.getEstimateId() + "*";
+    					result +=estimateId;
+    					String userName = data.getName()+"/";
+    					result += userName;
+    					System.out.println(data.getPhoneNum());
+    					String userPhone = data.getPhoneNum()+"]";
+    					result+= userPhone;
 
-					String plannerEmail = plannerData.getEmail()+"[";
-					result +=plannerEmail;
-					String plannerName = plannerData.getName()+",";
-					result+=plannerName;
-					
-				         
-				    try {
-				    	if(plannerData.getPlannerImg()!=null) {
-				    		Path imagePath = Paths.get("C:/Project/profileImg/planner",plannerData.getPlannerImg());
-					        byte[] imageBytes = Files.readAllBytes(imagePath);
-					        byte[] base64encodedData = Base64.getEncoder().encode(imageBytes);
-					        result += String.valueOf(new String(base64encodedData));
-				    	}
-				    	
-				       
-				    } catch (IOException e) {
-				           e.printStackTrace();
-				        
-				    }
-				    String depositStatusMsg = "[paid";
-				    result += depositStatusMsg;
+    					String plannerEmail = plannerData.getEmail()+"[";
+    					result +=plannerEmail;
+    					String plannerName = plannerData.getName()+",";
+    					result+=plannerName;
+    					
+    				         
+    				    try {
+    				    	if(plannerData.getPlannerImg()!=null) {
+    				    		Path imagePath = Paths.get("C:/Project/profileImg/planner",plannerData.getPlannerImg());
+    					        byte[] imageBytes = Files.readAllBytes(imagePath);
+    					        byte[] base64encodedData = Base64.getEncoder().encode(imageBytes);
+    					        result += String.valueOf(new String(base64encodedData));
+    				    	}
+    				    	
+    				       
+    				    } catch (IOException e) {
+    				           e.printStackTrace();
+    				        
+    				    }
+    				    String depositStatusMsg = "[paid";
+    				    result += depositStatusMsg;
 
-					System.out.println("result"+result);
-					return result;
+    					System.out.println("result"+result);
+    					return result;
+        			}else {
+        				return "-1";
+        			}
     			}else {
     				return "-1";
     			}
+    			
     		
     	
     }
@@ -269,10 +274,11 @@ public class PaymentController {
         Payment payment = paymentService.getPaymentData(estimateId);
         System.out.println(payment.getDepositStatus());
         if(payment!=null && payment.getDepositStatus().equals("paid")) {
-        	if (payment.getPaymentType().equals("deposit") && paymentStatus.equals("cancelled")
+        	if (payment.getPaymentType().equals("all") && paymentStatus.equals("cancelled")
         			|| payment.getPaymentType().equals("deposit") && payment.getPaymentStatus().equals("other")) {
                 // 계약금 결제 처리
         		 payment.setPaymentStatus(paymentStatus);
+        		 payment.setPaymentType(paymentType);
         		 paymentService.savePayment(payment);
         		 return 0;
             } else if (paymentType.equals("all") && paymentStatus.equals("paid")) {
