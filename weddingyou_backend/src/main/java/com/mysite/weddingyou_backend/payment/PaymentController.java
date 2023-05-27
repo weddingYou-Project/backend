@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mysite.weddingyou_backend.estimate.Estimate;
 import com.mysite.weddingyou_backend.item.ItemRepository;
-import com.mysite.weddingyou_backend.payment.PaymentCallbackRequest.PaymentStatus;
 import com.mysite.weddingyou_backend.plannerLogin.PlannerLogin;
 import com.mysite.weddingyou_backend.plannerLogin.PlannerLoginRepository;
 import com.mysite.weddingyou_backend.userLogin.UserLogin;
@@ -49,11 +49,12 @@ public class PaymentController {
         String paymentStatus = callbackRequest.getPaymentStatus();
         BigDecimal depositAmount = callbackRequest.getDepositAmount();
         callbackRequest.setDepositStatus(callbackRequest.getTempDepositStatus());
-        String depositStatus = callbackRequest.getPaymentStatus();
+        String depositStatus = callbackRequest.getDepositStatus();
         String paymentType = callbackRequest.getPaymentType();
         String userEmail = callbackRequest.getUserEmail(); // userEmail 추가
         String plannerEmail = callbackRequest.getPlannerEmail(); // plannerEmail 추가
-      //  Long itemId = callbackRequest.getItemId(); // itemId 추가)
+        Long estimateId = callbackRequest.getEstimateId(); // estimateId 추가)
+        System.out.println("estimateId:"+estimateId);
         
         //현재 시간 가져옴
         LocalDateTime currentTime = LocalDateTime.now();
@@ -66,35 +67,63 @@ public class PaymentController {
         // 데이터베이스에서 User 정보 가져오기
         UserLogin user = userLoginRepository.findByEmail(userEmail);
         
-        // 데이터베이스에서 Item 정보 가져오기
-     //   Optional<Item> item = itemRepository.findById(itemId);
-        
-        // 데이터베이스에 저장하기 위해 Payment 객체 생성
-        Payment payment = new Payment();
-        payment.setPrice(price);
-        payment.setQuantity(quantity);
-        payment.setPaymentMethod(paymentMethod);
-        payment.setPaymentAmount(paymentAmount);
-        payment.setPaymentStatus(paymentStatus);
-        payment.setDepositAmount(depositAmount);
-        payment.setDepositStatus(depositStatus);
-        payment.setPaymentType(paymentType);
-        payment.setUserEmail(userEmail);
-        payment.setPlannerEmail(plannerEmail);
-    //    payment.setItemId(itemId);
-        
-        // 플래너 정보를 Payment 객체에 설정
-        payment.setPlanner(planner);
-        
-        if (paymentType.equals("deposit")) {
-            payment.setDepositDate(currentTime);
+    	if(paymentService.getPaymentData(callbackRequest.getEstimateId())==null) {
+    		
+            // 데이터베이스에서 Item 정보 가져오기
+         //   Optional<Item> item = itemRepository.findById(itemId);
             
-        } else {   
-            payment.setPaymentDate(currentTime);
-        }
-        
-        // Payment 객체를 데이터베이스에 저장
-        paymentService.savePayment(payment);
+            // 데이터베이스에 저장하기 위해 Payment 객체 생성
+            Payment payment = new Payment();
+            payment.setPrice(price);
+            payment.setQuantity(quantity);
+            payment.setPaymentMethod(paymentMethod);
+            payment.setPaymentAmount(paymentAmount);
+            payment.setPaymentStatus(paymentStatus);
+            payment.setDepositAmount(depositAmount);
+            payment.setDepositStatus(depositStatus);
+            payment.setPaymentType(paymentType);
+            payment.setUserEmail(userEmail);
+            payment.setPlannerEmail(plannerEmail);
+            payment.setEstimateId(estimateId);
+        //    payment.setItemId(itemId);
+            
+            // 플래너 정보를 Payment 객체에 설정
+            payment.setPlanner(planner);
+            
+            if (paymentType.equals("deposit")) {
+                payment.setDepositDate(currentTime);
+                
+            } else {   
+                payment.setPaymentDate(currentTime);
+            }
+            
+            // Payment 객체를 데이터베이스에 저장
+            paymentService.savePayment(payment);
+    	}else { //estimateId가 겹칠 경우에 관련 데이터 업데이트
+    		Payment targetPayment = paymentService.getPaymentData(callbackRequest.getEstimateId());
+    		targetPayment.setPrice(price);
+    		targetPayment.setQuantity(quantity);
+    		targetPayment.setPaymentMethod(paymentMethod);
+    		targetPayment.setPaymentAmount(paymentAmount);
+    		targetPayment.setPaymentStatus(paymentStatus);
+    		targetPayment.setDepositAmount(depositAmount);
+    		targetPayment.setDepositStatus(depositStatus);
+    		targetPayment.setPaymentType(paymentType);
+    		targetPayment.setUserEmail(userEmail);
+    		targetPayment.setPlannerEmail(plannerEmail);
+    		targetPayment.setEstimateId(estimateId);
+    		
+    		targetPayment.setPlanner(planner);
+    		
+    		 if (paymentType.equals("deposit")) {
+    			 targetPayment.setDepositDate(currentTime);
+                 
+             } else {   
+            	 targetPayment.setPaymentDate(currentTime);
+             }
+    		  paymentService.savePayment(targetPayment);
+    	}
+    	
         
        // API 응답에 플래너의 이름과 이미지를 포함하여 전달
 //        PaymentResponse response = new PaymentResponse(payment, plannerName, plannerImg);

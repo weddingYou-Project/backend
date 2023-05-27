@@ -18,9 +18,10 @@ public class PaymentCallbackRequest {
     private String paymentType;
     private String userEmail;
     private String plannerEmail;
-    private Long itemId;
+//    private Long itemId;
     private String tempPaymentStatus;
     private String tempDepositStatus;
+    private Long estimateId;
     
     public Long getPaymentId() {
         return paymentId;
@@ -161,11 +162,19 @@ public class PaymentCallbackRequest {
         this.plannerEmail = plannerEmail;
     }
     
-    public Long getItemId() {
-        return itemId;
-    }
-
-    public void setItemId(Long itemId) {
-        this.itemId = itemId;
-    }
+  public Long getEstimateId() {
+  return this.estimateId;
+}
+  
+  public void setEstimateId(Long estimateId) {
+   this.estimateId = estimateId;
+}
+    
+//    public Long getItemId() {
+//        return itemId;
+//    }
+//
+//    public void setItemId(Long itemId) {
+//        this.itemId = itemId;
+//    }
 }

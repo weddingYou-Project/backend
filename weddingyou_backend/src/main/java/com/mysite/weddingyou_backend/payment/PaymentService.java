@@ -28,5 +28,9 @@ public class PaymentService {
     public Payment savePayment(Payment payment) {
         return paymentRepository.save(payment);
     }
+    
+    public Payment getPaymentData(Long estimateId){
+    	return paymentRepository.findByEstimateId(estimateId);
+    }
    
 }

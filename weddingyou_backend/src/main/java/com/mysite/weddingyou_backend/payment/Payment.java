@@ -31,6 +31,9 @@ public class Payment {
 	@Column(name = "payment_id")
 	private Long paymentId; //결제ID
 	
+	@Column(name = "estimate_id")
+	private Long estimateId; //견적서 id
+	
 	@Column(name = "price", precision = 10, scale = 2, nullable = false)
 	private BigDecimal price; //상품 가격
 	
