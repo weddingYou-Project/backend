@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mysite.weddingyou_backend.estimate.Estimate;
+import com.mysite.weddingyou_backend.estimate.EstimateRepository;
+
 
 @Service
 @Transactional
@@ -13,6 +16,9 @@ public class PaymentService {
 	
 	@Autowired
 	PaymentRepository paymentRepository;
+	
+	@Autowired
+	EstimateRepository estimateRepository;
 	
 //    이메일로 조회 부분인데 필요한가??
 //    public List<Payment> getPaymentsByUserEmail(String userEmail) {
@@ -33,8 +39,8 @@ public class PaymentService {
     	return paymentRepository.findByEstimateId(estimateId);
     }
     
-    public List<Payment> getEstimateList(String userEmail){
-    	return paymentRepository.findAllByUserEmail(userEmail);
+    public List<Estimate> getEstimateList(String userEmail){
+    	return estimateRepository.findAllByWriter(userEmail);
     }
 
    
