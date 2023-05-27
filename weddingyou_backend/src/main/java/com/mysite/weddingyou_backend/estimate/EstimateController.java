@@ -344,7 +344,8 @@ public class EstimateController {
 					result +=plannerEmail;
 					String plannerName = plannerData.getName()+",";
 					result+=plannerName;
-					
+					String price = targetEstimate.getBudget()+"*";
+					result+=price;
 				         
 				    try {
 				    	if(plannerData.getPlannerImg()!=null) {
@@ -366,7 +367,7 @@ public class EstimateController {
 				
 				}
 				
-				//매칭하기
+				//매칭된 플래너 정보 가져오기
 				@PostMapping(value = "/getMatchedPlanner")
 				public String matchingPlanner(@RequestParam("userEmail") String userEmail
 						) throws Exception {

@@ -30,7 +30,8 @@ public class ReviewController {
 	        @RequestParam("reviewStars") Integer reviewStars,
 	        @RequestParam(value = "reviewImg", required = false) MultipartFile[] reviewImg,
 	        @RequestParam("userEmail") String userEmail,
-	        @RequestParam("plannerEmail") String plannerEmail) throws IOException {
+	        @RequestParam("plannerEmail") String plannerEmail,
+	        @RequestParam("estimateId") Long estimateId) throws IOException {
 		
 		int res = 0;
 	    
@@ -53,6 +54,7 @@ public class ReviewController {
 	 	review.setUserEmail(userEmail);
 	 	review.setPlannerEmail(plannerEmail);
 	 	review.setReviewDate(LocalDateTime.now());
+	 	review.setEstimateId(estimateId);
 	 	
 	 	System.out.println(review);
 	 	

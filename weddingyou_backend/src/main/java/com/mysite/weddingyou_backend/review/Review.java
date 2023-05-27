@@ -44,6 +44,9 @@ public class Review {
 
 	@Column(name = "planner_email", nullable = false)
 	private String plannerEmail;
+	
+	@Column(name = "estimate_id", nullable = false, unique=true)
+	private Long estimateId;
 
 //	@ManyToOne(fetch = FetchType.LAZY)
 //	@JoinColumn(name = "user_email", referencedColumnName = "email", insertable = false, updatable = false, nullable = false)

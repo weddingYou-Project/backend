@@ -61,7 +61,7 @@ public class PaymentController {
 //    }
     
     @PostMapping(value = "/deposit/callback")
-    public int handlePaymentCallback(@RequestBody PaymentCallbackRequest callbackRequest) {
+    public int handleDepositCallback(@RequestBody PaymentCallbackRequest callbackRequest) {
         // 콜백 이벤트 처리 로직
     	PaymentCallbackRequest temp = new PaymentCallbackRequest();
     	BigDecimal price = callbackRequest.getPrice();
@@ -165,7 +165,11 @@ public class PaymentController {
     			Payment targetPayment = paymentService.getPaymentData(searchedEstimate.getId());
     			if(targetPayment!=null) {
     				String depositStatus = targetPayment.getDepositStatus();
+    				String paymentStatus = targetPayment.getPaymentStatus();
         			System.out.println(depositStatus);
+        			if(paymentStatus.equals("paid")) {
+        				return "1";
+        			}
         			if(depositStatus.equals("cancelled") || depositStatus.equals("other")) {
         				String result="";
         				
@@ -186,7 +190,8 @@ public class PaymentController {
     					result +=plannerEmail;
     					String plannerName = plannerData.getName()+",";
     					result+=plannerName;
-    					
+    					String price = searchedEstimate.getBudget()+"*";
+    					result+=price;
     				         
     				    try {
     				    	if(plannerData.getPlannerImg()!=null) {
@@ -228,7 +233,8 @@ public class PaymentController {
     					result +=plannerEmail;
     					String plannerName = plannerData.getName()+",";
     					result+=plannerName;
-    					
+    					String price = searchedEstimate.getBudget()+"*";
+    					result+=price;
     				         
     				    try {
     				    	if(plannerData.getPlannerImg()!=null) {
@@ -260,7 +266,7 @@ public class PaymentController {
     }
     
     @PostMapping(value = "/payment/callback")
-    public int handleDepositCallback(@RequestBody PaymentCallbackRequest callbackRequest) {
+    public int handlePaymentCallback(@RequestBody PaymentCallbackRequest callbackRequest) {
         // 콜백 이벤트 처리 로직
         Long estimateId = callbackRequest.getEstimateId();
         String paymentStatus = callbackRequest.getTempPaymentStatus();
@@ -281,7 +287,7 @@ public class PaymentController {
         		 payment.setPaymentType(paymentType);
         		 paymentService.savePayment(payment);
         		 return 0;
-            } else if (paymentType.equals("all") && paymentStatus.equals("paid")) {
+            }  else if (paymentType.equals("all") && paymentStatus.equals("paid")) {
                 // 전체 금액 결제 처리
             	payment.setPaymentType(paymentType);
                 payment.setPaymentStatus(paymentStatus);
@@ -291,12 +297,14 @@ public class PaymentController {
                 return 1;
             	
             	
-            } else if(payment.getPaymentType().equals("all") && payment.getPaymentStatus().equals("paid")){
+            }  else if(payment.getPaymentType().equals("all") && payment.getPaymentStatus().equals("paid")){
             	return 2;
             	
-            }else {
+            } else if(!payment.getPaymentType().equals("deposit") && !payment.getPaymentType().equals("all")) {
                 System.out.println("유효하지 않은 결제 유형입니다.");
                 return -1;
+            } else {
+            	return -2;
             }
         	
           
@@ -304,6 +312,7 @@ public class PaymentController {
         	  return -2; //deposit 결제 하지 않고 전액 결제로 넘어갈수 없음.
         	  
         }
+
       
         
     }
