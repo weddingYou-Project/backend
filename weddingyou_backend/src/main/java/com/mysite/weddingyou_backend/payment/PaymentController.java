@@ -113,7 +113,7 @@ public class PaymentController {
             // 플래너 정보를 Payment 객체에 설정
         //    payment.setPlanner(planner);
             
-            if (paymentType.equals("deposit") && !callbackRequest.getDepositStatus().equals("cancelled")) {
+            if (paymentType.equals("deposit") && callbackRequest.getDepositStatus().equals("paid")) {
                 payment.setDepositDate(currentTime);
                 
             } 
@@ -136,7 +136,7 @@ public class PaymentController {
     		
     	//	targetPayment.setPlanner(planner);
     		
-    		 if (paymentType.equals("deposit") && !callbackRequest.getDepositStatus().equals("cancelled")) {
+    		 if (paymentType.equals("deposit") && callbackRequest.getDepositStatus().equals("paid")) {
     			 targetPayment.setDepositDate(currentTime);
                  
              }
