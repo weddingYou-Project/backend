@@ -197,13 +197,53 @@ public class PaymentController {
 				           e.printStackTrace();
 				        
 				    }
+				    String depositStatusMsg = "[deposit";
+				    result += depositStatusMsg;
 				    
 
 					System.out.println("result"+result);
 					return result;
     				
     			}else if(depositStatus.equals("paid")) {
-    				return "1";
+    				String result="";
+    				
+					UserUpdateDelete data = userService.getUserByEmail(userEmail);
+					PlannerUpdateDelete plannerData = plannerService.getPlannerByEmail(targetPayment.getPlannerEmail());
+					
+					System.out.println(data.getName());
+					
+					String estimateId = targetPayment.getEstimateId() + "*";
+					result +=estimateId;
+					String userName = data.getName()+"/";
+					result += userName;
+					System.out.println(data.getPhoneNum());
+					String userPhone = data.getPhoneNum()+"]";
+					result+= userPhone;
+
+					String plannerEmail = plannerData.getEmail()+"[";
+					result +=plannerEmail;
+					String plannerName = plannerData.getName()+",";
+					result+=plannerName;
+					
+				         
+				    try {
+				    	if(plannerData.getPlannerImg()!=null) {
+				    		Path imagePath = Paths.get("C:/Project/profileImg/planner",plannerData.getPlannerImg());
+					        byte[] imageBytes = Files.readAllBytes(imagePath);
+					        byte[] base64encodedData = Base64.getEncoder().encode(imageBytes);
+					        result += String.valueOf(new String(base64encodedData));
+				    	}
+				    	
+				       
+				    } catch (IOException e) {
+				           e.printStackTrace();
+				        
+				    }
+				    String depositStatusMsg = "[paid";
+				    result += depositStatusMsg;
+
+					System.out.println("result"+result);
+					return result;
     			}else {
     				return "-1";
     			}
@@ -213,34 +253,44 @@ public class PaymentController {
     }
     
     @PostMapping(value = "/payment/callback")
-    public void handleDepositCallback(@RequestBody PaymentCallbackRequest callbackRequest) {
+    public int handleDepositCallback(@RequestBody PaymentCallbackRequest callbackRequest) {
         // 콜백 이벤트 처리 로직
-        Long paymentId = callbackRequest.getPaymentId();
+        Long estimateId = callbackRequest.getEstimateId();
         String paymentStatus = callbackRequest.getTempPaymentStatus();
-        String depositStatus = callbackRequest.getTempDepositStatus();
+//        String depositStatus = callbackRequest.getTempDepositStatus();
         String paymentType = callbackRequest.getPaymentType();
 
         // 현재 시간 가져옴
         LocalDateTime currentTime = LocalDateTime.now();
 
-        // 데이터베이스에서 해당 paymentId에 해당하는 Payment 객체 가져옴
-        Payment payment = paymentService.getPaymentById(paymentId);
+        // 데이터베이스에서 해당 estimateId에 해당하는 Payment 객체 가져옴
+        Payment payment = paymentService.getPaymentData(estimateId);
+        System.out.println(payment.getDepositStatus());
+        if(payment!=null && payment.getDepositStatus().equals("paid")) {
+        	if (paymentType.equals("deposit")) {
+                // 계약금 결제 처리
+        		 payment.setPaymentStatus(paymentStatus);
+        		 paymentService.savePayment(payment);
+        		 return 0;
+            } else if (paymentType.equals("all")) {
+                // 전체 금액 결제 처리
+            	payment.setPaymentType(paymentType);
+                payment.setPaymentStatus(paymentStatus);
+                payment.setPaymentDate(currentTime);
+                // Payment 객체를 데이터베이스에 저장
+                paymentService.savePayment(payment);
+                return 1;
+            } else {
+                System.out.println("유효하지 않은 결제 유형입니다.");
+                return -1;
+            }
 
-        if (paymentType.equals("deposit")) {
-            // 계약금 결제 처리
-            payment.setDepositStatus(depositStatus);
-            payment.setDepositDate(currentTime);
-        } else if (paymentType.equals("all")) {
-            // 전체 금액 결제 처리
-            payment.setPaymentStatus(paymentStatus);
-            payment.setPaymentDate(currentTime);
-        } else {
-            System.out.println("유효하지 않은 결제 유형입니다.");
-            return;
+          
+        }else {
+        	  return -2; //deposit 결제 하지 않고 전액 결제로 넘어갈수 없음.
         }
-
-        // Payment 객체를 데이터베이스에 저장
-        paymentService.savePayment(payment);
+      
+        
     }
 
 
