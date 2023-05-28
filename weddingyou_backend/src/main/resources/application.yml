@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/weddingyou?serverTimezone=Asia/Seoul&autoReconnect=true
+    url: jdbc:mysql://localhost:3306/weddingyou?serverTimezone=Asia/Seoul&autoReconnect=true&sessionVariables=sql_mode='NO_ENGINE_SUBSTITUTION'&jdbcCompliantTruncation=false
     username: root
     password: 123456
     
