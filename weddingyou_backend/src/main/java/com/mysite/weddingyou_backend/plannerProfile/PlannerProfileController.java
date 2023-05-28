@@ -18,11 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mysite.weddingyou_backend.estimate.Estimate;
 import com.mysite.weddingyou_backend.estimate.EstimateRepository;
-import com.mysite.weddingyou_backend.item.ItemDTO;
 import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDelete;
 import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDeleteRepository;
 import com.mysite.weddingyou_backend.review.Review;
 import com.mysite.weddingyou_backend.review.ReviewRepository;
+import com.mysite.weddingyou_backend.userUpdateDelete.UserUpdateDelete;
+import com.mysite.weddingyou_backend.userUpdateDelete.UserUpdateDeleteRepository;
 
 @RestController
 public class PlannerProfileController {
@@ -30,6 +31,9 @@ public class PlannerProfileController {
     
     @Autowired
     private PlannerUpdateDeleteRepository plannerUpdateDeleteRepository;
+    
+    @Autowired
+    private UserUpdateDeleteRepository userUpdateDeleteRepository;
     
     @Autowired
     private ReviewRepository reviewRepository;
@@ -168,13 +172,46 @@ public class PlannerProfileController {
     		}
     		
 	        encodingDatas.add(targetPlanner.getName());
-   
+	        encodingDatas.add(targetPlanner.getEmail());
     	}
     	
        
     		
 	    	 
 	        return encodingDatas;
+    
+    }
+    
+    @PostMapping("/plannerProfile/getProfileDetail")
+    public List<String> getProfileDetail(@RequestParam("plannerEmail") String plannerEmail) throws ParseException {
+    	PlannerProfile targetPlannerProfile = plannerService.getPlannerByEmail(plannerEmail);
+    	 List<String> result = new ArrayList<>();
+
+    	result.add(String.valueOf(targetPlannerProfile.getReviewCount()));
+    	result.add(String.valueOf(targetPlannerProfile.getAvgReviewStars()));	
+    	result.add(String.valueOf(targetPlannerProfile.getIntroduction()));
+    	result.add(String.valueOf(targetPlannerProfile.getMatchingCount()));
+    	
+    	if(!targetPlannerProfile.getReviewUsers().equals("[]")) {
+    		String data = targetPlannerProfile.getReviewUsers().substring(1, targetPlannerProfile.getReviewUsers().length()-1);
+        	String[] reviewUsers = data.split(",");
+        
+    		ArrayList<String> userName = new ArrayList<>();
+        	for(int i=0;i<reviewUsers.length;i++) {
+        		System.out.println(reviewUsers[i].trim());
+        		UserUpdateDelete userInfo = userUpdateDeleteRepository.findByEmail(reviewUsers[i].trim());
+        		System.out.println(userInfo.getName());
+        		userName.add(userInfo.getName());
+        	}
+        	result.add(String.valueOf(userName));
+    	}else {
+    		result.add("[]");
+    	}
+    	
+//    	result.add(String.valueOf(targetPlannerProfile.getReviewUsers()));
+    	result.add(String.valueOf(targetPlannerProfile.getReviewStars()));
+
+	    return result;
     
     }
 }

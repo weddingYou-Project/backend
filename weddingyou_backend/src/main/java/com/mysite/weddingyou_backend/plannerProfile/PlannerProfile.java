@@ -6,11 +6,10 @@ import org.hibernate.annotations.ColumnDefault;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -57,7 +56,8 @@ public class PlannerProfile {
     @Column(name = "planner_phoneNum", nullable = false)
    	private String plannerPhoneNum;
 
-    @Column(name = "planner_Introduction")
+    @Lob
+    @Column(name = "planner_Introduction", length=1000000000)
     private String introduction;
   
     @Column(name = "planner_JoinDate")
