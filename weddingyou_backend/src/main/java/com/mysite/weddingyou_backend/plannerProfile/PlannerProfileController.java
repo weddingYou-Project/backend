@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mysite.weddingyou_backend.estimate.Estimate;
 import com.mysite.weddingyou_backend.estimate.EstimateRepository;
+import com.mysite.weddingyou_backend.estimate.EstimateService;
 import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDelete;
 import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDeleteRepository;
 import com.mysite.weddingyou_backend.review.Review;
@@ -40,6 +41,9 @@ public class PlannerProfileController {
     
     @Autowired
     private EstimateRepository estimateRepository;
+    
+    @Autowired
+    private EstimateService estimateService;
 
     @Autowired
     public PlannerProfileController(PlannerProfileService plannerService) {
@@ -308,6 +312,47 @@ public class PlannerProfileController {
         return result;
        
     }
+    
+  //견적서 매칭원하는 고객 삽입하기
+  		@PostMapping(value = "/plannerProfile/insert/matchingUser")
+  		public void updateData(
+  		                       @RequestParam("estimateId") Long estimateId,
+  								@RequestParam("usermatching") String usermatching)
+  		                    		   throws Exception {
+  		    
+  			Estimate targetData = estimateService.getEstimateDetail(estimateId);
+  			
+  			
+  			System.out.println("targetData.plannermatching:"+targetData.getUserMatching());
+  			JSONParser parser = new JSONParser();
+  			ArrayList<String> obj = (ArrayList<String>) parser.parse(usermatching);
+  			ArrayList<String> userList = null;
+  			if(targetData.getUserMatching()!=null) {
+  				userList = (ArrayList<String>) parser.parse(targetData.getUserMatching());
+  				System.out.println(userList);
+  			}else {
+  				userList = new ArrayList<>();
+  			}
+  			 
+  			
+  			if(userList.size() == 0) {
+  				Estimate data = new Estimate();
+  				data.setUserMatching(usermatching);
+  				targetData.setUserMatching(data.getUserMatching());
+  				
+  				estimateService.save(targetData);
+  			}
+  			else if(userList.size()!=0 && !userList.containsAll(obj)) {
+  				Estimate data = new Estimate();
+  				data.setUserMatching(usermatching);
+  				targetData.setUserMatching(data.getUserMatching());
+  				
+  				estimateService.save(targetData);
+  			}else if(userList.size()!=0  && userList.containsAll(obj)){
+  				throw new Exception("중복됩니다!");
+  			}
+  			
+  		}
  
 
     

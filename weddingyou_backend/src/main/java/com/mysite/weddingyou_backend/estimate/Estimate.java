@@ -71,7 +71,11 @@ public class Estimate {
     private int viewcount;
     
     @Column (name = "e_plannerMatching") //plannermatching
+    
     private String plannermatching;
+    
+    @Column (name = "e_userMatching") //usermatching
+    private String userMatching;
 
     @Column (name = "e_assigned") //plannermatching
     private Boolean assigned;

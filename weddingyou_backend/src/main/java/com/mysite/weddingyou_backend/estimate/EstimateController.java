@@ -89,6 +89,7 @@ public class EstimateController {
 		data.setDate(LocalDate.now());
 		data.setViewcount(0);		
 		data.setPlannermatching("[]");
+		data.setUserMatching("[]");
 		data.setAssigned(false);
 		estimateService.insert(data);
 	}
