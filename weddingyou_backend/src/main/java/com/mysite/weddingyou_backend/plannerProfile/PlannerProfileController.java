@@ -293,6 +293,22 @@ public class PlannerProfileController {
         return encodingDatas;
        
     }
+    
+    @PostMapping("/plannerProfile/getUnmatchedEstimates")
+    public List<String> getUnmatchedEstimates(@RequestParam("userEmail") String userEmail ) throws ParseException {
+    	List<Estimate> estimatesData = estimateRepository.findAllByWriter(userEmail);
+    
+    	List<String> result = new ArrayList<>();
+    	for(int i =0;i<estimatesData.size();i++) {
+    		if(!estimatesData.get(i).isMatchstatus()) {
+    			result.add(String.valueOf(estimatesData.get(i).getId()));
+    		}
+    	}
+    	
+        return result;
+       
+    }
+ 
 
     
 }
