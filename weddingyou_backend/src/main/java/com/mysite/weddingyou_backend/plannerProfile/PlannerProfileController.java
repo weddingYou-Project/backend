@@ -182,6 +182,45 @@ public class PlannerProfileController {
     
     }
     
+    @PostMapping("/plannerProfile/getProfiles3")
+    public List<String> getPlannerProfiles3(@RequestParam("plannerEmailArr") String plannerEmailSort) throws ParseException {
+    	System.out.println(plannerEmailSort);
+    	JSONParser parser = new JSONParser();
+		ArrayList<String> obj = (ArrayList<String>) parser.parse(plannerEmailSort);
+		System.out.println(obj);
+		 List<String> encodingDatas = new ArrayList<>();
+		for(int i =0;i<obj.size();i++) {
+			PlannerUpdateDelete targetPlanner =  plannerUpdateDeleteRepository.findByEmail(obj.get(i));
+	    	 	 
+	    		if(targetPlanner.getPlannerImg()!=null) {
+	    			String path = "C:/Project/profileImg/planner";
+	   	    	 Path imagePath = Paths.get(path,targetPlanner.getPlannerImg());
+	   	    	 System.out.println(imagePath);
+
+	   	         try {
+	   	             byte[] imageBytes = Files.readAllBytes(imagePath);
+	   	             byte[] base64encodedData = Base64.getEncoder().encode(imageBytes);
+	   	             
+	   	             encodingDatas.add(new String(base64encodedData));
+	   	             
+	   	         } catch (IOException e) {
+	   	             e.printStackTrace();
+	   	            
+	   	         }
+	    		}else {
+	    			 encodingDatas.add("null");
+	    		}
+	    		
+		        encodingDatas.add(targetPlanner.getName());
+		        encodingDatas.add(targetPlanner.getEmail());
+	    	
+		    	 
+		      
+		}
+		  return encodingDatas;
+    
+    }
+    
     @PostMapping("/plannerProfile/getProfileDetail")
     public List<String> getProfileDetail(@RequestParam("plannerEmail") String plannerEmail) throws ParseException {
     	PlannerProfile targetPlannerProfile = plannerService.getPlannerByEmail(plannerEmail);
@@ -210,7 +249,7 @@ public class PlannerProfileController {
     	
 //    	result.add(String.valueOf(targetPlannerProfile.getReviewUsers()));
     	result.add(String.valueOf(targetPlannerProfile.getReviewStars()));
-
+    	result.add(String.valueOf(targetPlannerProfile.getPlannerCareerYears()));
 	    return result;
     
     }
