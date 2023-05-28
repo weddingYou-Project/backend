@@ -136,9 +136,10 @@ public class PlannerUpdateDeleteController {
 		// System.out.println("유저이메일: " + user.getEmail());
 		 PlannerUpdateDelete searchedPlanner = service.getPlannerByEmail(user.getEmail());
 	     if (searchedPlanner != null) {
-	         Path imagePath = Paths.get("C:/Project/profileImg/planner",searchedPlanner.getPlannerImg());
+	         
 	         
 	         try {
+	        	 Path imagePath = Paths.get("C:/Project/profileImg/planner",searchedPlanner.getPlannerImg());
 	             byte[] imageBytes = Files.readAllBytes(imagePath);
 	             byte[] base64encodedData = Base64.getEncoder().encode(imageBytes);
 	              return ResponseEntity.ok()

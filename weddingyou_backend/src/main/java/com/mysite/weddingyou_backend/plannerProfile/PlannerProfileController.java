@@ -253,4 +253,46 @@ public class PlannerProfileController {
 	    return result;
     
     }
+    
+    @PostMapping("/plannerProfile/getProfileDetail2")
+    public List<String> getProfileDetail2(@RequestParam("userEmail") String userEmail,@RequestParam("estimateNum") String estimateNum ) throws ParseException {
+    	List<Estimate> estimatesData = estimateRepository.findAllByWriter(userEmail);
+    	String searchedPlanner = "";
+    	List<String> encodingDatas = new ArrayList<>();
+    	for(int i =0;i<estimatesData.size();i++) {
+    		if(i==Integer.parseInt(estimateNum)) {
+    			JSONParser parser = new JSONParser();
+    			ArrayList<String> plannerMatching = (ArrayList<String>) parser.parse(estimatesData.get(i).getPlannermatching());
+    			searchedPlanner = plannerMatching.get(0);
+    			
+    			break;
+    		}
+    	}
+    	PlannerUpdateDelete targetPlanner = plannerUpdateDeleteRepository.findByEmail(searchedPlanner);
+    	if(targetPlanner.getPlannerImg()!=null) {
+			String path = "C:/Project/profileImg/planner";
+	    	 Path imagePath = Paths.get(path,targetPlanner.getPlannerImg());
+	    	 System.out.println(imagePath);
+
+	         try {
+	             byte[] imageBytes = Files.readAllBytes(imagePath);
+	             byte[] base64encodedData = Base64.getEncoder().encode(imageBytes);
+	             
+	             encodingDatas.add(new String(base64encodedData));
+	             
+	         } catch (IOException e) {
+	             e.printStackTrace();
+	            
+	         }
+		}else {
+			 encodingDatas.add("null");
+		}
+		
+        encodingDatas.add(targetPlanner.getName());
+        encodingDatas.add(targetPlanner.getEmail());
+        return encodingDatas;
+       
+    }
+
+    
 }
