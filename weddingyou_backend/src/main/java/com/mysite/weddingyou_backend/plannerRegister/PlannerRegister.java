@@ -2,6 +2,8 @@ package com.mysite.weddingyou_backend.plannerRegister;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -43,6 +45,10 @@ public class PlannerRegister {
     
     @Enumerated(EnumType.STRING) // Enum 값을 String 형태로 저장
     private Gender gender;
+    
+	@Column(name = "planner_introduction")
+	@ColumnDefault("아직 소개글이 없습니다!")
+	private String introduction;
 
     @Column(name = "planner_join_date", columnDefinition = "datetime default current_timestamp")
     private LocalDateTime plannerJoinDate;

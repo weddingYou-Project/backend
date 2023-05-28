@@ -2,6 +2,8 @@ package com.mysite.weddingyou_backend.plannerUpdateDelete;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import com.mysite.weddingyou_backend.plannerRegister.PlannerRegister.Gender;
 
 import jakarta.persistence.Column;
@@ -12,7 +14,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -43,6 +44,10 @@ public class PlannerUpdateDelete {
 	
 	@Column(name = "planner_career_years", nullable = false)
 	private String plannerCareerYears;
+	
+	@Column(name = "planner_introduction")
+	@ColumnDefault("아직 소개글이 없습니다!")
+	private String introduction;
 	
 	 @Enumerated(EnumType.STRING) // Enum 값을 String 형태로 저장
 	    private Gender gender;

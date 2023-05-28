@@ -40,5 +40,7 @@ public class PlannerUpdateDeleteDTO {
 	@NotNull
 	private String preemail;
 	
+	private String introduction;
+	
 	
 }

@@ -34,6 +34,7 @@ public class PlannerRegisterService {
 //        planner.setPlannerImg(plannerDTO.getPlannerImg());
         planner.setGender(plannerDTO.getGender());
         planner.setCareer(plannerDTO.getCareer());
+        planner.setIntroduction(plannerDTO.getIntroduction());
         planner.setPlannerJoinDate(LocalDateTime.now()); // 현재 시간으로 설정
         return plannerRepository.save(planner);
     }

@@ -86,6 +86,7 @@ public class PlannerUpdateDeleteController {
 			 searchedPlanner.setName(planner.getName());
 			 searchedPlanner.setGender(planner.getGender());
 			 searchedPlanner.setPlannerCareerYears(planner.getCareer());
+			 searchedPlanner.setIntroduction(planner.getIntroduction());
 			 System.out.println(planner.getCareer());
 			 service.save(searchedPlanner);
 		 }else {
