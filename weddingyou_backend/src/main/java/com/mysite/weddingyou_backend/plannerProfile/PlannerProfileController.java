@@ -61,17 +61,20 @@ public class PlannerProfileController {
     	  LocalDateTime plannerJoinDate = plannersInfo.get(i).getPlannerJoinDate();
     	  String plannerCareerYears = plannersInfo.get(i).getPlannerCareerYears();
     	  
-    	  List<Review> reviews = reviewRepository.findAllByPlannerEmail(plannerEmail);
-    	  System.out.println(reviews.get(0).getPlannerEmail());
+    	  List<Review> reviews = new ArrayList<>();
+    	  System.out.println(plannerEmail);
+    	  reviews = reviewRepository.findAllByPlannerEmail(plannerEmail);
+
     	  ArrayList<String> reviewUsers = new ArrayList<>();
     	  ArrayList<Integer> reviewStars = new ArrayList<>();
     	  int totalReviewStars = 0;
     	  int reviewCount = 0;
     	  if(reviews!=null) {
     		  for(int j = 0;j<reviews.size();j++) {
-        		  reviewUsers.add(reviews.get(i).getUserEmail());
-        		  reviewStars.add(reviews.get(i).getReviewStars());
-        		  totalReviewStars += reviews.get(i).getReviewStars();
+    			  System.out.println(reviews.get(j).getPlannerEmail());
+        		  reviewUsers.add(reviews.get(j).getUserEmail());
+        		  reviewStars.add(reviews.get(j).getReviewStars());
+        		  totalReviewStars += reviews.get(j).getReviewStars();
         	  }
     		  reviewCount = reviews.size();
     	  }  
@@ -86,7 +89,7 @@ public class PlannerProfileController {
     	  List<Estimate> estimates = estimateRepository.findAll();
     	  int matchingCount = 0;
     	  for(int k = 0;k<estimates.size();k++) {
-    		  Estimate targetEstimate = estimates.get(i);
+    		  Estimate targetEstimate = estimates.get(k);
     		  if(targetEstimate.isMatchstatus()) {
     			  JSONParser parser = new JSONParser();
     			  ArrayList<String> matchedPlanners = (ArrayList<String>) parser.parse(targetEstimate.getPlannermatching());
