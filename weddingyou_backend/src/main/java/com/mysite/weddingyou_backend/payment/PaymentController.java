@@ -11,6 +11,7 @@ import java.util.Base64;
 import java.util.List;
 
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -152,7 +153,7 @@ public class PaymentController {
     }
     
     @PostMapping(value = "/deposit/check")
-    public String depositCheck(@RequestParam(value="estimateNum") int estimateNum, @RequestParam(value="userEmail") String userEmail) {
+    public String depositCheck(@RequestParam(value="estimateNum") int estimateNum, @RequestParam(value="userEmail") String userEmail) throws ParseException {
     	List<Estimate> estimateData = paymentService.getEstimateList(userEmail);
     	Estimate searchedEstimate = null;
     	for(int i =0;i<estimateData.size();i++) {
@@ -161,8 +162,10 @@ public class PaymentController {
     			searchedEstimate = targetEstimate;
     		}
     	}
-    		
+    	System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++"+estimateNum);
+    	System.out.println(searchedEstimate.getId());
     			Payment targetPayment = paymentService.getPaymentData(searchedEstimate.getId());
+    			System.out.println(targetPayment);
     			if(targetPayment!=null) {
     				String depositStatus = targetPayment.getDepositStatus();
     				String paymentStatus = targetPayment.getPaymentStatus();
@@ -258,7 +261,129 @@ public class PaymentController {
         				return "-1";
         			}
     			}else {
-    				return "-1";
+    				PaymentCallbackRequest callbackRequest = new PaymentCallbackRequest();
+    				BigDecimal tempPrice = new BigDecimal(searchedEstimate.getBudget());
+    				BigDecimal price = tempPrice;
+    		    	Integer quantity = 1;
+    		    	String paymentMethod = "card";
+    		    	BigDecimal paymentAmount = new BigDecimal(searchedEstimate.getBudget());
+    		    	
+    		        String paymentStatus = "other";
+    		        BigDecimal depositAmount = new BigDecimal(searchedEstimate.getBudget() * 0.05);
+    	
+    		        String depositStatus = "cancelled";
+    		        String paymentType = "deposit";
+    		        String useremail = searchedEstimate.getWriter(); // userEmail 추가
+    		        JSONParser parser = new JSONParser();
+					ArrayList<String> plannermatching = (ArrayList<String>) parser.parse(searchedEstimate.getPlannermatching());
+    		        String planneremail = plannermatching.get(0);// plannerEmail 추가
+    		        Long estimateId = searchedEstimate.getId(); // estimateId 추가)
+    		        
+    		        //현재 시간 가져옴
+    		        LocalDateTime currentTime = LocalDateTime.now();
+    		        
+    		        // 데이터베이스에서 Planner 정보 가져오기
+    		        PlannerLogin planner = plannerLoginRepository.findByEmail(planneremail);
+    		        String plannerName = planner.getName();
+    		        String plannerImg = planner.getPlannerImg();
+    		        
+    		        // 데이터베이스에서 User 정보 가져오기
+    		        UserLogin user = userLoginRepository.findByEmail(userEmail);
+    		        
+    		    	if(paymentService.getPaymentData(estimateId)==null) {
+
+    		            // 데이터베이스에서 Item 정보 가져오기
+    		         //   Optional<Item> item = itemRepository.findById(itemId);
+    		            
+    		            // 데이터베이스에 저장하기 위해 Payment 객체 생성
+    		            Payment payment = new Payment();
+    		            payment.setPrice(price);
+    		            payment.setQuantity(quantity);
+    		            payment.setPaymentMethod(paymentMethod);
+    		            payment.setPaymentAmount(paymentAmount);
+    		            payment.setPaymentStatus(paymentStatus);
+    		            payment.setDepositAmount(depositAmount);
+    		            payment.setDepositStatus(depositStatus);
+    		            payment.setPaymentType(paymentType);
+    		            payment.setUserEmail(useremail);
+    		            payment.setPlannerEmail(planneremail);
+    		            payment.setEstimateId(estimateId);
+    		        //    payment.setItemId(itemId);
+    		            
+    		            // 플래너 정보를 Payment 객체에 설정
+    		        //    payment.setPlanner(planner);
+    		            
+    		            if (paymentType.equals("deposit") && depositStatus.equals("paid")) {
+    		                payment.setDepositDate(currentTime);
+    		                
+    		            } 
+    		            
+    		            // Payment 객체를 데이터베이스에 저장
+    		            paymentService.savePayment(payment);
+    		    	}else { //estimateId가 겹칠 경우에 관련 데이터 업데이트
+    		    		Payment targetPayment2 = paymentService.getPaymentData(callbackRequest.getEstimateId());
+    		    		targetPayment2.setPrice(price);
+    		    		targetPayment2.setQuantity(quantity);
+    		    		targetPayment2.setPaymentMethod(paymentMethod);
+    		    		targetPayment2.setPaymentAmount(paymentAmount);
+    		    		targetPayment2.setPaymentStatus(paymentStatus);
+    		    		targetPayment2.setDepositAmount(depositAmount);
+    		    		targetPayment2.setDepositStatus(depositStatus);
+    		    		targetPayment2.setPaymentType(paymentType);
+    		    		targetPayment2.setUserEmail(userEmail);
+    		    		targetPayment2.setPlannerEmail(planneremail);
+    		    		targetPayment2.setEstimateId(estimateId);
+    		    		
+    		    	//	targetPayment.setPlanner(planner);
+    		    		
+    		    		 if (paymentType.equals("deposit") && depositStatus.equals("paid")) {
+    		    			 targetPayment2.setDepositDate(currentTime);
+    		                 
+    		             }
+    		    		  paymentService.savePayment(targetPayment2);
+    		    	}
+    		    	
+    		    	String result="";
+    				
+					UserUpdateDelete data = userService.getUserByEmail(useremail);
+					PlannerUpdateDelete plannerData = plannerService.getPlannerByEmail(planneremail);
+					
+					System.out.println(data.getName());
+					
+					String estimateId2 = estimateId + "*";
+					result +=estimateId2;
+					String userName = data.getName()+"/";
+					result += userName;
+					System.out.println(data.getPhoneNum());
+					String userPhone = data.getPhoneNum()+"]";
+					result+= userPhone;
+
+					String plannerEmail = plannerData.getEmail()+"[";
+					result +=plannerEmail;
+					String plannername = plannerData.getName()+",";
+					result+=plannername;
+					String paymentAmount2 = paymentAmount+"*";
+					result+=paymentAmount2;
+				         
+				    try {
+				    	if(plannerData.getPlannerImg()!=null) {
+				    		Path imagePath = Paths.get("C:/Project/profileImg/planner",plannerData.getPlannerImg());
+					        byte[] imageBytes = Files.readAllBytes(imagePath);
+					        byte[] base64encodedData = Base64.getEncoder().encode(imageBytes);
+					        result += String.valueOf(new String(base64encodedData));
+				    	}
+				    	
+				       
+				    } catch (IOException e) {
+				           e.printStackTrace();
+				        
+				    }
+				    String depositStatusMsg = "[deposit";
+				    result += depositStatusMsg;
+				    
+
+					System.out.println("result"+result);
+					return result;
     			}
     			
     		
