@@ -555,10 +555,13 @@ public class EstimateController {
 											System.out.println(plannermatching);
 											System.out.println(usermatching);
 											result.add(String.valueOf(k));
+										}else {
+											result.add(String.valueOf(-1));
 										}
 										
 									}
 									k++;
+									
 								}
 							
 								
