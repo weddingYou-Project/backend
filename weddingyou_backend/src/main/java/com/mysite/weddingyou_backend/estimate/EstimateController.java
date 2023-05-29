@@ -290,12 +290,17 @@ public class EstimateController {
 				    JSONParser parser = new JSONParser();
 				    ArrayList<String> obj = (ArrayList<String>) parser.parse(targetEstimate.getPlannermatching());
 				    obj.remove(deletePlanner);
+				   
 				    if(targetEstimate.isMatchstatus()) {
+				    	ArrayList<String> obj2 = (ArrayList<String>) parser.parse(targetEstimate.getUserMatching());
+						obj2.remove(deletePlanner);
+						 targetEstimate.setUserMatching(String.valueOf(obj2));
 				    	targetEstimate.setMatchstatus(false);
 				    	res=2;
 				    }
 				    newEstimate.setPlannermatching(String.valueOf(obj));
 				    targetEstimate.setPlannermatching(String.valueOf(obj));
+				   
 				    estimateService.save(targetEstimate);
 					
 					return res;
@@ -317,6 +322,7 @@ public class EstimateController {
 						ArrayList<String> cleanList= new ArrayList<>();
 						Estimate cleanEstimate = targetEstimate;
 						cleanEstimate.setPlannermatching(String.valueOf(cleanList));
+						cleanEstimate.setUserMatching(String.valueOf(cleanList));
 						cleanEstimate.setAssigned(true);
 						estimateService.save(cleanEstimate);
 //					}
@@ -328,6 +334,7 @@ public class EstimateController {
 					ArrayList<String> obj = (ArrayList<String>) parser.parse(targetEstimate.getPlannermatching());
 				    obj.add(matchingPlanner);
 					targetEstimate.setPlannermatching(String.valueOf(obj));
+					targetEstimate.setUserMatching(String.valueOf(obj));
 					targetEstimate.setMatchstatus(true);
 				    estimateService.save(targetEstimate);
 				    
@@ -412,6 +419,7 @@ public class EstimateController {
 						ArrayList<String> cleanList= new ArrayList<>();
 						targetEstimate.getPlannermatching();
 						targetEstimate.setPlannermatching(String.valueOf(cleanList));
+						targetEstimate.setUserMatching(String.valueOf(cleanList));
 						targetEstimate.setMatchstatus(false);
 						estimateService.save(targetEstimate);
 						
@@ -449,6 +457,7 @@ public class EstimateController {
 							ArrayList<String> cleanList= new ArrayList<>();
 							Estimate cleanEstimate = targetData.get(estimateNum);
 							cleanEstimate.setPlannermatching(String.valueOf(cleanList));
+							cleanEstimate.setUserMatching(String.valueOf(cleanList));
 							cleanEstimate.setMatchstatus(false);
 							estimateService.save(cleanEstimate);
 							res = 1;

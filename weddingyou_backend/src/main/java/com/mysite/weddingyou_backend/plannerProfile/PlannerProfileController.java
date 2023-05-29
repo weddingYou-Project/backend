@@ -414,6 +414,9 @@ public class PlannerProfileController {
   	  	  				obj.remove(plannerEmail);
   	  	  				targetEstimate.setUserMatching(String.valueOf(obj));
   	  	  				if(targetEstimate.isMatchstatus()) {
+  	  	  					obj = (ArrayList<String>) parser.parse(targetEstimate.getPlannermatching());
+  	  	  					obj.remove(plannerEmail);
+  	  	  					targetEstimate.setPlannermatching(String.valueOf(obj));
   	  	  					targetEstimate.setMatchstatus(false);
   	  	  				}
   	  	  				estimateRepository.save(targetEstimate);
@@ -447,6 +450,7 @@ public class PlannerProfileController {
   	  	  				obj.clear();
   	  	  				obj.add(plannerEmail);
   	  	  				targetEstimate.setUserMatching(String.valueOf(obj));
+  	  	  				targetEstimate.setPlannermatching(String.valueOf(obj));
   	  	  				targetEstimate.setMatchstatus(true);
   	  	  				estimateRepository.save(targetEstimate);
   	  	  				res =1;
@@ -458,7 +462,7 @@ public class PlannerProfileController {
   			
   		}
  
-  		//매칭 요청 온 고객 매칭하기
+  		//매칭된 고객 정보 가져오기
   		@PostMapping(value = "/plannerProfile/getMatchedUser")
   		public List<String> getMatchedUser(
   		                       @RequestParam("plannerEmail") String plannerEmail)
