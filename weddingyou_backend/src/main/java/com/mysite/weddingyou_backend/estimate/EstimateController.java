@@ -12,12 +12,11 @@ import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
+import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.UrlResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -47,6 +46,9 @@ public class EstimateController {
 	
 	@Autowired
 	private UserUpdateDeleteService userService ;
+	
+	@Autowired
+	private EstimateRepository estimateRepository;
 	
 	@Value("${spring.servlet.multipart.location}")
     String uploadDir;
@@ -467,6 +469,106 @@ public class EstimateController {
 						return res;
 				
 				}
+				
+				//플래너 요청, 고객요청 비교해서 서로 짝 찾기
+				@PostMapping(value = "/findMatching")
+				public List<String> findMatching(@RequestParam("email") String email
+						,@RequestParam("category") String category
+						) throws Exception {
+					List<String> result = new ArrayList<>();
+					if(category.equals("user")) {
+						 
+						List<Estimate> estimatesData = estimateService.getEstimateDetailByEmail(email);
+						System.out.println(estimatesData.size());
+						if(estimatesData!=null) {
+							int k=0;
+							for(int i =0;i<estimatesData.size();i++) {
+								Estimate targetEstimate = estimatesData.get(i);
+								JSONParser parser = new JSONParser();
+								
+								ArrayList<String> plannermatching = (ArrayList<String>) parser.parse(targetEstimate.getPlannermatching());
+								ArrayList<String> usermatching = (ArrayList<String>) parser.parse(targetEstimate.getUserMatching());
+								ArrayList<String> originPlannerMatching = (ArrayList<String>) parser.parse(targetEstimate.getPlannermatching());
+								JSONArray temp = new JSONArray();
+								if(plannermatching.size()!=0 && usermatching.size() !=0) {
+									System.out.println(plannermatching);
+									System.out.println(usermatching);
+									
+									System.out.println(originPlannerMatching.size());
+									plannermatching.retainAll(usermatching);
+									int m =0;
+								
+									if(plannermatching.size()!=0) {
+										
+										for(int l=0;l<originPlannerMatching.size();l++) {
+											String str = originPlannerMatching.get(l);
+											if(usermatching.contains(str)) {
+												temp.add(str);
+											
+											}else {
+												temp.add("empty");
+												
+											}
+										}
+									
+										System.out.println("temp:"+temp);
+									}
+									
+									
+									if(plannermatching.size()!=0) {
+										
+										result.add(String.valueOf(temp));
+										result.add(String.valueOf(k));
+										
+									}else {
+										result.add(String.valueOf(new ArrayList<>()));
+										result.add(String.valueOf(0));
+										k++;
+										continue;
+									}
+									
+								}else {
+									result.add(String.valueOf(new ArrayList<>()));
+									result.add(String.valueOf(0));
+								}
+								
+								k++;
+							}
+						}
+						
+					}else if(category.equals("planner")) {
+						List<Estimate> estimatesData1 = estimateRepository.findAll();
+					
+						if(estimatesData1!=null) {
+							int k= 0;
+							for(int i =0;i<estimatesData1.size();i++) {
+								Estimate targetEstimate = estimatesData1.get(i);
+							
+								JSONParser parser = new JSONParser();
+								
+								ArrayList<String> plannermatching = (ArrayList<String>) parser.parse(targetEstimate.getPlannermatching());
+								ArrayList<String> usermatching = (ArrayList<String>) parser.parse(targetEstimate.getUserMatching());
+								ArrayList<String> originUserMatching = usermatching;
+								if(usermatching.contains(email)) {
+									if(plannermatching.size()!=0 && usermatching.size() !=0) {
+										if(plannermatching.contains(email) && usermatching.contains(email)) {
+											System.out.println(plannermatching);
+											System.out.println(usermatching);
+											result.add(String.valueOf(k));
+										}
+										
+									}
+									k++;
+								}
+							
+								
+							}
+						}
+					}
+					return result;
+				
+				}
+
 	
 }
 
