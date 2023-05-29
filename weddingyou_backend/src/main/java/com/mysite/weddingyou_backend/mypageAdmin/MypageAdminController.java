@@ -20,7 +20,6 @@ import com.mysite.weddingyou_backend.plannerLogin.PlannerLogin;
 import com.mysite.weddingyou_backend.plannerLogin.PlannerLoginRepository;
 import com.mysite.weddingyou_backend.userLogin.UserLogin;
 import com.mysite.weddingyou_backend.userLogin.UserLoginRepository;
-import com.mysite.weddingyou_backend.userLogin.UserLoginService;
 
 @RestController
 @RequestMapping("/mypageAdmin")
