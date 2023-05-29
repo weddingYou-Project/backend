@@ -470,6 +470,7 @@ public class PlannerProfileController {
   		                    		   throws Exception {
   		    List<String> result = new ArrayList<>();
   			List<Estimate> estimatesData = estimateRepository.findAll();
+  			int k = 0;
   			if(estimatesData !=null) {
   				for(int i =0;i<estimatesData.size();i++) {
   					Estimate targetEstimate = estimatesData.get(i);
@@ -480,15 +481,19 @@ public class PlannerProfileController {
   					}else {
   						obj = new ArrayList<>();
   					}
-
+  					if(obj.contains(plannerEmail)) {
+  						k++;
+  					}
   					if(targetEstimate.isMatchstatus() && obj.contains(plannerEmail)) {
+  						
   						result.add(String.valueOf(targetEstimate.getId()));
   						String userEmail = targetEstimate.getWriter();
   						UserUpdateDelete userInfo = userUpdateDeleteRepository.findByEmail(userEmail);
   						String userName = userInfo.getName();
   						result.add(userName);
+  						result.add(String.valueOf(k));  
+  						
   					}
-  					
   				}
   			}
   		
@@ -498,5 +503,5 @@ public class PlannerProfileController {
   			
   		}
 
-    
+  		
 }
