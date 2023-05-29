@@ -301,14 +301,14 @@ public class PlannerProfileController {
     @PostMapping("/plannerProfile/getUnmatchedEstimates")
     public List<String> getUnmatchedEstimates(@RequestParam("userEmail") String userEmail ) throws ParseException {
     	List<Estimate> estimatesData = estimateRepository.findAllByWriter(userEmail);
-    
+    	
     	List<String> result = new ArrayList<>();
     	for(int i =0;i<estimatesData.size();i++) {
     		if(!estimatesData.get(i).isMatchstatus()) {
     			result.add(String.valueOf(estimatesData.get(i).getId()));
     		}
     	}
-    	
+    
         return result;
        
     }
@@ -394,6 +394,34 @@ public class PlannerProfileController {
   			return result;
   		}
   			
+  	//매칭 요청 온 고객 취소하기
+  		@PostMapping(value = "/plannerProfile/cancelMatchingUser")
+  		public int cancelMatchingUser(
+  		                       @RequestParam("estimateId") Long estimateId, @RequestParam("plannerEmail") String plannerEmail)
+  								
+  		                    		   throws Exception {
+  		    
+  			Estimate targetEstimate = estimateRepository.findById(estimateId);
+  			int res = 0;
+  			if(targetEstimate!=null) {
+  				
+  	  				JSONParser parser = new JSONParser();
+  	  	  			ArrayList<String> obj = null; 
+  	  	  			if(targetEstimate.getUserMatching()==null) {
+  	  	  				obj= new ArrayList<>();
+  	  	  			}else {
+  	  	  				obj = (ArrayList<String>) parser.parse(targetEstimate.getUserMatching());
+  	  	  				obj.remove(plannerEmail);
+  	  	  				targetEstimate.setUserMatching(String.valueOf(obj));
+  	  	  				estimateRepository.save(targetEstimate);
+  	  	  				res =1;
+  	  	  			}		
+  	  			}
+  			
+  			return res;
+  			
+  			
+  		}
   
  
 
