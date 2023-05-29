@@ -30,6 +30,11 @@ public class NoticeDTO {
 
     private LocalDateTime noticeWriteDate;
     
+ // 첨부 파일 
+    public void setAttachment(String noticeImg) {
+        this.noticeImg = noticeImg;
+    }
+    
 	public static NoticeDTO fromEntity(Notice notice) {
 		NoticeDTO NoticeDTO = new NoticeDTO();
 		NoticeDTO.setNoticeId(notice.getNoticeId());
