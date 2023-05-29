@@ -557,8 +557,12 @@ public class EstimateController {
 											result.add(String.valueOf(k));
 										}else {
 											result.add(String.valueOf(-1));
+											k++;
+											continue;
 										}
 										
+									}else {
+										result.add(String.valueOf(-1));
 									}
 									k++;
 									
