@@ -79,6 +79,7 @@ public class MypageAdminController {
 	            plannerMypageAdmin.setPlannerPassword(planner.getPassword());
 	            plannerMypageAdmin.setPlannerGender(planner.getGender());
 	            plannerMypageAdmin.setPlannerPhoneNum(planner.getPhoneNum());
+	            plannerMypageAdmin.setPlannerCareerYears(planner.getPlannerCareerYears());
 	            plannerMypageAdmin.setPlannerJoinDate(planner.getPlannerJoinDate());
 
 	            mypageAdmins.add(plannerMypageAdmin);

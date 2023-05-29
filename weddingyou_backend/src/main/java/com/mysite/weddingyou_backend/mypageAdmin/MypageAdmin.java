@@ -75,6 +75,9 @@ public class MypageAdmin {
 	@Column(name = "planner_join_date")
 	private LocalDateTime plannerJoinDate;
 	
+	@Column(name = "planner_career_years")
+	private Integer plannerCareerYears;
+	
 	
 //	// user 테이블
 //	@ManyToOne(fetch=FetchType.LAZY)
