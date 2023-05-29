@@ -109,6 +109,8 @@ public class PaymentController {
             payment.setUserEmail(userEmail);
             payment.setPlannerEmail(plannerEmail);
             payment.setEstimateId(estimateId);
+            payment.setPaymentDate(null);
+            payment.setDepositDate(null);
         //    payment.setItemId(itemId);
             
             // 플래너 정보를 Payment 객체에 설정
@@ -134,6 +136,11 @@ public class PaymentController {
     		targetPayment.setUserEmail(userEmail);
     		targetPayment.setPlannerEmail(plannerEmail);
     		targetPayment.setEstimateId(estimateId);
+    		targetPayment.setPaymentDate(null);
+    		if(targetPayment.getDepositStatus()=="cancelled" || targetPayment.getDepositStatus()=="other") {
+    			targetPayment.setDepositDate(null);
+    		}
+    	
     		
     	//	targetPayment.setPlanner(planner);
     		
@@ -308,6 +315,8 @@ public class PaymentController {
     		            payment.setUserEmail(useremail);
     		            payment.setPlannerEmail(planneremail);
     		            payment.setEstimateId(estimateId);
+    		            payment.setPaymentDate(null);
+    		            payment.setDepositDate(null);
     		        //    payment.setItemId(itemId);
     		            
     		            // 플래너 정보를 Payment 객체에 설정
@@ -333,7 +342,10 @@ public class PaymentController {
     		    		targetPayment2.setUserEmail(userEmail);
     		    		targetPayment2.setPlannerEmail(planneremail);
     		    		targetPayment2.setEstimateId(estimateId);
-    		    		
+    		    		targetPayment2.setPaymentDate(null);
+    		    		if(targetPayment2.getDepositStatus()=="cancelled" || targetPayment2.getDepositStatus()=="other") {
+    		    			targetPayment2.setDepositDate(null);
+    		    		}
     		    	//	targetPayment.setPlanner(planner);
     		    		
     		    		 if (paymentType.equals("deposit") && depositStatus.equals("paid")) {
