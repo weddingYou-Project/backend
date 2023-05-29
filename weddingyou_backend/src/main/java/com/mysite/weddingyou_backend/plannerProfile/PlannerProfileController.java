@@ -234,7 +234,7 @@ public class PlannerProfileController {
     	result.add(String.valueOf(targetPlannerProfile.getAvgReviewStars()));	
     	result.add(String.valueOf(targetPlannerProfile.getIntroduction()));
     	result.add(String.valueOf(targetPlannerProfile.getMatchingCount()));
-    	
+    	result.add(String.valueOf(targetPlannerProfile.getPlannerPhoneNum()));
     	if(!targetPlannerProfile.getReviewUsers().equals("[]")) {
     		String data = targetPlannerProfile.getReviewUsers().substring(1, targetPlannerProfile.getReviewUsers().length()-1);
         	String[] reviewUsers = data.split(",");
@@ -254,6 +254,7 @@ public class PlannerProfileController {
 //    	result.add(String.valueOf(targetPlannerProfile.getReviewUsers()));
     	result.add(String.valueOf(targetPlannerProfile.getReviewStars()));
     	result.add(String.valueOf(targetPlannerProfile.getPlannerCareerYears()));
+    	
 	    return result;
     
     }
