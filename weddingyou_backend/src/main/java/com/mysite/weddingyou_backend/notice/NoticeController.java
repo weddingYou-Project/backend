@@ -57,7 +57,7 @@ public class NoticeController {
     }
 
 
-    @PutMapping("/{noticeId}")
+    @PutMapping("/update/{noticeId}")
     public NoticeDTO updateNotice(@PathVariable Long noticeId, @RequestBody NoticeDTO noticeDTO) {
         return noticeService.updateNotice(noticeId, noticeDTO);
     }
