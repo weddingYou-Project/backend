@@ -458,6 +458,41 @@ public class PlannerProfileController {
   			
   		}
  
+  		//매칭 요청 온 고객 매칭하기
+  		@PostMapping(value = "/plannerProfile/getMatchedUser")
+  		public List<String> getMatchedUser(
+  		                       @RequestParam("plannerEmail") String plannerEmail)
+  								
+  		                    		   throws Exception {
+  		    List<String> result = new ArrayList<>();
+  			List<Estimate> estimatesData = estimateRepository.findAll();
+  			if(estimatesData !=null) {
+  				for(int i =0;i<estimatesData.size();i++) {
+  					Estimate targetEstimate = estimatesData.get(i);
+  					JSONParser parser = new JSONParser();
+  					ArrayList<String> obj = null;
+  					if(targetEstimate.getUserMatching()!=null) {
+  						obj = (ArrayList<String>) parser.parse(targetEstimate.getUserMatching()); 
+  					}else {
+  						obj = new ArrayList<>();
+  					}
+
+  					if(targetEstimate.isMatchstatus() && obj.contains(plannerEmail)) {
+  						result.add(String.valueOf(targetEstimate.getId()));
+  						String userEmail = targetEstimate.getWriter();
+  						UserUpdateDelete userInfo = userUpdateDeleteRepository.findByEmail(userEmail);
+  						String userName = userInfo.getName();
+  						result.add(userName);
+  					}
+  					
+  				}
+  			}
+  		
+  			
+  			return result;
+  			
+  			
+  		}
 
     
 }
