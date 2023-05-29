@@ -413,6 +413,9 @@ public class PlannerProfileController {
   	  	  				obj = (ArrayList<String>) parser.parse(targetEstimate.getUserMatching());
   	  	  				obj.remove(plannerEmail);
   	  	  				targetEstimate.setUserMatching(String.valueOf(obj));
+  	  	  				if(targetEstimate.isMatchstatus()) {
+  	  	  					targetEstimate.setMatchstatus(false);
+  	  	  				}
   	  	  				estimateRepository.save(targetEstimate);
   	  	  				res =1;
   	  	  			}		
@@ -444,6 +447,7 @@ public class PlannerProfileController {
   	  	  				obj.clear();
   	  	  				obj.add(plannerEmail);
   	  	  				targetEstimate.setUserMatching(String.valueOf(obj));
+  	  	  				targetEstimate.setMatchstatus(true);
   	  	  				estimateRepository.save(targetEstimate);
   	  	  				res =1;
   	  	  			}		
