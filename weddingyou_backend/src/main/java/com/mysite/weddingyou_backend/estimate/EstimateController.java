@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDelete;
+import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDeleteRepository;
 import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDeleteService;
 import com.mysite.weddingyou_backend.userUpdateDelete.UserUpdateDelete;
 import com.mysite.weddingyou_backend.userUpdateDelete.UserUpdateDeleteService;
@@ -49,6 +50,9 @@ public class EstimateController {
 	
 	@Autowired
 	private EstimateRepository estimateRepository;
+	
+	@Autowired
+	private PlannerUpdateDeleteRepository plannerUpdateDeleteRepository;
 	
 	@Value("${spring.servlet.multipart.location}")
     String uploadDir;
@@ -576,6 +580,94 @@ public class EstimateController {
 				
 				}
 
+				//리뷰 페이지로 이동하기1
+				@PostMapping(value = "/review")
+				public String getPlannerInfoForReview(@RequestParam("matchingPlanner") String plannerEmail, 
+						@RequestParam("targetEstimateId") Long estimateId, @RequestParam("userEmail") String userEmail
+						) throws Exception {
+				    String result="";
+				    List<Estimate> targetData = estimateService.getEstimateDetailByEmail(userEmail);
+					Estimate targetEstimate = estimateService.getEstimateDetail(estimateId);
+
+					UserUpdateDelete data = userService.getUserByEmail(userEmail);
+					PlannerUpdateDelete plannerData = plannerService.getPlannerByEmail(plannerEmail);
+					
+					System.out.println(data.getName());
+					String userName = data.getName()+"/";
+					result= userName;
+					System.out.println(data.getPhoneNum());
+					String userPhone = data.getPhoneNum()+"]";
+					result+= userPhone;
+
+					String planneremail = plannerData.getEmail()+"[";
+					result +=plannerEmail;
+					String plannerName = plannerData.getName()+",";
+					result+=plannerName;
+					String price = targetEstimate.getBudget()+"*";
+					result+=price;
+				         
+				    try {
+				    	if(plannerData.getPlannerImg()!=null) {
+				    		Path imagePath = Paths.get("C:/Project/profileImg/planner",plannerData.getPlannerImg());
+					        byte[] imageBytes = Files.readAllBytes(imagePath);
+					        byte[] base64encodedData = Base64.getEncoder().encode(imageBytes);
+					        result += String.valueOf(new String(base64encodedData));
+				    	}
+				    	
+				       
+				    } catch (IOException e) {
+				           e.printStackTrace();
+				        
+				    }
+				    
+
+					System.out.println("result"+result);
+					return result;
+				
+				}
+				
+				//리뷰 페이지로 이동하기2
+				@PostMapping(value = "/review2")
+				public List<String> getPlannerInfoForReview2(@RequestParam("userEmail") String userEmail,@RequestParam("estimateNum") String estimateNum
+						) throws Exception {
+					List<Estimate> estimatesData = estimateRepository.findAllByWriter(userEmail);
+			    	String searchedPlanner = "";
+			    	List<String> encodingDatas = new ArrayList<>();
+			    	Long estimateId = null;
+			    	for(int i =0;i<estimatesData.size();i++) {
+			    		if(i==Integer.parseInt(estimateNum)) {
+			    			JSONParser parser = new JSONParser();
+			    			ArrayList<String> plannerMatching = (ArrayList<String>) parser.parse(estimatesData.get(i).getPlannermatching());
+			    			searchedPlanner = plannerMatching.get(0);
+			    			estimateId = estimatesData.get(i).getId();
+			    			break;
+			    		}
+			    	}
+			    	PlannerUpdateDelete targetPlanner = plannerUpdateDeleteRepository.findByEmail(searchedPlanner);
+			    	if(targetPlanner.getPlannerImg()!=null) {
+						String path = "C:/Project/profileImg/planner";
+				    	 Path imagePath = Paths.get(path,targetPlanner.getPlannerImg());
+				    	 System.out.println(imagePath);
+
+				         try {
+				             byte[] imageBytes = Files.readAllBytes(imagePath);
+				             byte[] base64encodedData = Base64.getEncoder().encode(imageBytes);
+				             
+				             encodingDatas.add(new String(base64encodedData));
+				             
+				         } catch (IOException e) {
+				             e.printStackTrace();
+				            
+				         }
+					}else {
+						 encodingDatas.add("null");
+					}
+					
+			        encodingDatas.add(targetPlanner.getName());
+			        encodingDatas.add(targetPlanner.getEmail());
+			        encodingDatas.add(String.valueOf(estimateId));
+			        return encodingDatas;
+				}
 	
 }
 

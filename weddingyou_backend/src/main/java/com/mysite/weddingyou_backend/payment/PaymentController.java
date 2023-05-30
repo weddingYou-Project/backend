@@ -611,8 +611,6 @@ public class PaymentController {
 								result.add(resultStatus);
 								
 							
-						}else {
-							result.add("other");
 						}
 						k++;
 						
@@ -783,11 +781,11 @@ public class PaymentController {
      							result.add("-1");
      							
      						}
-     						System.out.println(result);
+     						
      					}
      					
      				}
-     				
+     				System.out.println(result);
      				return result;
              	}else {
              		ArrayList<String> result = new ArrayList<>();
