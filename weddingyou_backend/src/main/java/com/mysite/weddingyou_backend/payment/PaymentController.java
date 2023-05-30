@@ -142,7 +142,8 @@ public class PaymentController {
     		targetPayment.setPlannerEmail(plannerEmail);
     		targetPayment.setEstimateId(estimateId);
     		targetPayment.setPaymentDate(null);
-    		if(targetPayment.getDepositStatus()=="cancelled" || targetPayment.getDepositStatus()=="other") {
+    		if((targetPayment.getDepositStatus()=="cancelled" && targetPayment.getPaymentType().equals("deposit"))
+    				|| (targetPayment.getDepositStatus()=="other" && targetPayment.getPaymentType().equals("deposit"))) {
     			targetPayment.setDepositDate(null);
     		}
     	

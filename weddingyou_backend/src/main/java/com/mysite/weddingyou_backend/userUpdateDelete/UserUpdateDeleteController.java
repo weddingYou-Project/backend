@@ -124,27 +124,37 @@ public class UserUpdateDeleteController {
 	
 	 
 	 @RequestMapping(value="/user/getprofileImg",  produces = MediaType.IMAGE_JPEG_VALUE)
-	 public ResponseEntity<byte[]> getImage(@RequestBody UserUpdateDeleteDTO user) {
+	 public ResponseEntity<byte[]> getImage(@RequestBody UserUpdateDeleteDTO user) throws Exception {
 		// System.out.println("유저이메일: " + user.getEmail());
-		 UserUpdateDelete searchedUser = service.getUserByEmail(user.getEmail());
+		 UserUpdateDelete searchedUser = null;
+		 try {
+			 searchedUser = service.getUserByEmail(user.getEmail());
+		 }catch(Exception e) {
+			  throw new Exception("서버 오류!");
+		 }
 	     if (searchedUser != null) {
-	         Path imagePath = Paths.get("C:/Project/profileImg/user",searchedUser.getUserImg());
+	    	 try {
+	    		 	Path imagePath = Paths.get("C:/Project/profileImg/user",searchedUser.getUserImg());
 
-	         try {
-	             byte[] imageBytes = Files.readAllBytes(imagePath);
-	             byte[] base64encodedData = Base64.getEncoder().encode(imageBytes);
-	              return ResponseEntity.ok()
-	                      .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + 
-	                    		  searchedUser.getUserImg() + "\"")
-	                      .body(base64encodedData);
-	         } catch (IOException e) {
+	             	 byte[] imageBytes = Files.readAllBytes(imagePath);
+	            
+	            	 byte[] base64encodedData = Base64.getEncoder().encode(imageBytes);
+		             return ResponseEntity.ok()
+		                      .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + 
+		                    		  searchedUser.getUserImg() + "\"")
+		                      .body(base64encodedData);
+	           
+	            
+	         } catch (Exception e) {
 	             e.printStackTrace();
-	             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	             throw new Exception("프로필 사진이 없습니다!");
 	         }
 	 
 	     } else {
-	         return ResponseEntity.notFound().build();
+	        throw new Exception("로그인 하세요!");
 	     }
+		 
+	   
 	 }
 	 
 	 	

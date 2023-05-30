@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.mysite.weddingyou_backend.like.LikeRepository;
 import com.mysite.weddingyou_backend.plannerLogin.PlannerLoginRepository;
 import com.mysite.weddingyou_backend.userLogin.UserLoginRepository;
+import com.mysite.weddingyou_backend.userUpdateDelete.UserUpdateDelete;
 import com.mysite.weddingyou_backend.userUpdateDelete.UserUpdateDeleteDTO;
 
 @RestController //데이터를 반환
@@ -132,27 +133,33 @@ public class PlannerUpdateDeleteController {
 	
 	 
 	 @RequestMapping(value="/planner/getprofileImg",  produces = MediaType.IMAGE_JPEG_VALUE)
-	 public ResponseEntity<byte[]> getImage(@RequestBody UserUpdateDeleteDTO user) {
-		// System.out.println("유저이메일: " + user.getEmail());
-		 PlannerUpdateDelete searchedPlanner = service.getPlannerByEmail(user.getEmail());
+	 public ResponseEntity<byte[]> getImage(@RequestBody UserUpdateDeleteDTO user) throws Exception {
+		 PlannerUpdateDelete searchedPlanner = null;
+		 try {
+			 searchedPlanner = service.getPlannerByEmail(user.getEmail());
+		 }catch(Exception e) {
+			  throw new Exception("서버 오류!");
+		 }
 	     if (searchedPlanner != null) {
-	         
-	         
-	         try {
-	        	 Path imagePath = Paths.get("C:/Project/profileImg/planner",searchedPlanner.getPlannerImg());
-	             byte[] imageBytes = Files.readAllBytes(imagePath);
-	             byte[] base64encodedData = Base64.getEncoder().encode(imageBytes);
-	              return ResponseEntity.ok()
-	                      .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + 
-	                    		  searchedPlanner.getPlannerImg() + "\"")
-	                      .body(base64encodedData);
-	         } catch (IOException e) {
+	    	 try {
+	    		 	Path imagePath = Paths.get("C:/Project/profileImg/planner",searchedPlanner.getPlannerImg());
+
+	             	 byte[] imageBytes = Files.readAllBytes(imagePath);
+	            
+	            	 byte[] base64encodedData = Base64.getEncoder().encode(imageBytes);
+		             return ResponseEntity.ok()
+		                      .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + 
+		                    		  searchedPlanner.getPlannerImg() + "\"")
+		                      .body(base64encodedData);
+	           
+	            
+	         } catch (Exception e) {
 	             e.printStackTrace();
-	             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	             throw new Exception("프로필 사진이 없습니다!");
 	         }
-	      
+	 
 	     } else {
-	         return ResponseEntity.notFound().build();
+	        throw new Exception("로그인 하세요!");
 	     }
 	 }
 	 
