@@ -349,8 +349,9 @@ public class PaymentController {
     		    		targetPayment2.setPlannerEmail(planneremail);
     		    		targetPayment2.setEstimateId(estimateId);
     		    		targetPayment2.setPaymentDate(null);
-    		    		if(targetPayment2.getDepositStatus()=="cancelled" || targetPayment2.getDepositStatus()=="other") {
-    		    			targetPayment2.setDepositDate(null);
+    		    		if((targetPayment.getDepositStatus()=="cancelled" && targetPayment.getPaymentType().equals("deposit"))
+    		    				|| (targetPayment.getDepositStatus()=="other" && targetPayment.getPaymentType().equals("deposit"))) {
+    		    			targetPayment.setDepositDate(null);
     		    		}
     		    	//	targetPayment.setPlanner(planner);
     		    		
@@ -580,8 +581,9 @@ public class PaymentController {
 			    		    		targetPayment2.setPlannerEmail(planneremail);
 			    		    		targetPayment2.setEstimateId(estimateId2);
 			    		    		targetPayment2.setPaymentDate(null);
-			    		    		if(targetPayment2.getDepositStatus()=="cancelled" || targetPayment2.getDepositStatus()=="other") {
-			    		    			targetPayment2.setDepositDate(null);
+			    		    		if((targetPayment.getDepositStatus()=="cancelled" && targetPayment.getPaymentType().equals("deposit"))
+			    		    				|| (targetPayment.getDepositStatus()=="other" && targetPayment.getPaymentType().equals("deposit"))) {
+			    		    			targetPayment.setDepositDate(null);
 			    		    		}
 			    		    	//	targetPayment.setPlanner(planner);
 			    		    		
@@ -607,10 +609,13 @@ public class PaymentController {
 									resultStatus = "other";
 								}
 								result.add(resultStatus);
+								
 							
-							
+						}else {
+							result.add("other");
 						}
 						k++;
+						
 					}
 					
 				}
@@ -620,6 +625,174 @@ public class PaymentController {
         		ArrayList<String> result = new ArrayList<>();
 				return result;
         	}
+        }
+        	
+        	 @PostMapping(value = "/paymentStatus2")
+             public List<String> getPaymentStatus2(@RequestParam String category, @RequestParam String email) throws ParseException {
+             	if(category.equals("user")) {
+             		List<Estimate> estimatesData = estimateRepository.findAllByWriter(email);
+             		
+     				ArrayList<String> result = new ArrayList<>();
+     				
+     				for(int i =0;i<estimatesData.size();i++) {
+     					Estimate targetEstimate = estimatesData.get(i);
+     					if(targetEstimate.isMatchstatus()) {
+     						Long estimateId = targetEstimate.getId();
+     						Payment targetPayment = paymentService.getPaymentData(estimateId);
+     						if(targetPayment.getPaymentStatus().equals("paid") && targetPayment.getDepositStatus().equals("paid")) {
+     							result.add("all");
+     						}else if(!targetPayment.getPaymentStatus().equals("paid") &&targetPayment.getDepositStatus().equals("paid")) {
+     							result.add("deposit");
+     						}else {
+     							result.add("other");
+     						}
+     					}else {
+     						result.add("-1");
+     					}
+     					
+     				}
+     					
+     				
+     				return result;
+             	}else if(category.equals("planner")) {
+             		List<Estimate> estimatesData = estimateRepository.findAll();
+             	
+             		 JSONParser parser = new JSONParser();
+     			
+     				ArrayList<String> result = new ArrayList<>();
+     				int k = 0;
+     				
+     				for(int i =0;i<estimatesData.size();i++) {
+     					Estimate targetEstimate = estimatesData.get(i);
+     				
+     					ArrayList<String> userMatching = (ArrayList<String>)  parser.parse(targetEstimate.getUserMatching());
+     					if(userMatching.contains(email)) {
+     						Long estimateId = targetEstimate.getId();
+ 							System.out.println("estimateId => "+estimateId);
+     						if(targetEstimate.isMatchstatus()) {
+     						
+     							Payment targetPayment = paymentService.getPaymentData(estimateId);
+     							if(targetPayment==null) {
+     								PaymentCallbackRequest callbackRequest = new PaymentCallbackRequest();
+     			    				BigDecimal tempPrice = new BigDecimal(targetEstimate.getBudget());
+     			    				BigDecimal price = tempPrice;
+     			    		    	Integer quantity = 1;
+     			    		    	String paymentMethod = "card";
+     			    		    	BigDecimal paymentAmount = new BigDecimal(targetEstimate.getBudget());
+     			    		    	
+     			    		        String paymentStatus = "other";
+     			    		        BigDecimal depositAmount = new BigDecimal(targetEstimate.getBudget() * 0.05);
+     			    	
+     			    		        String depositStatus = "cancelled";
+     			    		        String paymentType = "deposit";
+     			    		        String useremail = targetEstimate.getWriter(); // userEmail 추가
+     			    		       
+     								ArrayList<String> plannermatching = (ArrayList<String>) parser.parse(targetEstimate.getPlannermatching());
+     			    		        String planneremail = plannermatching.get(0);// plannerEmail 추가
+     			    		        Long estimateId2 = targetEstimate.getId(); // estimateId 추가)
+     			    		        
+     			    		        //현재 시간 가져옴
+     			    		        LocalDateTime currentTime = LocalDateTime.now();
+     			    		        
+     			    		        // 데이터베이스에서 Planner 정보 가져오기
+     			    		        PlannerLogin planner = plannerLoginRepository.findByEmail(planneremail);
+     			    		        String plannerName = planner.getName();
+     			    		        String plannerImg = planner.getPlannerImg();
+     			    		        
+     			    		        // 데이터베이스에서 User 정보 가져오기
+     			    		        UserLogin user = userLoginRepository.findByEmail(useremail);
+     			    		        
+     			    		    	if(paymentService.getPaymentData(estimateId)==null) {
+
+     			    		            // 데이터베이스에서 Item 정보 가져오기
+     			    		         //   Optional<Item> item = itemRepository.findById(itemId);
+     			    		            
+     			    		            // 데이터베이스에 저장하기 위해 Payment 객체 생성
+     			    		            Payment payment = new Payment();
+     			    		            payment.setPrice(price);
+     			    		            payment.setQuantity(quantity);
+     			    		            payment.setPaymentMethod(paymentMethod);
+     			    		            payment.setPaymentAmount(paymentAmount);
+     			    		            payment.setPaymentStatus(paymentStatus);
+     			    		            payment.setDepositAmount(depositAmount);
+     			    		            payment.setDepositStatus(depositStatus);
+     			    		            payment.setPaymentType(paymentType);
+     			    		            payment.setUserEmail(useremail);
+     			    		            payment.setPlannerEmail(planneremail);
+     			    		            payment.setEstimateId(estimateId2);
+     			    		            payment.setPaymentDate(null);
+     			    		            payment.setDepositDate(null);
+     			    		        //    payment.setItemId(itemId);
+     			    		            
+     			    		            // 플래너 정보를 Payment 객체에 설정
+     			    		        //    payment.setPlanner(planner);
+     			    		            
+     			    		            if (paymentType.equals("deposit") && depositStatus.equals("paid")) {
+     			    		                payment.setDepositDate(currentTime);
+     			    		                
+     			    		            } 
+     			    		            
+     			    		            // Payment 객체를 데이터베이스에 저장
+     			    		            paymentService.savePayment(payment);
+     			    		    	}else { //estimateId가 겹칠 경우에 관련 데이터 업데이트
+     			    		    		Payment targetPayment2 = paymentService.getPaymentData(estimateId);
+     			    		    		targetPayment2.setPrice(price);
+     			    		    		targetPayment2.setQuantity(quantity);
+     			    		    		targetPayment2.setPaymentMethod(paymentMethod);
+     			    		    		targetPayment2.setPaymentAmount(paymentAmount);
+     			    		    		targetPayment2.setPaymentStatus(paymentStatus);
+     			    		    		targetPayment2.setDepositAmount(depositAmount);
+     			    		    		targetPayment2.setDepositStatus(depositStatus);
+     			    		    		targetPayment2.setPaymentType(paymentType);
+     			    		    		targetPayment2.setUserEmail(useremail);
+     			    		    		targetPayment2.setPlannerEmail(planneremail);
+     			    		    		targetPayment2.setEstimateId(estimateId2);
+     			    		    		targetPayment2.setPaymentDate(null);
+     			    		    		if((targetPayment2.getDepositStatus()=="cancelled" && targetPayment2.getPaymentType().equals("deposit"))
+    			    		    				|| (targetPayment2.getDepositStatus()=="other" && targetPayment2.getPaymentType().equals("deposit"))) {
+     			    		    			targetPayment2.setDepositDate(null);
+    			    		    		}
+     			    		    	//	targetPayment.setPlanner(planner);
+     			    		    		
+     			    		    		 if (paymentType.equals("deposit") && depositStatus.equals("paid")) {
+     			    		    			 targetPayment2.setDepositDate(currentTime);
+     			    		                 
+     			    		             }
+     			    		    		  paymentService.savePayment(targetPayment2);
+     			    		    	}
+     							}
+     					
+     							Payment targetPayment2 = paymentService.getPaymentData(estimateId);
+     								String paymentStatus = targetPayment2.getPaymentStatus();				
+     								System.out.println(paymentStatus);
+     								String depositStatus = targetPayment2.getDepositStatus();
+     								System.out.println(depositStatus);
+     								String resultStatus = "";
+     								if(depositStatus.equals("paid")&& !paymentStatus.equals("paid")) {
+     									resultStatus = "deposit";
+     								}else if(depositStatus.equals("paid") && paymentStatus.equals("paid")) {
+     									resultStatus = "all";
+     								}else {
+     									resultStatus = "other";
+     								}
+     								result.add(resultStatus);
+	
+     						}
+     						else {
+     							System.out.println("9999");
+     							result.add("-1");
+     							
+     						}
+     						System.out.println(result);
+     					}
+     					
+     				}
+     				
+     				return result;
+             	}else {
+             		ArrayList<String> result = new ArrayList<>();
+     				return result;
+             	}
         
     }
 

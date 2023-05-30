@@ -16,5 +16,7 @@ public class ReviewService {
 		reviewRepository.save(review);
 	}
 
-
+	public Review findEstimate(Long estimateId) {
+		return reviewRepository.findByEstimateId(estimateId);
+	}
 }

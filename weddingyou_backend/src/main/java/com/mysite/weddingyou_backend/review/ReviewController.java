@@ -58,10 +58,23 @@ public class ReviewController {
 	 	
 	 	System.out.println(review);
 	 	
+	 	if(reviewService.findEstimate(estimateId)!=null) {
+	 		Review targetReview = reviewService.findEstimate(estimateId);
+	 		targetReview.setPlannerEmail(plannerEmail);
+	 		targetReview.setReviewText(reviewText);
+	 		targetReview.setReviewStars(reviewStars);
+	 		targetReview.setReviewImg(list.toString());
+	 		targetReview.setUserEmail(userEmail);
+	 		targetReview.setReviewDate(LocalDateTime.now());
+	 		reviewService.save(targetReview);
+	 		res =1;
+	 	}else {
+	 	// 리뷰 생성 및 데이터베이스 저장
+		    reviewService.save(review);
+		    res=1;
+	 	}
 	 	
-	    // 리뷰 생성 및 데이터베이스 저장
-	    reviewService.save(review);
-	    res=1;
+	    
 	    
 	    return res;
 	    
