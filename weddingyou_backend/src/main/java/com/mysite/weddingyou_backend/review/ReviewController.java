@@ -1,8 +1,9 @@
-package com.mysite.weddingyou_backend.notice;
+package com.mysite.weddingyou_backend.review;
 
 import java.io.File;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,21 +20,22 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
-@RequestMapping("/notice")
-public class NoticeController {
+@RequestMapping("/review")
+public class ReviewController {
 
-	private final NoticeService noticeService;
+	private final ReviewService reviewService;
 
-	public NoticeController(NoticeService noticeService) {
-		this.noticeService = noticeService;
+	@Autowired
+	public ReviewController(ReviewService reviewService) {
+		this.reviewService = reviewService;
 	}
 
 	@PostMapping("/post")
-	public ResponseEntity<NoticeDTO> createNotice(@RequestParam("file") MultipartFile file,
-			@RequestParam("noticeDTO") String noticeDTOJson) {
+	public ResponseEntity<ReviewDTO> createReview(@RequestParam("file") MultipartFile file,
+			@RequestParam("reviewDTO") String reviewDTOJson) {
 		try {
 			ObjectMapper objectMapper = new ObjectMapper();
-			NoticeDTO noticeDTO = objectMapper.readValue(noticeDTOJson, NoticeDTO.class);
+			ReviewDTO reviewDTO = objectMapper.readValue(reviewDTOJson, ReviewDTO.class);
 
 			String folderPath = "C:\\Project\\customerservice";
 			String filePath = folderPath + "\\" + file.getOriginalFilename();
@@ -46,34 +48,36 @@ public class NoticeController {
 			if (!file.isEmpty()) {
 				File newFile = new File(filePath);
 				file.transferTo(newFile);
-				noticeDTO.setAttachment(filePath);
+				reviewDTO.setAttachment(filePath);
 			}
 
-			NoticeDTO newNotice = noticeService.createNotice(noticeDTO);
-			return ResponseEntity.ok(newNotice);
+			ReviewDTO newReview = reviewService.createReview(reviewDTO);
+			return ResponseEntity.ok(newReview);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}
 
-	@PutMapping("/update/{noticeId}")
-	public NoticeDTO updateNotice(@PathVariable Long noticeId, @RequestBody NoticeDTO noticeDTO) {
-		return noticeService.updateNotice(noticeId, noticeDTO);
+	
+	@PutMapping("/update/{reviewId}")
+	public ReviewDTO updateReview(@PathVariable Long reviewId, @RequestBody ReviewDTO reviewDTO) {
+	    return reviewService.updateReview(reviewId, reviewDTO);
 	}
 
-	@DeleteMapping("/delete/{noticeId}")
-	public void deleteNotice(@PathVariable Long noticeId) {
-		noticeService.deleteNotice(noticeId);
+	@DeleteMapping("/delete/{reviewId}")
+	public void deleteReview(@PathVariable Long reviewId) {
+	    reviewService.deleteReview(reviewId);
 	}
 
-	@GetMapping("/{noticeId}")
-	public NoticeDTO getNoticeById(@PathVariable Long noticeId) {
-		return noticeService.getNoticeById(noticeId);
+	@GetMapping("/{reviewId}")
+	public ReviewDTO getReviewById(@PathVariable Long reviewId) {
+	    return reviewService.getReviewById(reviewId);
 	}
 
 	@GetMapping("/search/{keyword}")
-	public List<NoticeDTO> searchNotices(@RequestParam String keyword) {
-		return noticeService.searchNotices(keyword);
+	public List<ReviewDTO> searchReviews(@RequestParam String keyword) {
+	    return reviewService.searchReviews(keyword);
 	}
+
 }
