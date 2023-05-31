@@ -56,7 +56,7 @@ public class PlannerProfile {
     @Column(name = "planner_phoneNum", nullable = false)
    	private String plannerPhoneNum;
 
-    @Lob
+  
     @Column(name = "planner_Introduction", length=1000000000)
     private String introduction;
   

@@ -96,7 +96,6 @@ public class EstimateController {
 		data.setViewcount(0);		
 		data.setPlannermatching("[]");
 		data.setUserMatching("[]");
-		data.setAssigned(false);
 		estimateService.insert(data);
 	}
 	
@@ -321,15 +320,15 @@ public class EstimateController {
 				    String result="";
 				    List<Estimate> targetData = estimateService.getEstimateDetailByEmail(userEmail);
 					Estimate targetEstimate = estimateService.getEstimateDetail(estimateId);
-					for(int i=0;i<targetData.size();i++) {
-						targetData.get(i).setAssigned(false);
-					}
+//					for(int i=0;i<targetData.size();i++) {
+//						targetData.get(i).setAssigned(false);
+//					}
 //					for(int i=0;i<targetData.size();i++) {
 						ArrayList<String> cleanList= new ArrayList<>();
 						Estimate cleanEstimate = targetEstimate;
 						cleanEstimate.setPlannermatching(String.valueOf(cleanList));
 						cleanEstimate.setUserMatching(String.valueOf(cleanList));
-						cleanEstimate.setAssigned(true);
+//						cleanEstimate.setAssigned(true);
 						estimateService.save(cleanEstimate);
 //					}
 				
@@ -392,7 +391,7 @@ public class EstimateController {
 				    String result = "";
 					for(int i=0;i<targetData.size();i++) {
 						Boolean matchStatus = targetData.get(i).isMatchstatus();
-						Boolean assigned = targetData.get(i).getAssigned();
+//						Boolean assigned = targetData.get(i).getAssigned();
 						if(matchStatus) {
 							JSONParser parser = new JSONParser();
 							ArrayList<String> obj = (ArrayList<String>) parser.parse(targetData.get(i).getPlannermatching());

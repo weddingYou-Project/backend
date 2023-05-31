@@ -47,7 +47,7 @@ public class PlannerUpdateDelete {
 	private String plannerCareerYears;
 	
 	
-	 @ColumnDefault("아직 소개글이 없습니다!")
+	
 	 @Column(name = "planner_Introduction", length=1000000000)
 	 private String introduction;
 

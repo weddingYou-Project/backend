@@ -77,8 +77,7 @@ public class Estimate {
     @Column (name = "e_userMatching") //usermatching
     private String userMatching;
 
-    @Column (name = "e_assigned") //plannermatching
-    private Boolean assigned;
+ 
 }
 	
 	
