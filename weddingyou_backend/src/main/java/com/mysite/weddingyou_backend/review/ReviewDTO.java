@@ -1,6 +1,10 @@
 package com.mysite.weddingyou_backend.review;
 
 import java.time.LocalDateTime;
+
+import com.mysite.weddingyou_backend.plannerLogin.PlannerLogin;
+import com.mysite.weddingyou_backend.userLogin.UserLogin;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,7 +16,10 @@ public class ReviewDTO {
 	private long reviewId;
 
 	//작성자
-	private String reviewWriter;
+    private UserLogin user;
+    
+    private PlannerLogin planner;
+
 
 	//제목
 	private String reviewTitle;
@@ -33,7 +40,8 @@ public class ReviewDTO {
 	public static ReviewDTO fromEntity(Review review) {
 		ReviewDTO reviewDTO = new ReviewDTO();
 		reviewDTO.setReviewId(review.getReviewId());
-		reviewDTO.setReviewWriter(review.getReviewWriter());
+        reviewDTO.setUser(review.getUser());
+        reviewDTO.setPlanner(review.getPlanner());
 		reviewDTO.setReviewTitle(review.getReviewTitle());
 		reviewDTO.setReviewContent(review.getReviewContent());
 		reviewDTO.setReviewImg(review.getReviewImg());

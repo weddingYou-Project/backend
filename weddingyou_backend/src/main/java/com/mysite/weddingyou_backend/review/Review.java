@@ -2,14 +2,21 @@ package com.mysite.weddingyou_backend.review;
 
 import java.time.LocalDateTime;
 
+import com.mysite.weddingyou_backend.plannerLogin.PlannerLogin;
+import com.mysite.weddingyou_backend.userLogin.UserLogin;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+
 
 @Getter
 @Setter
@@ -24,8 +31,15 @@ public class Review {
     private long reviewId;
 
 	//작성자
-	@Column(name = "review_writer")
-    private String reviewWriter;
+    // 유저 (외래 키)
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "useremail", referencedColumnName="email")
+    private UserLogin user;
+
+    // 플래너 (외래 키)
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "planneremail", referencedColumnName="email")
+    private PlannerLogin planner;
 
 	//제목
 	@Column(name = "review_title")
