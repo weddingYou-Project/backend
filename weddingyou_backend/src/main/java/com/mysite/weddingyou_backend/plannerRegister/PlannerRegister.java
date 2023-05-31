@@ -46,9 +46,8 @@ public class PlannerRegister {
     @Enumerated(EnumType.STRING) // Enum 값을 String 형태로 저장
     private Gender gender;
     
-	@Column(name = "planner_introduction")
-	@ColumnDefault("아직 소개글이 없습니다!")
-	private String introduction;
+    @Column(name = "planner_Introduction", length=1000000000)
+    private String introduction;
 
     @Column(name = "planner_join_date", columnDefinition = "datetime default current_timestamp")
     private LocalDateTime plannerJoinDate;
