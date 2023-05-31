@@ -12,6 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -27,7 +28,8 @@ public class Review {
     @Column(name = "review_id")
     private Long reviewId;
 	
-	@Column(name = "review_img", nullable = true)
+	
+	@Column(name = "review_img", length=1000000000, nullable = true)
     private String reviewImg;
 	
 	@Column(name = "review_text", nullable = false)
