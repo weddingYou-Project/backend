@@ -54,7 +54,12 @@ public class ReviewController {
 	 	}
 	 	
 	 	Review review = new Review();
-	 	review.setReviewText(reviewText);
+	 	if(reviewText.equals("undefined")) {
+	 		review.setReviewText("");
+	 	}else {
+	 		review.setReviewText(reviewText);
+	 	}
+	 	
 	 	review.setReviewStars(reviewStars);
 	 	review.setReviewImg(list.toString());
 	 	review.setUserEmail(userEmail);
