@@ -22,6 +22,7 @@ public interface EstimateRepository extends JpaRepository<Estimate, Integer> {
 			+ "OR e_honeymoon LIKE CONCAT('%', :search, '%') \r\n"
 			+ "OR e_studio LIKE CONCAT('%', :search, '%') \r\n"
 			+ "OR e_title LIKE CONCAT ('%', :search, '%')) "
+			+ "OR e_weddingdate LIKE CONCAT('%', :search, '%') \r\n"
 			+ "Order By e_id desc\r\n"
 			,nativeQuery=true)
 	List<Estimate> getsearchlist(String search);
