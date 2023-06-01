@@ -40,6 +40,8 @@ public interface MypageAdminRepository extends JpaRepository<MypageAdmin, Long> 
             + "OR planner_email LIKE CONCAT('%', :search, '%') \r\n"
             + "OR planner_phoneNum LIKE CONCAT('%', :search, '%') \r\n"
             + "OR UsersType LIKE CONCAT('%', :search, '%'))"
+            + "OR user_join_date LIKE CONCAT('%', :search, '%') \r\n"
+            + "OR planner_join_date LIKE CONCAT('%', :search, '%') \r\n"
             + "ORDER BY admin_id ASC \r\n" ,
             nativeQuery = true)
     Page<MypageAdmin> getSearchList(@Param("search") String search, Pageable pageable);
