@@ -227,7 +227,7 @@ public class MypageAdminController {
 		    	 }
 		    	 if(userMatching.contains(plannerEmail)) {
 		    		 userMatching.remove(plannerEmail);
-		    		 targetEstimate.setUserMatching(String.valueOf(userMatching));)
+		    		 targetEstimate.setUserMatching(String.valueOf(userMatching));
 		    	 }
 		    	 if(targetEstimate.isMatchstatus()) {
 		    		 targetEstimate.setMatchstatus(false);
