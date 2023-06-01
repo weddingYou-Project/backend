@@ -79,5 +79,21 @@ public class ReviewController {
 	public List<ReviewDTO> searchReviews(@RequestParam String keyword) {
 	    return reviewService.searchReviews(keyword);
 	}
+	
+    @PostMapping("/{reviewId}/comment")
+    public ResponseEntity<CommentDTO> createComment(@PathVariable Long reviewId, @RequestBody CommentDTO commentDTO) {
+        CommentDTO newComment = reviewService.createComment(reviewId, commentDTO);
+        return ResponseEntity.ok(newComment);
+    }
+
+    @PutMapping("/comment/{commentId}")
+    public CommentDTO updateComment(@PathVariable Long commentId, @RequestBody CommentDTO commentDTO) {
+        return reviewService.updateComment(commentId, commentDTO);
+    }
+
+    @DeleteMapping("/comment/{commentId}")
+    public void deleteComment(@PathVariable Long commentId) {
+        reviewService.deleteComment(commentId);
+    }
 
 }

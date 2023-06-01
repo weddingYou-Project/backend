@@ -1,6 +1,7 @@
 package com.mysite.weddingyou_backend.review;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import com.mysite.weddingyou_backend.plannerLogin.PlannerLogin;
 import com.mysite.weddingyou_backend.userLogin.UserLogin;
@@ -20,7 +21,9 @@ public class ReviewDTO {
     
     private PlannerLogin planner;
 
-
+    // 별점
+    private double starRating;
+    
 	//제목
 	private String reviewTitle;
 
@@ -42,6 +45,7 @@ public class ReviewDTO {
 		reviewDTO.setReviewId(review.getReviewId());
         reviewDTO.setUser(review.getUser());
         reviewDTO.setPlanner(review.getPlanner());
+        reviewDTO.setStarRating(review.getStarRating());
 		reviewDTO.setReviewTitle(review.getReviewTitle());
 		reviewDTO.setReviewContent(review.getReviewContent());
 		reviewDTO.setReviewImg(review.getReviewImg());
@@ -49,4 +53,7 @@ public class ReviewDTO {
 
 		return reviewDTO;
 	}
+	
+    private List<CommentDTO> comments;
+
 }

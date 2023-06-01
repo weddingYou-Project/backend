@@ -10,14 +10,17 @@ import org.springframework.stereotype.Service;
 public class ReviewService {
 
 	private final ReviewRepository reviewRepository;
+	private final CommentRepository commentRepository;
 
-	public ReviewService(ReviewRepository reviewRepository) {
+	public ReviewService(ReviewRepository reviewRepository, CommentRepository commentRepository) {
 		this.reviewRepository = reviewRepository;
+		this.commentRepository = commentRepository;
 	}
 
 	public ReviewDTO createReview(ReviewDTO reviewDTO) {
 		Review review = new Review();
 		review.setReviewImg(reviewDTO.getReviewImg());
+		review.setStarRating(reviewDTO.getStarRating());
 		review.setReviewTitle(reviewDTO.getReviewTitle());
 		review.setReviewContent(reviewDTO.getReviewContent());
 		review.setReviewWriteDate(LocalDateTime.now());
@@ -28,6 +31,7 @@ public class ReviewService {
 	public ReviewDTO updateReview(Long reviewId, ReviewDTO reviewDTO) {
 		Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new IllegalArgumentException("불러오기 실패"));
 		review.setReviewImg(reviewDTO.getReviewImg());
+		review.setStarRating(reviewDTO.getStarRating());
 		review.setReviewTitle(reviewDTO.getReviewTitle());
 		review.setReviewContent(reviewDTO.getReviewContent());
 		review.setReviewWriteDate(LocalDateTime.now());
@@ -47,5 +51,37 @@ public class ReviewService {
 	public List<ReviewDTO> searchReviews(String keyword) {
 		List<Review> reviews = reviewRepository.findByReviewTitleContaining(keyword);
 		return reviews.stream().map(ReviewDTO::fromEntity).collect(Collectors.toList());
+	}
+
+	// 댓글
+	public CommentDTO createComment(Long reviewId, CommentDTO commentDTO) {
+		Review review = reviewRepository.findById(reviewId)
+				.orElseThrow(() -> new IllegalArgumentException("리뷰를 찾을 수 없습니다."));
+
+		Comment comment = new Comment();
+		comment.setCommentContent(commentDTO.getCommentContent());
+		comment.setReview(review);
+
+		commentRepository.save(comment);
+
+		return CommentDTO.fromEntity(comment);
+	}
+
+	public CommentDTO updateComment(Long commentId, CommentDTO commentDTO) {
+		Comment comment = commentRepository.findById(commentId)
+				.orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다."));
+
+		comment.setCommentContent(commentDTO.getCommentContent());
+
+		commentRepository.save(comment);
+
+		return CommentDTO.fromEntity(comment);
+	}
+
+	public void deleteComment(Long commentId) {
+		Comment comment = commentRepository.findById(commentId)
+				.orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다."));
+
+		commentRepository.delete(comment);
 	}
 }

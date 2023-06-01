@@ -66,6 +66,11 @@
 	    	<artifactId>iamport-rest-client-java</artifactId>
 	    	<version>0.2.22</version>
 		</dependency>
+		<dependency>
+			<groupId>com.mysite</groupId>
+			<artifactId>sprinjpa</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 	
 	<repositories>
