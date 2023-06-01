@@ -66,6 +66,7 @@
 	    	<artifactId>iamport-rest-client-java</artifactId>
 	    	<version>0.2.22</version>
 		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
 <dependency>
     <groupId>com.google.code.gson</groupId>
