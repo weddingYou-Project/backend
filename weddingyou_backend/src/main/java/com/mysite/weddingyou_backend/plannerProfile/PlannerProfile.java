@@ -51,7 +51,7 @@ public class PlannerProfile {
     private int matchingCount;
     
     @Column(name = "planner_career_years", nullable = false)
-	private String plannerCareerYears;
+	private int plannerCareerYears;
     
     @Column(name = "planner_phoneNum", nullable = false)
    	private String plannerPhoneNum;

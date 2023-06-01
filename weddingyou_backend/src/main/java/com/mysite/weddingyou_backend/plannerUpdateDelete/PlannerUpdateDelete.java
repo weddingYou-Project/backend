@@ -41,7 +41,7 @@ public class PlannerUpdateDelete {
 	private String plannerImg;
 	
 	@Column(name = "planner_career_years", nullable = false)
-	private String plannerCareerYears;
+	private int plannerCareerYears;
 	
 	 @Enumerated(EnumType.STRING) // Enum 값을 String 형태로 저장
 	    private Gender gender;

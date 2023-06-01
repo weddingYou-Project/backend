@@ -67,7 +67,7 @@ public class PlannerProfileController {
     	  String plannerPhoneNum = plannersInfo.get(i).getPhoneNum();
     	  String plannerImg = plannersInfo.get(i).getPlannerImg();
     	  LocalDateTime plannerJoinDate = plannersInfo.get(i).getPlannerJoinDate();
-    	  String plannerCareerYears = plannersInfo.get(i).getPlannerCareerYears();
+    	  int plannerCareerYears = plannersInfo.get(i).getPlannerCareerYears();
     	  
     	  List<Review> reviews = new ArrayList<>();
     	  System.out.println(plannerEmail);
