@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.mysite.weddingyou_backend.payment.PaymentRepository;
 import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDelete;
 import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDeleteRepository;
 import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDeleteService;
@@ -52,6 +53,9 @@ public class EstimateController {
 	
 	@Autowired
 	private EstimateRepository estimateRepository;
+	
+	@Autowired
+	private PaymentRepository paymentRepository;
 	
 	@Autowired
 	private PlannerUpdateDeleteRepository plannerUpdateDeleteRepository;
@@ -479,6 +483,7 @@ public class EstimateController {
 							cleanEstimate.setUserMatching(String.valueOf(cleanList));
 							cleanEstimate.setMatchstatus(false);
 							estimateService.save(cleanEstimate);
+							
 							res = 1;
 						}
 						

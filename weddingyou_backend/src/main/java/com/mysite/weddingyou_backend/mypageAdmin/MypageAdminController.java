@@ -224,14 +224,18 @@ public class MypageAdminController {
 	    		 if(plannerMatching.contains(plannerEmail)) {
 		    		 plannerMatching.remove(plannerEmail);	   
 		    		 targetEstimate.setPlannermatching(String.valueOf(plannerMatching));
+		    		 if(targetEstimate.isMatchstatus()) {
+			    		 targetEstimate.setMatchstatus(false);
+			    	 }
 		    	 }
 		    	 if(userMatching.contains(plannerEmail)) {
 		    		 userMatching.remove(plannerEmail);
 		    		 targetEstimate.setUserMatching(String.valueOf(userMatching));
+		    		 if(targetEstimate.isMatchstatus()) {
+			    		 targetEstimate.setMatchstatus(false);
+			    	 }
 		    	 }
-		    	 if(targetEstimate.isMatchstatus()) {
-		    		 targetEstimate.setMatchstatus(false);
-		    	 }
+		    	 
 		    	 estimateRepository.save(targetEstimate);
 	    	 }
 	    	
