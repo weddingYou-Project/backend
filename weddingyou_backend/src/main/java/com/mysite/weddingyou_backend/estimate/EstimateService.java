@@ -70,7 +70,7 @@ public class EstimateService {
 	}
 	
 	//견적서 삭제
-	public void delete(int id ) {
+	public void delete(Long id ) {
 		estimateRepository.deleteById(id);
 	}
 

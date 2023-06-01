@@ -15,4 +15,6 @@ public interface PaymentRepository extends JpaRepository<Payment, Long>{
 	Payment findByEstimateId(Long EstimateId);
 	
 	List<Payment> findAllByUserEmail(String userEmail);
+	
+	void deleteByEstimateId(Long estimateId);
 }

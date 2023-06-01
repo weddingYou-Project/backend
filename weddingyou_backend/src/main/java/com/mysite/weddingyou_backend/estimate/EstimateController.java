@@ -33,9 +33,11 @@ import com.mysite.weddingyou_backend.payment.PaymentRepository;
 import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDelete;
 import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDeleteRepository;
 import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDeleteService;
+import com.mysite.weddingyou_backend.review.ReviewRepository;
 import com.mysite.weddingyou_backend.userUpdateDelete.UserUpdateDelete;
 import com.mysite.weddingyou_backend.userUpdateDelete.UserUpdateDeleteService;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -59,6 +61,9 @@ public class EstimateController {
 	
 	@Autowired
 	private PlannerUpdateDeleteRepository plannerUpdateDeleteRepository;
+	
+	@Autowired
+	private ReviewRepository reviewRepository;
 	
 	@Value("${spring.servlet.multipart.location}")
     String uploadDir;
@@ -146,9 +151,12 @@ public class EstimateController {
 		
 	
 	//견적서 삭제
+	@Transactional
 	@RequestMapping("/delete")
-	public void delete(@RequestParam int id) {
+	public void delete(@RequestParam Long id) {
 		estimateService.delete(id);
+		reviewRepository.deleteByEstimateId(id);
+		paymentRepository.deleteByEstimateId(id);
 	}
 	
 	
