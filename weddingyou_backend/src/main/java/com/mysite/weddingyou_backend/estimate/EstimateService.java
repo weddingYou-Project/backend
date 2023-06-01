@@ -74,6 +74,22 @@ public class EstimateService {
 		estimateRepository.deleteById(id);
 	}
 
+	
+	public List<Estimate> pageinglist(int page_num, int limit) {
+		int start = (page_num - 1) * limit;
+		return estimateRepository.pageinglist(start, limit);
+	}
+	
+	//검색데이터 갯수 
+	public int getsearchlistcount(String search) {
+			return estimateRepository.getsearchlistcount(search);
+	}
+	
+	//검색데이터 조회
+	public List<Estimate> getsearchlistpageing(int page_num, int limit, String search) {
+		int start = (page_num - 1)*limit; 
+		return estimateRepository.getsearchlistpageing(start,limit,search);
+	}
 
 	
 			

@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.json.simple.JSONArray;
@@ -21,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -160,6 +162,8 @@ public class EstimateController {
 	                       @RequestParam("studio") String studio,
 	                       @RequestParam("writer") String writer,  
 	                       @RequestParam("previmage") String[] previmage,
+	                       @RequestParam("date") String date,
+	                       @RequestParam("viewcount") int viewcount,
 	                       @RequestParam("id") long id)
 	                    		   throws IOException {
 	    // 이미지 데이터 처리 로직
@@ -189,10 +193,20 @@ public class EstimateController {
 		data.setImg(list.toString());
 		data.setMatchstatus(false);
 		data.setTitle(writer + "님의 견적서");
-		data.setDate(LocalDate.now());
-		data.setViewcount(0);		
+		data.setDate(LocalDate.parse(date));
+		data.setViewcount(viewcount);		
 		data.setId(id);
 		estimateService.insert(data);
+	}
+
+
+	
+	@PostMapping("/pageinglist")
+	public List<Estimate> pageinglist(@RequestBody Map<String, Object> requestParams) {
+	  int page_num = (int) requestParams.get("page_num");
+	  int limit = (int) requestParams.get("limit");
+	  
+	  return estimateService.pageinglist(page_num, limit);
 	}
 	
 	//견적서 매칭원하는 플래너 삽입하기
@@ -232,7 +246,7 @@ public class EstimateController {
 			}
 			
 		}
-	
+
 		//견적서 매칭원하는 플래너 삽입하기
 				@GetMapping(value = "/getuserdetail")
 				public List<Estimate> getUserDetail(@RequestParam("userEmail") String userEmail) throws Exception {
@@ -667,6 +681,24 @@ public class EstimateController {
 			        encodingDatas.add(String.valueOf(estimateId));
 			        return encodingDatas;
 				}
+
+	@RequestMapping("/getsearchlistcount")
+	public int getsearchlistcount(@RequestBody Map<String, Object> requestParams) {
+		System.out.println("여기"+requestParams.get("search"));
+		String search = (String)requestParams.get("search");
+		return estimateService.getsearchlistcount(search);
+	}
+	
+	
+	//검색어도 보내야 하고 페이징을 위한 데이터 몇 개 가져올지 그것도 필요할듯.
+	@RequestMapping("/getsearchlistpageing")
+	public List<Estimate> getsearchlistpageing(@RequestBody Map<String,Object> requestParams){
+		int page_num = (int)requestParams.get("page_num");
+		int limit = (int)requestParams.get("limit");
+		String search = (String)requestParams.get("search");
+		return estimateService.getsearchlistpageing(page_num,limit,search);
+	}
+
 	
 }
 
