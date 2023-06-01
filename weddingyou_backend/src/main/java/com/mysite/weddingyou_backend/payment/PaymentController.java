@@ -76,7 +76,8 @@ public class PaymentController {
     	BigDecimal paymentAmount = callbackRequest.getPaymentAmount();
     	callbackRequest.setPaymentStatus(callbackRequest.getTempPaymentStatus());
         String paymentStatus = callbackRequest.getPaymentStatus();
-        BigDecimal depositAmount = callbackRequest.getDepositAmount();
+    //    BigDecimal depositAmount = callbackRequest.getDepositAmount();
+        BigDecimal depositAmount;
         callbackRequest.setDepositStatus(callbackRequest.getTempDepositStatus());
         String depositStatus = callbackRequest.getDepositStatus();
         String paymentType = callbackRequest.getPaymentType();
@@ -92,6 +93,14 @@ public class PaymentController {
         PlannerLogin planner = plannerLoginRepository.findByEmail(plannerEmail);
         String plannerName = planner.getName();
         String plannerImg = planner.getPlannerImg();
+        int plannerCareerYears = planner.getPlannerCareerYears();
+        if(plannerCareerYears >= 0 && plannerCareerYears <5) {
+        	depositAmount = new BigDecimal(50000);
+        }else if(plannerCareerYears >= 5 && plannerCareerYears <15) {
+        	depositAmount = new BigDecimal(100000);
+        }else {
+        	depositAmount = new BigDecimal(150000);
+        }
         
         // 데이터베이스에서 User 정보 가져오기
         UserLogin user = userLoginRepository.findByEmail(userEmail);
@@ -162,7 +171,7 @@ public class PaymentController {
 //        PaymentResponse response = new PaymentResponse(payment, plannerName, plannerImg);
 //        return ResponseEntity.ok(response);
         
-        return 1;
+        return plannerCareerYears;
     }
     
     @PostMapping(value = "/deposit/check")

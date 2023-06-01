@@ -1,7 +1,6 @@
 package com.mysite.weddingyou_backend.estimate;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
