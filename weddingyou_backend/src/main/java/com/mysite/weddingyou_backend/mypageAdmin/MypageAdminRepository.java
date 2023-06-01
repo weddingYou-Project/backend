@@ -36,24 +36,47 @@ public interface MypageAdminRepository extends JpaRepository<MypageAdmin, Long> 
   	@Query(value = "SELECT * FROM mypageAdmin WHERE (user_name LIKE CONCAT('%', :search, '%') \r\n"
             + "OR user_email LIKE CONCAT('%', :search, '%') \r\n"
             + "OR user_phoneNum LIKE CONCAT('%', :search, '%') \r\n"
+            + "OR DATE(user_join_date) = DATE(:search) \r\n"
+            + "OR DATE_FORMAT(user_join_date, '%Y-%m') = :search \r\n"
+            + "OR DATE_FORMAT(user_join_date, '%m-%d') = :search \r\n"
+            + "OR DATE_FORMAT(user_join_date, '%Y') = :search \r\n"
+            + "OR DATE_FORMAT(user_join_date, '%m') = :search \r\n"
+            + "OR DATE_FORMAT(user_join_date, '%d') = :search \r\n"
             + "OR planner_name LIKE CONCAT('%', :search, '%') \r\n"
             + "OR planner_email LIKE CONCAT('%', :search, '%') \r\n"
             + "OR planner_phoneNum LIKE CONCAT('%', :search, '%') \r\n"
+            + "OR DATE(planner_join_date) = DATE(:search) \r\n"
+            + "OR DATE_FORMAT(planner_join_date, '%Y-%m') = :search \r\n"
+            + "OR DATE_FORMAT(planner_join_date, '%m-%d') = :search \r\n"
+            + "OR DATE_FORMAT(planner_join_date, '%Y') = :search \r\n"
+            + "OR DATE_FORMAT(planner_join_date, '%m') = :search \r\n"
+            + "OR DATE_FORMAT(planner_join_date, '%d') = :search \r\n"
             + "OR UsersType LIKE CONCAT('%', :search, '%'))"
-            + "OR user_join_date LIKE CONCAT('%', :search, '%') \r\n"
-            + "OR planner_join_date LIKE CONCAT('%', :search, '%') \r\n"
             + "ORDER BY admin_id ASC \r\n" ,
             nativeQuery = true)
-    Page<MypageAdmin> getSearchList(@Param("search") String search, Pageable pageable);
+  	Page<MypageAdmin> getSearchList(@Param("search") String search, Pageable pageable);
   	
     //검색 데이터 개수 조회
   	@Query(value = "select count(*) from mypageAdmin where (user_name LIKE CONCAT('%', :search, '%') \r\n"
   			+ "OR user_email LIKE CONCAT('%', :search, '%') \r\n"
-  			+ "OR user_phoneNum LIKE CONCAT('%', :search, '%') \r\n"
-  			+ "OR planner_name LIKE CONCAT('%', :search, '%') \r\n"
-  			+ "OR planner_email LIKE CONCAT('%', :search, '%') \r\n"
-  			+ "OR planner_phoneNum LIKE CONCAT('%', :search, '%') \r\n"
-  			+ "OR UsersType LIKE CONCAT('%', :search, '%'))", nativeQuery=true)
+            + "OR user_phoneNum LIKE CONCAT('%', :search, '%') \r\n"
+            + "OR DATE(user_join_date) = DATE(:search) \r\n"
+            + "OR DATE_FORMAT(user_join_date, '%Y-%m') = :search \r\n"
+            + "OR DATE_FORMAT(user_join_date, '%m-%d') = :search \r\n"
+            + "OR DATE_FORMAT(user_join_date, '%Y') = :search \r\n"
+            + "OR DATE_FORMAT(user_join_date, '%m') = :search \r\n"
+            + "OR DATE_FORMAT(user_join_date, '%d') = :search \r\n"
+            + "OR planner_name LIKE CONCAT('%', :search, '%') \r\n"
+            + "OR planner_email LIKE CONCAT('%', :search, '%') \r\n"
+            + "OR planner_phoneNum LIKE CONCAT('%', :search, '%') \r\n"
+            + "OR DATE(planner_join_date) = DATE(:search) \r\n"
+            + "OR DATE_FORMAT(planner_join_date, '%Y-%m') = :search \r\n"
+            + "OR DATE_FORMAT(planner_join_date, '%m-%d') = :search \r\n"
+            + "OR DATE_FORMAT(planner_join_date, '%Y') = :search \r\n"
+            + "OR DATE_FORMAT(planner_join_date, '%m') = :search \r\n"
+            + "OR DATE_FORMAT(planner_join_date, '%d') = :search \r\n"
+            + "OR UsersType LIKE CONCAT('%', :search, '%'))"
+  			, nativeQuery=true)
   	int getSearchCount(String search);
   	
 }
