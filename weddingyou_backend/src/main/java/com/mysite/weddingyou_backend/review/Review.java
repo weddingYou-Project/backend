@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mysite.weddingyou_backend.plannerLogin.PlannerLogin;
 import com.mysite.weddingyou_backend.userLogin.UserLogin;
 
 import jakarta.persistence.CascadeType;
@@ -32,9 +33,16 @@ public class Review {
 	private long reviewId;
 
 	// 작성자
-	@Column(name = "writer_name")
-	private String writerName;
-	
+	// 유저 (외래 키)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "useremail", referencedColumnName = "email")
+	private UserLogin user;
+
+	// 플래너 (외래 키)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "planneremail", referencedColumnName = "email")
+	private PlannerLogin planner;
+
 	// 제목
 	@Column(name = "review_title")
 	private String reviewTitle;

@@ -22,7 +22,6 @@ public class ReviewService {
 
 	public ReviewDTO createReview(ReviewDTO reviewDTO) {
 		Review review = new Review();
-		review.setWriterName(reviewDTO.getWriterName());
 		review.setReviewImg(reviewDTO.getReviewImg());
 		review.setStarRating(reviewDTO.getStarRating());
 		review.setReviewTitle(reviewDTO.getReviewTitle());
@@ -34,7 +33,6 @@ public class ReviewService {
 
 	public ReviewDTO updateReview(Long reviewId, ReviewDTO reviewDTO) {
 		Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new IllegalArgumentException("불러오기 실패"));
-		review.setWriterName(reviewDTO.getWriterName());
 		review.setReviewImg(reviewDTO.getReviewImg());
 		review.setStarRating(reviewDTO.getStarRating());
 		review.setReviewTitle(reviewDTO.getReviewTitle());
