@@ -20,7 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
-@RequestMapping("/review")
+@RequestMapping("/reviews")
 public class ReviewController {
 
 	private final ReviewService reviewService;
@@ -30,14 +30,14 @@ public class ReviewController {
 		this.reviewService = reviewService;
 	}
 
-	//win
-	@PostMapping("/post")
+	// 리뷰작성
+	@PostMapping
 	public ResponseEntity<ReviewDTO> createReview(@RequestParam("file") MultipartFile file,
-			@RequestParam("reviewDTO") String reviewDTOJson) {
+			@RequestParam("reviewDTO") String reviewDTOJson, @RequestParam("writerName") String writerName) {
 		try {
 			ObjectMapper objectMapper = new ObjectMapper();
 			ReviewDTO reviewDTO = objectMapper.readValue(reviewDTOJson, ReviewDTO.class);
-
+			reviewDTO.setWriterName(writerName);
 			String folderPath = "C:\\Project\\customerservice";
 			String filePath = folderPath + "\\" + file.getOriginalFilename();
 
@@ -60,41 +60,47 @@ public class ReviewController {
 		}
 	}
 
-	
-	@PutMapping("/update/{reviewId}")
+	// 리뷰수정
+	@PutMapping("/{reviewId}")
 	public ReviewDTO updateReview(@PathVariable Long reviewId, @RequestBody ReviewDTO reviewDTO) {
-	    return reviewService.updateReview(reviewId, reviewDTO);
+		return reviewService.updateReview(reviewId, reviewDTO);
 	}
 
-	@DeleteMapping("/delete/{reviewId}")
+	// 리뷰삭제
+	@DeleteMapping("/{reviewId}")
 	public void deleteReview(@PathVariable Long reviewId) {
-	    reviewService.deleteReview(reviewId);
+		reviewService.deleteReview(reviewId);
 	}
 
-	@GetMapping("/{reviewId}")
-	public ReviewDTO getReviewById(@PathVariable Long reviewId) {
-	    return reviewService.getReviewById(reviewId);
+	// 리뷰목록
+	@GetMapping
+	public List<ReviewDTO> getAllReviews() {
+		return reviewService.getAllReviews();
 	}
 
+	// 리뷰검색(확인안됨)
 	@GetMapping("/search/{keyword}")
 	public List<ReviewDTO> searchReviews(@RequestParam String keyword) {
-	    return reviewService.searchReviews(keyword);
+		return reviewService.searchReviews(keyword);
 	}
-	
-    @PostMapping("/{reviewId}/comment")
-    public ResponseEntity<CommentDTO> createComment(@PathVariable Long reviewId, @RequestBody CommentDTO commentDTO) {
-        CommentDTO newComment = reviewService.createComment(reviewId, commentDTO);
-        return ResponseEntity.ok(newComment);
-    }
 
-    @PutMapping("/comment/{commentId}")
-    public CommentDTO updateComment(@PathVariable Long commentId, @RequestBody CommentDTO commentDTO) {
-        return reviewService.updateComment(commentId, commentDTO);
-    }
+	// 댓글작성
+	@PostMapping("/{reviewId}/comments")
+	public ResponseEntity<CommentDTO> createComment(@PathVariable Long reviewId, @RequestBody CommentDTO commentDTO) {
+		CommentDTO newComment = reviewService.createComment(reviewId, commentDTO);
+		return ResponseEntity.ok(newComment);
+	}
 
-    @DeleteMapping("/comment/{commentId}")
-    public void deleteComment(@PathVariable Long commentId) {
-        reviewService.deleteComment(commentId);
-    }
+	// 댓글수정
+	@PutMapping("/{reviewId}/comments/{commentId}")
+	public CommentDTO updateComment(@PathVariable Long commentId, @RequestBody CommentDTO commentDTO) {
+		return reviewService.updateComment(commentId, commentDTO);
+	}
+
+	// 댓글삭제
+	@DeleteMapping("/{reviewId}/comments/{commentId}")
+	public void deleteComment(@PathVariable Long commentId) {
+		reviewService.deleteComment(commentId);
+	}
 
 }
