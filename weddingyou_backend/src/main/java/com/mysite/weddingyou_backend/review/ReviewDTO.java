@@ -13,7 +13,6 @@ import lombok.Setter;
 @Setter
 public class ReviewDTO {
 
-	//id
 	private long reviewId;
 
 	//작성자

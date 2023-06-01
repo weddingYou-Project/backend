@@ -12,6 +12,7 @@ public class ReviewService {
 	private final ReviewRepository reviewRepository;
 	private final CommentRepository commentRepository;
 
+
 	public ReviewService(ReviewRepository reviewRepository, CommentRepository commentRepository) {
 		this.reviewRepository = reviewRepository;
 		this.commentRepository = commentRepository;

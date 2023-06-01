@@ -30,6 +30,7 @@ public class ReviewController {
 		this.reviewService = reviewService;
 	}
 
+	//win
 	@PostMapping("/post")
 	public ResponseEntity<ReviewDTO> createReview(@RequestParam("file") MultipartFile file,
 			@RequestParam("reviewDTO") String reviewDTOJson) {
