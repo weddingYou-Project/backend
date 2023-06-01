@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mysite.weddingyou_backend.estimate.Estimate;
 import com.mysite.weddingyou_backend.estimate.EstimateRepository;
 import com.mysite.weddingyou_backend.estimate.EstimateService;
+import com.mysite.weddingyou_backend.payment.Payment;
+import com.mysite.weddingyou_backend.payment.PaymentRepository;
 import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDelete;
 import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDeleteRepository;
 import com.mysite.weddingyou_backend.review.Review;
@@ -44,6 +46,10 @@ public class PlannerProfileController {
     
     @Autowired
     private EstimateService estimateService;
+    
+
+    @Autowired
+    private PaymentRepository paymentRepository;
 
     @Autowired
     public PlannerProfileController(PlannerProfileService plannerService) {
@@ -419,6 +425,10 @@ public class PlannerProfileController {
   	  	  					obj.remove(plannerEmail);
   	  	  					targetEstimate.setPlannermatching(String.valueOf(obj));
   	  	  					targetEstimate.setMatchstatus(false);
+  	  	  					Payment targetPayment = paymentRepository.findByEstimateId(estimateId);
+  	  	  					if(targetPayment!=null) {
+  	  	  						paymentRepository.delete(targetPayment);
+  	  	  					}
   	  	  				}
   	  	  				estimateRepository.save(targetEstimate);
   	  	  				res =1;

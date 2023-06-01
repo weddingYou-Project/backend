@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.mysite.weddingyou_backend.payment.Payment;
 import com.mysite.weddingyou_backend.payment.PaymentRepository;
 import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDelete;
 import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDeleteRepository;
@@ -329,6 +330,10 @@ public class EstimateController {
 				    	targetEstimate.setMatchstatus(false);
 				    	res=2;
 				    }
+				    Payment targetPayment = paymentRepository.findByEstimateId(estimateId);
+				    if(targetPayment!=null) {
+				    	paymentRepository.delete(targetPayment);
+				    }
 				    newEstimate.setPlannermatching(String.valueOf(obj));
 				    targetEstimate.setPlannermatching(String.valueOf(obj));
 				   
@@ -453,7 +458,10 @@ public class EstimateController {
 						targetEstimate.setUserMatching(String.valueOf(cleanList));
 						targetEstimate.setMatchstatus(false);
 						estimateService.save(targetEstimate);
-						
+						 Payment targetPayment = paymentRepository.findByEstimateId(EstimateId);
+						    if(targetPayment!=null) {
+						    	paymentRepository.delete(targetPayment);
+						    }
 //						for(int i=0;i<targetData.size();i++) {
 //						
 //							Boolean matchStatus = targetData.get(i).isMatchstatus();
@@ -491,7 +499,11 @@ public class EstimateController {
 							cleanEstimate.setUserMatching(String.valueOf(cleanList));
 							cleanEstimate.setMatchstatus(false);
 							estimateService.save(cleanEstimate);
-							
+							Long estimateId = cleanEstimate.getId();
+							 Payment targetPayment = paymentRepository.findByEstimateId(estimateId);
+							    if(targetPayment!=null) {
+							    	paymentRepository.delete(targetPayment);
+							    }
 							res = 1;
 						}
 						
