@@ -16,10 +16,8 @@ public class ReviewDTO {
 	private long reviewId;
 
 	//작성자
-    private UserLogin user;
+    private String userName;
     
-    private PlannerLogin planner;
-
     // 별점
     private double starRating;
     
@@ -42,8 +40,7 @@ public class ReviewDTO {
 	public static ReviewDTO fromEntity(Review review) {
 		ReviewDTO reviewDTO = new ReviewDTO();
 		reviewDTO.setReviewId(review.getReviewId());
-        reviewDTO.setUser(review.getUser());
-        reviewDTO.setPlanner(review.getPlanner());
+	    reviewDTO.setUserName(review.getUser().getName());  
         reviewDTO.setStarRating(review.getStarRating());
 		reviewDTO.setReviewTitle(review.getReviewTitle());
 		reviewDTO.setReviewContent(review.getReviewContent());

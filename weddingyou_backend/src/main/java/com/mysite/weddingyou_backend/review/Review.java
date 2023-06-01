@@ -35,14 +35,14 @@ public class Review {
 	// 작성자
 	// 유저 (외래 키)
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "useremail", referencedColumnName = "email")
+	@JoinColumn(name = "username", referencedColumnName = "name")
 	private UserLogin user;
 
 	// 플래너 (외래 키)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "planneremail", referencedColumnName = "email")
 	private PlannerLogin planner;
-
+	
 	// 제목
 	@Column(name = "review_title")
 	private String reviewTitle;

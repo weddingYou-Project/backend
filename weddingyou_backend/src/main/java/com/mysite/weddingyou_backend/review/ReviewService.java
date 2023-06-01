@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.mysite.weddingyou_backend.notice.NoticeDTO;
+import com.mysite.weddingyou_backend.userLogin.UserLogin;
 
 @Service
 public class ReviewService {
@@ -27,6 +27,9 @@ public class ReviewService {
 		review.setReviewTitle(reviewDTO.getReviewTitle());
 		review.setReviewContent(reviewDTO.getReviewContent());
 		review.setReviewWriteDate(LocalDateTime.now());
+		UserLogin user = new UserLogin();
+	    user.setName(reviewDTO.getUserName());  // 작성자의 이름 설정
+	    review.setUser(user);
 		Review savedReview = reviewRepository.save(review);
 		return ReviewDTO.fromEntity(savedReview);
 	}
