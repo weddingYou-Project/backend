@@ -9,5 +9,6 @@ import org.springframework.stereotype.Repository;
 public interface PlannerProfileRepository extends JpaRepository<PlannerProfile, Long> {
     PlannerProfile findByPlannerEmail(String email);
     
+    void deleteByPlannerEmail(String email);
  
 }

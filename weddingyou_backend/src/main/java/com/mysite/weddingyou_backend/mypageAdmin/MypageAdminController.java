@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mysite.weddingyou_backend.plannerLogin.PlannerLogin;
 import com.mysite.weddingyou_backend.plannerLogin.PlannerLoginRepository;
+import com.mysite.weddingyou_backend.plannerProfile.PlannerProfileRepository;
 import com.mysite.weddingyou_backend.userLogin.UserLogin;
 import com.mysite.weddingyou_backend.userLogin.UserLoginRepository;
 
@@ -36,6 +37,9 @@ public class MypageAdminController {
 	
 	@Autowired
 	PlannerLoginRepository plannerLoginRepository;
+	
+	@Autowired
+	PlannerProfileRepository plannerProfileRepository;
 	
 
 	//전체 사용자 정보 리스트 조회
@@ -169,6 +173,10 @@ public class MypageAdminController {
 	    
 	    //planer 테이블에서 해당 이메일로 정보 삭제
 	    plannerLoginRepository.deleteByEmail(plannerEmail);
+	    
+	    //plannerProfile 테이블에서 이메일로 정보 삭제
+	    plannerProfileRepository.deleteByPlannerEmail(plannerEmail);
+	    
 
 	}
 
