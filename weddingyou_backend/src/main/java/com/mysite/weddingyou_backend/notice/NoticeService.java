@@ -14,6 +14,11 @@ public class NoticeService {
 	public NoticeService(NoticeRepository noticeRepository) {
 		this.noticeRepository = noticeRepository;
 	}
+	
+	public List<NoticeDTO> getAllNotices() {
+	    List<Notice> notices = noticeRepository.findAll();
+	    return notices.stream().map(NoticeDTO::fromEntity).collect(Collectors.toList());
+	}
 
 	public NoticeDTO createNotice(NoticeDTO noticeDTO) {
 		Notice notice = new Notice();

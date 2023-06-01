@@ -27,6 +27,11 @@ public class NoticeController {
 	public NoticeController(NoticeService noticeService) {
 		this.noticeService = noticeService;
 	}
+	
+	@GetMapping("/list")
+	public List<NoticeDTO> getAllNotices() {
+	    return noticeService.getAllNotices();
+	}
 
 	@PostMapping("/post")
 	public ResponseEntity<NoticeDTO> createNotice(@RequestParam("file") MultipartFile file,
