@@ -14,7 +14,6 @@ public class ReviewService {
 	private final ReviewRepository reviewRepository;
 	private final CommentRepository commentRepository;
 
-
 	public ReviewService(ReviewRepository reviewRepository, CommentRepository commentRepository) {
 		this.reviewRepository = reviewRepository;
 		this.commentRepository = commentRepository;
@@ -27,9 +26,7 @@ public class ReviewService {
 		review.setReviewTitle(reviewDTO.getReviewTitle());
 		review.setReviewContent(reviewDTO.getReviewContent());
 		review.setReviewWriteDate(LocalDateTime.now());
-		UserLogin user = new UserLogin();
-	    user.setName(reviewDTO.getUserName());  // 작성자의 이름 설정
-	    review.setUser(user);
+		review.setReviewWriter(reviewDTO.getReviewWriter());
 		Review savedReview = reviewRepository.save(review);
 		return ReviewDTO.fromEntity(savedReview);
 	}
@@ -58,10 +55,10 @@ public class ReviewService {
 		List<Review> reviews = reviewRepository.findByReviewTitleContaining(keyword);
 		return reviews.stream().map(ReviewDTO::fromEntity).collect(Collectors.toList());
 	}
-	
+
 	public List<ReviewDTO> getAllReviews() {
-	    List<Review> reviews = reviewRepository.findAll();
-	    return reviews.stream().map(ReviewDTO::fromEntity).collect(Collectors.toList());
+		List<Review> reviews = reviewRepository.findAll();
+		return reviews.stream().map(ReviewDTO::fromEntity).collect(Collectors.toList());
 
 	}
 
@@ -74,6 +71,7 @@ public class ReviewService {
 		comment.setCommentContent(commentDTO.getCommentContent());
 		comment.setReview(review);
 
+		review.getComments().add(comment);
 		commentRepository.save(comment);
 
 		return CommentDTO.fromEntity(comment);

@@ -33,15 +33,8 @@ public class Review {
 	private long reviewId;
 
 	// 작성자
-	// 유저 (외래 키)
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "username", referencedColumnName = "name")
-	private UserLogin user;
-
-	// 플래너 (외래 키)
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "planneremail", referencedColumnName = "email")
-	private PlannerLogin planner;
+	@Column(name = "review_writer")
+	private String reviewWriter;
 	
 	// 제목
 	@Column(name = "review_title")

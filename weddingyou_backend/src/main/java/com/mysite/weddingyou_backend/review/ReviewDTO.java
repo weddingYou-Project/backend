@@ -3,7 +3,6 @@ package com.mysite.weddingyou_backend.review;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.mysite.weddingyou_backend.plannerLogin.PlannerLogin;
 import com.mysite.weddingyou_backend.userLogin.UserLogin;
 
 import lombok.Getter;
@@ -16,7 +15,7 @@ public class ReviewDTO {
 	private long reviewId;
 
 	//작성자
-    private String userName;
+	private UserLogin reviewWriter;
     
     // 별점
     private double starRating;
@@ -40,7 +39,7 @@ public class ReviewDTO {
 	public static ReviewDTO fromEntity(Review review) {
 		ReviewDTO reviewDTO = new ReviewDTO();
 		reviewDTO.setReviewId(review.getReviewId());
-	    reviewDTO.setUserName(review.getUser().getName());  
+		reviewDTO.setReviewWriter(review.getReviewWriter());
         reviewDTO.setStarRating(review.getStarRating());
 		reviewDTO.setReviewTitle(review.getReviewTitle());
 		reviewDTO.setReviewContent(review.getReviewContent());

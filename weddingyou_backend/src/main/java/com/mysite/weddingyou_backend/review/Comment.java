@@ -1,8 +1,5 @@
 package com.mysite.weddingyou_backend.review;
 
-import com.mysite.weddingyou_backend.plannerLogin.PlannerLogin;
-import com.mysite.weddingyou_backend.userLogin.UserLogin;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -25,16 +22,8 @@ public class Comment {
 	@Column(name = "comment_id")
 	private Long commentId;
 	
-	// 작성자
-	// 유저 (외래 키)
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "useremail", referencedColumnName = "email")
-	private UserLogin user;
-	
-	// 플래너 (외래 키)
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "planneremail", referencedColumnName = "email")
-	private PlannerLogin planner;
+	@Column(name = "comment_writer")
+	private String commentWriter;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "review_id")
