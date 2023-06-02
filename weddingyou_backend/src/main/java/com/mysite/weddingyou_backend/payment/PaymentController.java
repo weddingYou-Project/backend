@@ -215,7 +215,16 @@ public class PaymentController {
     					result +=plannerEmail;
     					String plannerName = plannerData.getName()+",";
     					result+=plannerName;
-    					String price = searchedEstimate.getBudget()+"*";
+    					int careerYears = plannerData.getPlannerCareerYears();
+    					int depositAmount = 0;
+    					if(careerYears>=0 && careerYears <5) {
+    						depositAmount=50000;
+    					}else if(careerYears<15) {
+    						depositAmount=100000;
+    					}else {
+    						depositAmount=150000;
+    					}
+    					String price = depositAmount+"*";
     					result+=price;
     				         
     				    try {
@@ -258,7 +267,16 @@ public class PaymentController {
     					result +=plannerEmail;
     					String plannerName = plannerData.getName()+",";
     					result+=plannerName;
-    					String price = searchedEstimate.getBudget()+"*";
+    					int careerYears = plannerData.getPlannerCareerYears();
+    					int depositAmount = 0;
+    					if(careerYears>=0 && careerYears <5) {
+    						depositAmount=50000;
+    					}else if(careerYears<15) {
+    						depositAmount=100000;
+    					}else {
+    						depositAmount=150000;
+    					}
+    					String price = depositAmount+"*";
     					result+=price;
     				         
     				    try {
@@ -291,7 +309,17 @@ public class PaymentController {
     		    	BigDecimal paymentAmount = new BigDecimal(searchedEstimate.getBudget());
     		    	
     		        String paymentStatus = "other";
-    		        BigDecimal depositAmount = new BigDecimal(searchedEstimate.getBudget() * 0.05);
+    		        PlannerUpdateDelete plannerData = plannerService.getPlannerByEmail(targetPayment.getPlannerEmail());
+    		        int careerYears = plannerData.getPlannerCareerYears();
+					int depositAmount1 = 0;
+					if(careerYears>=0 && careerYears <5) {
+						depositAmount1=50000;
+					}else if(careerYears<15) {
+						depositAmount1=100000;
+					}else {
+						depositAmount1=150000;
+					}
+    		        BigDecimal depositAmount = new BigDecimal(depositAmount1);
     	
     		        String depositStatus = "cancelled";
     		        String paymentType = "deposit";
@@ -374,7 +402,6 @@ public class PaymentController {
     		    	String result="";
     				
 					UserUpdateDelete data = userService.getUserByEmail(useremail);
-					PlannerUpdateDelete plannerData = plannerService.getPlannerByEmail(planneremail);
 					
 					System.out.println(data.getName());
 					
@@ -523,7 +550,18 @@ public class PaymentController {
 			    		    	BigDecimal paymentAmount = new BigDecimal(targetEstimate.getBudget());
 			    		    	
 			    		        String paymentStatus = "other";
-			    		        BigDecimal depositAmount = new BigDecimal(targetEstimate.getBudget() * 0.05);
+			    		        PlannerUpdateDelete plannerData = plannerService.getPlannerByEmail(email);
+			    		        int careerYears = plannerData.getPlannerCareerYears();
+								int depositAmount1 = 0;
+								if(careerYears>=0 && careerYears <5) {
+									depositAmount1=50000;
+								}else if(careerYears<15) {
+									depositAmount1=100000;
+								}else {
+									depositAmount1=150000;
+								}
+			    		        BigDecimal depositAmount = new BigDecimal(depositAmount1);
+			    	
 			    	
 			    		        String depositStatus = "cancelled";
 			    		        String paymentType = "deposit";
@@ -688,7 +726,17 @@ public class PaymentController {
      			    		    	BigDecimal paymentAmount = new BigDecimal(targetEstimate.getBudget());
      			    		    	
      			    		        String paymentStatus = "other";
-     			    		        BigDecimal depositAmount = new BigDecimal(targetEstimate.getBudget() * 0.05);
+     			    		       PlannerUpdateDelete plannerData = plannerService.getPlannerByEmail(email);
+     			    		        int careerYears = plannerData.getPlannerCareerYears();
+     								int depositAmount1 = 0;
+     								if(careerYears>=0 && careerYears <5) {
+     									depositAmount1=50000;
+     								}else if(careerYears<15) {
+     									depositAmount1=100000;
+     								}else {
+     									depositAmount1=150000;
+     								}
+     			    		        BigDecimal depositAmount = new BigDecimal(depositAmount1);
      			    	
      			    		        String depositStatus = "cancelled";
      			    		        String paymentType = "deposit";

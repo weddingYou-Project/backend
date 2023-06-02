@@ -389,7 +389,17 @@ public class EstimateController {
 					result +=plannerEmail;
 					String plannerName = plannerData.getName()+",";
 					result+=plannerName;
-					String price = targetEstimate.getBudget()+"*";
+					
+					int careerYears = plannerData.getPlannerCareerYears();
+					int depositAmount = 0;
+					if(careerYears>=0 && careerYears <5) {
+						depositAmount=50000;
+					}else if(careerYears<15) {
+						depositAmount=100000;
+					}else {
+						depositAmount=150000;
+					}
+					String price = depositAmount+"*";
 					result+=price;
 				         
 				    try {
