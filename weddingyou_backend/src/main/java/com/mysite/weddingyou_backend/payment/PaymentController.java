@@ -452,6 +452,7 @@ public class PaymentController {
         String paymentStatus = callbackRequest.getTempPaymentStatus();
 //        String depositStatus = callbackRequest.getTempDepositStatus();
         String paymentType = callbackRequest.getPaymentType();
+        BigDecimal paymentAmount = callbackRequest.getPaymentAmount();
 
         // 현재 시간 가져옴
         LocalDateTime currentTime = LocalDateTime.now();
@@ -465,6 +466,8 @@ public class PaymentController {
                 // 계약금 결제 처리
         		 payment.setPaymentStatus(paymentStatus);
         		 payment.setPaymentType(paymentType);
+        		 payment.setPaymentAmount(paymentAmount);
+        		 payment.setPrice(paymentAmount);
         		 paymentService.savePayment(payment);
         		 return 0;
             }  else if (paymentType.equals("all") && paymentStatus.equals("paid")) {
@@ -472,7 +475,8 @@ public class PaymentController {
             	payment.setPaymentType(paymentType);
                 payment.setPaymentStatus(paymentStatus);
                 payment.setPaymentDate(currentTime);
-                // Payment 객체를 데이터베이스에 저장
+                payment.setPrice(paymentAmount);
+                payment.setPaymentAmount(paymentAmount);                // Payment 객체를 데이터베이스에 저장
                 paymentService.savePayment(payment);
                 return 1;
             	
