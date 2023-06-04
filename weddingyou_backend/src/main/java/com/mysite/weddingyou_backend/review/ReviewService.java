@@ -7,16 +7,20 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.mysite.weddingyou_backend.userLogin.UserLogin;
+import com.mysite.weddingyou_backend.userLogin.UserLoginRepository;
 
 @Service
 public class ReviewService {
 
 	private final ReviewRepository reviewRepository;
 	private final CommentRepository commentRepository;
+	private final UserLoginRepository userLoginRepository;
 
-	public ReviewService(ReviewRepository reviewRepository, CommentRepository commentRepository) {
+
+	public ReviewService(ReviewRepository reviewRepository, CommentRepository commentRepository, UserLoginRepository userLoginRepository) {
 		this.reviewRepository = reviewRepository;
 		this.commentRepository = commentRepository;
+		this.userLoginRepository = userLoginRepository;
 	}
 
 	public ReviewDTO createReview(ReviewDTO reviewDTO) {
@@ -26,7 +30,12 @@ public class ReviewService {
 		review.setReviewTitle(reviewDTO.getReviewTitle());
 		review.setReviewContent(reviewDTO.getReviewContent());
 		review.setReviewWriteDate(LocalDateTime.now());
-		review.setReviewWriter(reviewDTO.getReviewWriter());
+		
+		String email = reviewDTO.getReviewWriter();
+		UserLogin user = userLoginRepository.findByEmail(email);
+		if (user != null) {
+			review.setReviewWriter(user.getName());
+		}
 		Review savedReview = reviewRepository.save(review);
 		return ReviewDTO.fromEntity(savedReview);
 	}
