@@ -259,6 +259,7 @@ public class PlannerProfileController {
         	result.add(String.valueOf(userReview));
         }else {
     		result.add("[]");
+    		result.add("[]");
     	}
     	
 //    	result.add(String.valueOf(targetPlannerProfile.getReviewUsers()));
