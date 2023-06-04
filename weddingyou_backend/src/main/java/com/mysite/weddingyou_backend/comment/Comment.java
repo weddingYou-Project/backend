@@ -1,4 +1,7 @@
-package com.mysite.weddingyou_backend.review;
+package com.mysite.weddingyou_backend.comment;
+
+import com.mysite.weddingyou_backend.qna.Qna;
+import com.mysite.weddingyou_backend.review.Review;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,6 +31,11 @@ public class Comment {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "review_id")
 	private Review review;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "qna_id")
+	private Qna qna;
+
 
 	@Column(name = "comment_content")
 	private String commentContent;

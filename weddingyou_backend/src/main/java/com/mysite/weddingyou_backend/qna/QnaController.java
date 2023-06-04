@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mysite.weddingyou_backend.comment.CommentDTO;
+
 @RestController
 @RequestMapping("/qna")
 public class QnaController {
@@ -53,14 +55,14 @@ public class QnaController {
     }
 
     @PostMapping("/{qnaId}/comments")
-    public ResponseEntity<QnaCommentDTO> createComment(@PathVariable Long qnaId,
-            @RequestBody QnaCommentDTO commentDTO) {
-        QnaCommentDTO newComment = qnaService.createComment(qnaId, commentDTO);
+    public ResponseEntity<CommentDTO> createComment(@PathVariable Long qnaId,
+            @RequestBody CommentDTO commentDTO) {
+        CommentDTO newComment = qnaService.createComment(qnaId, commentDTO);
         return ResponseEntity.ok(newComment);
     }
 
     @PutMapping("/{qnaId}/comments/{commentId}")
-    public QnaCommentDTO updateComment(@PathVariable Long commentId, @RequestBody QnaCommentDTO commentDTO) {
+    public CommentDTO updateComment(@PathVariable Long commentId, @RequestBody CommentDTO commentDTO) {
         return qnaService.updateComment(commentId, commentDTO);
     }
 

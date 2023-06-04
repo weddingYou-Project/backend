@@ -1,4 +1,4 @@
-package com.mysite.weddingyou_backend.review;
+package com.mysite.weddingyou_backend.comment;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

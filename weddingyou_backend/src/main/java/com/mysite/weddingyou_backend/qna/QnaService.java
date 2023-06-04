@@ -6,12 +6,16 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.mysite.weddingyou_backend.comment.Comment;
+import com.mysite.weddingyou_backend.comment.CommentDTO;
+import com.mysite.weddingyou_backend.comment.CommentRepository;
+
 @Service
 public class QnaService {
     private final QnaRepository qnaRepository;
-    private final QnaCommentRepository commentRepository;
+    private final CommentRepository commentRepository;
 
-    public QnaService(QnaRepository qnaRepository, QnaCommentRepository commentRepository) {
+    public QnaService(QnaRepository qnaRepository, CommentRepository commentRepository) {
         this.qnaRepository = qnaRepository;
         this.commentRepository = commentRepository;
     }
@@ -55,33 +59,33 @@ public class QnaService {
         return qnas.stream().map(QnaDTO::fromEntity).collect(Collectors.toList());
     }
 
-    public QnaCommentDTO createComment(Long qnaId, QnaCommentDTO commentDTO) {
+    public CommentDTO createComment(Long qnaId, CommentDTO commentDTO) {
         Qna qna = qnaRepository.findById(qnaId)
                 .orElseThrow(() -> new IllegalArgumentException("Q&A not found."));
 
-        QnaComment comment = new QnaComment();
+        Comment comment = new Comment();
         comment.setCommentContent(commentDTO.getCommentContent());
         comment.setQna(qna);
 
         qna.getComments().add(comment);
         commentRepository.save(comment);
 
-        return QnaCommentDTO.fromEntity(comment);
+        return CommentDTO.fromEntity(comment);
     }
 
-    public QnaCommentDTO updateComment(Long commentId, QnaCommentDTO commentDTO) {
-        QnaComment comment = commentRepository.findById(commentId)
+    public CommentDTO updateComment(Long commentId, CommentDTO commentDTO) {
+        Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException("Comment not found."));
 
         comment.setCommentContent(commentDTO.getCommentContent());
 
         commentRepository.save(comment);
 
-        return QnaCommentDTO.fromEntity(comment);
+        return CommentDTO.fromEntity(comment);
     }
 
     public void deleteComment(Long commentId) {
-        QnaComment comment = commentRepository.findById(commentId)
+        Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException("Comment not found."));
 
         commentRepository.delete(comment);

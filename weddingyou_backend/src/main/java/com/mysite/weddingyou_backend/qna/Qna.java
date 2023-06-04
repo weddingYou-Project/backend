@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mysite.weddingyou_backend.comment.Comment;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -38,5 +40,5 @@ public class Qna {
     private LocalDateTime qnaWriteDate;
 
     @OneToMany(mappedBy = "qna", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<QnaComment> comments = new ArrayList<>();
+    private List<Comment> comments = new ArrayList<>();
 }

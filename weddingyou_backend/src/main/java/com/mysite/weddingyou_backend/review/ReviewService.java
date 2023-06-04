@@ -6,6 +6,9 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.mysite.weddingyou_backend.comment.Comment;
+import com.mysite.weddingyou_backend.comment.CommentDTO;
+import com.mysite.weddingyou_backend.comment.CommentRepository;
 import com.mysite.weddingyou_backend.userLogin.UserLogin;
 import com.mysite.weddingyou_backend.userLogin.UserLoginRepository;
 
