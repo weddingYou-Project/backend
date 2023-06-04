@@ -95,7 +95,7 @@ public class PlannerProfileController {
     	  
     	  double avgReviewStars = 0.0;
     	  if(reviewCount !=0) {
-    		  avgReviewStars = totalReviewStars / (double)reviewCount;
+    		  avgReviewStars =  Math.round(totalReviewStars / (double)reviewCount * 100.0)/100.0;
     	  }
     	  
     	  String avgReviewStarsStr = String.valueOf(avgReviewStars);
