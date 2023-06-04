@@ -235,25 +235,29 @@ public class PlannerProfileController {
     public List<String> getProfileDetail(@RequestParam("plannerEmail") String plannerEmail) throws ParseException {
     	PlannerProfile targetPlannerProfile = plannerService.getPlannerByEmail(plannerEmail);
     	 List<String> result = new ArrayList<>();
-
+    	 List<Review> reviewData = reviewRepository.findAllByPlannerEmail(plannerEmail);
     	result.add(String.valueOf(targetPlannerProfile.getReviewCount()));
     	result.add(String.valueOf(targetPlannerProfile.getAvgReviewStars()));	
     	result.add(String.valueOf(targetPlannerProfile.getIntroduction()));
     	result.add(String.valueOf(targetPlannerProfile.getMatchingCount()));
     	result.add(String.valueOf(targetPlannerProfile.getPlannerPhoneNum()));
+   
     	if(!targetPlannerProfile.getReviewUsers().equals("[]")) {
     		String data = targetPlannerProfile.getReviewUsers().substring(1, targetPlannerProfile.getReviewUsers().length()-1);
         	String[] reviewUsers = data.split(",");
         
     		ArrayList<String> userName = new ArrayList<>();
+    		ArrayList<String> userReview = new ArrayList<>();
         	for(int i=0;i<reviewUsers.length;i++) {
         		System.out.println(reviewUsers[i].trim());
         		UserUpdateDelete userInfo = userUpdateDeleteRepository.findByEmail(reviewUsers[i].trim());
         		System.out.println(userInfo.getName());
         		userName.add(userInfo.getName());
+        		userReview.add(reviewData.get(i).getReviewText());
         	}
         	result.add(String.valueOf(userName));
-    	}else {
+        	result.add(String.valueOf(userReview));
+        }else {
     		result.add("[]");
     	}
     	
