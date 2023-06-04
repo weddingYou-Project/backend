@@ -1,19 +1,18 @@
 package com.mysite.weddingyou_backend.review;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-import com.mysite.weddingyou_backend.plannerLogin.PlannerLogin;
-import com.mysite.weddingyou_backend.userLogin.UserLogin;
+import com.mysite.weddingyou_backend.comment.Comment;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -49,6 +48,16 @@ public class Review {
 	
 	@Column(name = "estimate_id", nullable = false, unique=true)
 	private Long estimateId;
+
+	@Column(name="review_title", nullable=false)
+	private String reviewTitle;
+	
+	@Column(name="review_counts", nullable=false)
+	private int reviewCounts;
+		
+	// 댓글
+	@OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Comment> comments = new ArrayList<>();
 
 //	@ManyToOne(fetch = FetchType.LAZY)
 //	@JoinColumn(name = "user_email", referencedColumnName = "email", insertable = false, updatable = false, nullable = false)

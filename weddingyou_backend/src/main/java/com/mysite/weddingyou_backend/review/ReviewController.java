@@ -20,6 +20,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDelete;
+import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDeleteRepository;
+
 
 @RestController
 
@@ -27,6 +30,9 @@ public class ReviewController {
 	
 	@Autowired
 	ReviewService reviewService;
+	
+	@Autowired
+	PlannerUpdateDeleteRepository plannerUpdateDeleteRepository;
 	
 	@Value("${spring.servlet.multipart.location}")
     String uploadDir;
@@ -66,7 +72,9 @@ public class ReviewController {
 	 	review.setPlannerEmail(plannerEmail);
 	 	review.setReviewDate(LocalDateTime.now());
 	 	review.setEstimateId(estimateId);
-	 	
+	 	PlannerUpdateDelete plannerData = plannerUpdateDeleteRepository.findByEmail(plannerEmail);
+	 	review.setReviewTitle(plannerData.getName()+"플래너 Review");
+	 	review.setReviewCounts(0);
 	 	System.out.println(review);
 	 	
 	 	if(reviewService.findEstimate(estimateId)!=null) {
@@ -89,6 +97,15 @@ public class ReviewController {
 	    
 	    
 	    return res;
+	    
+	}
+	
+	@RequestMapping(value = "/getreviewslist")
+	public List<Review> getReviews() {
+		
+		List<Review> reviewList = reviewService.getReviewList();
+		return reviewList;
+ 
 	    
 	}
 	

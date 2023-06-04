@@ -1,5 +1,7 @@
 package com.mysite.weddingyou_backend.review;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,5 +20,9 @@ public class ReviewService {
 
 	public Review findEstimate(Long estimateId) {
 		return reviewRepository.findByEstimateId(estimateId);
+	}
+	
+	public List<Review> getReviewList(){
+		return reviewRepository.findAll();
 	}
 }
