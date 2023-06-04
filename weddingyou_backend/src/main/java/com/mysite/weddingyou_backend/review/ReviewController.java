@@ -12,9 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +24,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDelete;
 import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDeleteRepository;
+
+import jakarta.transaction.Transactional;
 
 
 @RestController
@@ -33,6 +37,9 @@ public class ReviewController {
 	
 	@Autowired
 	PlannerUpdateDeleteRepository plannerUpdateDeleteRepository;
+	
+	@Autowired
+	ReviewRepository reviewRepository;
 	
 	@Value("${spring.servlet.multipart.location}")
     String uploadDir;
@@ -119,11 +126,32 @@ public class ReviewController {
 		return targetReview;
 	}
 	
+	@PutMapping(value="/reviewcount/{estimateId}")
+	public Review addReviewCount(@PathVariable Long estimateId) {
+		
+		Review targetReview  = reviewService.findEstimate(estimateId);
+		if(targetReview !=null) {
+			int reviewCount = targetReview.getReviewCounts();
+			targetReview.setReviewCounts(reviewCount+1);
+			reviewRepository.save(targetReview);
+		}
+		return targetReview;
+	}
+	
+	
 	@RequestMapping("/review/imageview")
     public ResponseEntity<UrlResource> downloadReviewImg(@RequestParam("image") String stored) throws MalformedURLException {
         UrlResource resource = new UrlResource("file:" + uploadDir + "/" + stored);
         return ResponseEntity.ok().body(resource);
     }
 
-
+	@Transactional
+	@DeleteMapping("/review/delete/{estimateId}")
+    public Review removeReview(@PathVariable Long estimateId)  {
+		Review targetReview  = reviewService.findEstimate(estimateId);
+		if(targetReview !=null) {
+			reviewRepository.deleteByEstimateId(estimateId);
+		}
+		return targetReview;
+    }
 }
