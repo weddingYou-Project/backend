@@ -3,8 +3,6 @@ package com.mysite.weddingyou_backend.review;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.mysite.weddingyou_backend.userLogin.UserLogin;
-
 import lombok.Getter;
 import lombok.Setter;
 
