@@ -35,6 +35,9 @@ public class Qna {
 
     @Column(name = "qna_content")
     private String qnaContent;
+    
+	@Column(name = "qna_attachedfile")
+	private String qnaImg;
 
     @Column(name = "qna_write_date")
     private LocalDateTime qnaWriteDate;

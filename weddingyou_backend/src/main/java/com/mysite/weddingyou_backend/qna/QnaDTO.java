@@ -11,6 +11,9 @@ public class QnaDTO {
     private String qnaWriter;
     private String qnaTitle;
     private String qnaContent;
+    
+	private String qnaImg;
+
     private LocalDateTime qnaWriteDate;
     
     public static QnaDTO fromEntity(Qna qna) {
@@ -19,6 +22,7 @@ public class QnaDTO {
         qnaDTO.setQnaWriter(qna.getQnaWriter());
         qnaDTO.setQnaTitle(qna.getQnaTitle());
         qnaDTO.setQnaContent(qna.getQnaContent());
+		qnaDTO.setQnaImg(qna.getQnaImg());
         qnaDTO.setQnaWriteDate(qna.getQnaWriteDate());
         return qnaDTO;
     }
