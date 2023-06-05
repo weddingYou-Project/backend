@@ -2,6 +2,7 @@ package com.mysite.weddingyou_backend.comment;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mysite.weddingyou_backend.qna.Qna;
 import com.mysite.weddingyou_backend.review.Review;
 
@@ -31,10 +32,12 @@ public class Comment {
 	private String commentWriter;
 
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnore
 	@JoinColumn(name = "review_id")
 	private Review review;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnore
 	@JoinColumn(name = "qna_id")
 	private Qna qna;
 

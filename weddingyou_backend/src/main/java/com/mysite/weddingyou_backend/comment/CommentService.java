@@ -1,6 +1,8 @@
 package com.mysite.weddingyou_backend.comment;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -53,5 +55,41 @@ public class CommentService {
 		commentRepository.save(comment);
 		res = 1;
 		return res;
+	}
+	
+//	public List<Comment> getComments(Long reviewId){
+//		List<Comment> commentData = new ArrayList<>();
+//		commentData = commentRepository.findAllByReview(reviewId);
+//		
+//		return commentData;
+//	}
+	
+	public List<Comment> updateComments(int index, Review targetReview, String commentContent){
+	List<Comment> commentData = new ArrayList<>();
+	commentData = commentRepository.findAllByReview(targetReview);
+	for(int i =0;i<commentData.size();i++) {
+		if(i==index) {
+			Comment targetComment = commentData.get(i);
+			targetComment.setCommentContent(commentContent);
+			targetComment.setCommentDate(LocalDateTime.now());
+			commentRepository.save(targetComment);
+		}
+		
+	}
+	return commentData;
+}
+	
+	public List<Comment> deleteComments(int index, Review targetReview){
+		List<Comment> commentData = new ArrayList<>();
+		commentData = commentRepository.findAllByReview(targetReview);
+		for(int i =0;i<commentData.size();i++) {
+			if(i==index) {
+				Comment targetComment = commentData.get(i);
+			
+				commentRepository.delete(targetComment);
+			}
+			
+		}
+		return commentData;
 	}
 }
