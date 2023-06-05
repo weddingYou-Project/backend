@@ -3,11 +3,16 @@ package com.mysite.weddingyou_backend.review;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.UrlResource;
@@ -22,8 +27,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.mysite.weddingyou_backend.estimate.Estimate;
+import com.mysite.weddingyou_backend.estimate.EstimateRepository;
+import com.mysite.weddingyou_backend.payment.Payment;
+import com.mysite.weddingyou_backend.payment.PaymentRepository;
 import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDelete;
 import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDeleteRepository;
+import com.mysite.weddingyou_backend.userUpdateDelete.UserUpdateDelete;
+import com.mysite.weddingyou_backend.userUpdateDelete.UserUpdateDeleteRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -39,7 +50,16 @@ public class ReviewController {
 	PlannerUpdateDeleteRepository plannerUpdateDeleteRepository;
 	
 	@Autowired
+	UserUpdateDeleteRepository userUpdateDeleteRepository;
+	
+	@Autowired
 	ReviewRepository reviewRepository;
+	
+	@Autowired
+	EstimateRepository estimateRepository;
+	
+	@Autowired
+	PaymentRepository paymentRepository;
 	
 	@Value("${spring.servlet.multipart.location}")
     String uploadDir;
@@ -236,5 +256,77 @@ public class ReviewController {
 		}
 		return res;
 	    
+	}
+	
+	@PostMapping(value = "/existreviewpaid")
+	public List<String> checkPaidReview(
+	        @RequestParam("userEmail") String userEmail
+	        ) throws IOException {
+		int res =0;
+		List<Estimate> estimatesData = estimateRepository.findAllByWriter(userEmail);
+		List<String> result = new ArrayList<>();
+    	
+       
+		for(int i =0;i<estimatesData.size();i++) {
+			Estimate targetEstimate = estimatesData.get(i);
+			Long estimateId = targetEstimate.getId();
+			Payment paymentData = paymentRepository.findByEstimateId(estimateId);
+			if(paymentData!=null) {
+				if(paymentData.getPaymentStatus().equals("paid")) {
+					result.add(String.valueOf(estimateId));
+				}
+			}
+			
+		}
+		 return result; 
+	    
+	}
+	
+	@PostMapping(value = "/plannerinforeview")
+	public String getPlannerInfoForReview2(
+			@RequestParam("targetEstimateId") Long estimateId
+			) throws Exception {
+	    String result="";
+	    
+		Estimate targetEstimate = estimateRepository.findById(estimateId);
+		JSONParser parser = new JSONParser();
+		
+		ArrayList<String> plannermatching = (ArrayList<String>) parser.parse(targetEstimate.getPlannermatching());
+		String plannerEmail = plannermatching.get(0);
+		//	UserUpdateDelete data = userUpdateDeleteRepository(userEmail);
+		PlannerUpdateDelete plannerData = plannerUpdateDeleteRepository.findByEmail(plannerEmail);
+		
+//		System.out.println(data.getName());
+//		String userName = data.getName()+"/";
+//		result= userName;
+//		System.out.println(data.getPhoneNum());
+//		String userPhone = data.getPhoneNum()+"]";
+//		result+= userPhone;
+
+		String planneremail = plannerData.getEmail()+"[";
+		result +=planneremail;
+		String plannerName = plannerData.getName()+",";
+		result+=plannerName;
+//		String price = targetEstimate.getBudget()+"*";
+//		result+=price;
+	         
+	    try {
+	    	if(plannerData.getPlannerImg()!=null) {
+	    		Path imagePath = Paths.get("C:/Project/profileImg/planner",plannerData.getPlannerImg());
+		        byte[] imageBytes = Files.readAllBytes(imagePath);
+		        byte[] base64encodedData = Base64.getEncoder().encode(imageBytes);
+		        result += String.valueOf(new String(base64encodedData));
+	    	}
+	    	
+	       
+	    } catch (IOException e) {
+	           e.printStackTrace();
+	        
+	    }
+	    
+
+		System.out.println("result"+result);
+		return result;
+	
 	}
 }
