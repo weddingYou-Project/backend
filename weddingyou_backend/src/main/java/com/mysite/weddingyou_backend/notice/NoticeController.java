@@ -75,7 +75,7 @@ public class NoticeController {
 		}
 	}
 
-	@PutMapping("/update/{noticeId}")
+	@PostMapping("/update/{noticeId}")
 	public NoticeDTO updateNotice(@PathVariable Long noticeId, @RequestParam("file") MultipartFile file,
 			@RequestParam("title") String title,@RequestParam("content") String content) throws IOException {
 		NoticeDTO noticeDTO = new NoticeDTO();
@@ -93,7 +93,7 @@ public class NoticeController {
 		if (!file.isEmpty()) {
 			Files.copy(file.getInputStream(), Paths.get(folderPath, file.getOriginalFilename()),StandardCopyOption.REPLACE_EXISTING); //request에서 들어온 파일을 uploads 라는 경로에 originalfilename을 String 으로 올림
 			//file.transferTo(newFile);
-			 noticeDTO.setAttachment(file.getOriginalFilename()); 
+			 noticeDTO.setNoticeImg(file.getOriginalFilename()); 
 		}else {
 			noticeDTO.setAttachment(null);
 		}
