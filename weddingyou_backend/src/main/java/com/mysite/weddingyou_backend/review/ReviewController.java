@@ -80,7 +80,7 @@ public class ReviewController {
 	 	review.setReviewDate(LocalDateTime.now());
 	 	review.setEstimateId(estimateId);
 	 	PlannerUpdateDelete plannerData = plannerUpdateDeleteRepository.findByEmail(plannerEmail);
-	 	review.setReviewTitle(plannerData.getName()+"플래너 Review");
+	 	review.setReviewTitle(plannerData.getName()+" 플래너 Review");
 	 	review.setReviewCounts(0);
 	 	System.out.println(review);
 	 	
@@ -218,6 +218,23 @@ public class ReviewController {
 	    
 	    
 	    return res;
+	    
+	}
+	
+	@PostMapping(value = "/reviewauthority/{estimateId}")
+	public int checkUpdateDeleteAuthorityReview(
+	        @RequestParam("userEmail") String userEmail,
+	        @PathVariable("estimateId") Long estimateId) throws IOException {
+		int res =0;
+		Review targetReview  = reviewService.findEstimate(estimateId);
+		if(targetReview !=null) {
+			if(targetReview.getUserEmail().equals(userEmail)) {
+				res =1;
+			}else {
+				res =0;
+			}
+		}
+		return res;
 	    
 	}
 }
