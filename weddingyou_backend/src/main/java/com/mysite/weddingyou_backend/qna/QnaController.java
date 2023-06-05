@@ -6,6 +6,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mysite.weddingyou_backend.comment.CommentDTO;
+import com.mysite.weddingyou_backend.notice.Notice;
 import com.mysite.weddingyou_backend.notice.NoticeDTO;
 import com.mysite.weddingyou_backend.plannerLogin.PlannerLogin;
 import com.mysite.weddingyou_backend.plannerLogin.PlannerLoginRepository;
@@ -116,4 +118,14 @@ public class QnaController {
     public void deleteComment(@PathVariable Long commentId) {
         qnaService.deleteComment(commentId);
     }
+    
+    @PostMapping("/addviewcount")
+	public Qna addviewcount(@RequestParam Long qnaId) {
+		Optional<Qna> qna = qnaService.getQnaById2(qnaId);
+		Qna targetQna = qna.get();
+		int view = targetQna.getQnaViewCount();
+		targetQna.setQnaViewCount(view+1);
+		qnaService.save(targetQna);
+		return targetQna;
+	}
 }

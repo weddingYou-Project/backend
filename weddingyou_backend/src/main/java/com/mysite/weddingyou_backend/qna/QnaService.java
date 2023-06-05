@@ -2,6 +2,7 @@ package com.mysite.weddingyou_backend.qna;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.mysite.weddingyou_backend.comment.Comment;
 import com.mysite.weddingyou_backend.comment.CommentDTO;
 import com.mysite.weddingyou_backend.comment.CommentRepository;
+import com.mysite.weddingyou_backend.notice.Notice;
 
 @Service
 public class QnaService {
@@ -97,4 +99,13 @@ public class QnaService {
 
         commentRepository.delete(comment);
     }
+    
+    public void save(Qna qna) {
+		qnaRepository.save(qna);
+	}
+    
+    public Optional<Qna> getQnaById2(Long qnaId) {
+    	
+		return qnaRepository.findById(qnaId);
+	}
 }
