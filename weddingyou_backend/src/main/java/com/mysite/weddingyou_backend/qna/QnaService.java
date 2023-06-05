@@ -60,6 +60,11 @@ public class QnaService {
         List<Qna> qnas = qnaRepository.findAll();
         return qnas.stream().map(QnaDTO::fromEntity).collect(Collectors.toList());
     }
+    
+    public List<Qna> getAllQnas2() {
+        List<Qna> qnas = qnaRepository.findAll();
+        return qnas;
+    }
 
     public CommentDTO createComment(Long qnaId, CommentDTO commentDTO) {
         Qna qna = qnaRepository.findById(qnaId)

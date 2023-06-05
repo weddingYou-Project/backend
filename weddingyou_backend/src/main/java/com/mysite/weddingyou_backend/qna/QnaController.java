@@ -91,8 +91,8 @@ public class QnaController {
     }
 
     @GetMapping("/list")
-    public List<QnaDTO> getAllQnas() {
-        return qnaService.getAllQnas();
+    public List<Qna> getAllQnas() {
+        return qnaService.getAllQnas2();
     }
 
     @GetMapping("/search/{keyword}")
