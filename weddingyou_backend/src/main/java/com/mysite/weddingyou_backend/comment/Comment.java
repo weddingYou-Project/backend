@@ -30,6 +30,9 @@ public class Comment {
 	
 	@Column(name = "comment_writer")
 	private String commentWriter;
+	
+	@Column(name = "comment_writer_email")
+	private String commentEmail;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JsonIgnore

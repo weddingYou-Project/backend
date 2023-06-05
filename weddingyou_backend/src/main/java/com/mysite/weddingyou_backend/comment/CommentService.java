@@ -41,11 +41,13 @@ public class CommentService {
 			UserLogin user = userLoginRepository.findByEmail(email);
 			if (user != null) {
 				comment.setCommentWriter(user.getName());
+				comment.setCommentEmail(user.getEmail());
 			}
 		} else if ("planner".equals(category)) {
 			PlannerLogin planner = plannerLoginRepository.findByEmail(email);
 			if (planner != null) {
 				comment.setCommentWriter(planner.getName());
+				comment.setCommentEmail(planner.getEmail());
 			}
 		}
 		Optional<Review> review = reviewRepository.findById(reviewId);
