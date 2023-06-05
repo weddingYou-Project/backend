@@ -1,5 +1,7 @@
 package com.mysite.weddingyou_backend.comment;
 
+import java.time.LocalDateTime;
+
 import com.mysite.weddingyou_backend.qna.Qna;
 import com.mysite.weddingyou_backend.review.Review;
 
@@ -40,5 +42,6 @@ public class Comment {
 	@Column(name = "comment_content")
 	private String commentContent;
 	
-
+	@Column(name = "comment_date")
+	private LocalDateTime commentDate; 
 }

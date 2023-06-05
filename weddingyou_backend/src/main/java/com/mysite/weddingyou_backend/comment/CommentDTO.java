@@ -14,7 +14,6 @@ public class CommentDTO {
 
     public static CommentDTO fromEntity(Comment comment) {
         CommentDTO commentDTO = new CommentDTO();
-        commentDTO.setCommentId(comment.getCommentId());
         commentDTO.setCommentWriter(comment.getCommentWriter());
         commentDTO.setCommentContent(comment.getCommentContent());
         return commentDTO;
