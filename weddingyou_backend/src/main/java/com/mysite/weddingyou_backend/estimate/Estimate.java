@@ -7,7 +7,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -69,6 +68,15 @@ public class Estimate {
     
     @Column (name = "e_viewcount") //조회수
     private int viewcount;
+    
+    @Column (name = "e_plannerMatching") //plannermatching
+    
+    private String plannermatching;
+    
+    @Column (name = "e_userMatching") //usermatching
+    private String userMatching;
+
+ 
 }
 	
 	

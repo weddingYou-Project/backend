@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.mysite.weddingyou_backend.like.LikeRepository;
 import com.mysite.weddingyou_backend.plannerLogin.PlannerLoginRepository;
 import com.mysite.weddingyou_backend.userLogin.UserLoginRepository;
+import com.mysite.weddingyou_backend.userUpdateDelete.UserUpdateDelete;
 import com.mysite.weddingyou_backend.userUpdateDelete.UserUpdateDeleteDTO;
 
 @RestController //데이터를 반환
@@ -63,19 +64,34 @@ public class PlannerUpdateDeleteController {
 	 //회원 업데이트
 	 @PostMapping("/planner/userUpdate")
 	    public PlannerUpdateDelete updateUser(@RequestBody PlannerUpdateDeleteDTO planner) throws Exception {
-		 System.out.println(planner.getPreemail());
-		 System.out.println(planner.getEmail());
-		 PlannerUpdateDelete searchedPlanner = service.getPlannerByEmail(planner.getPreemail());
-		 PlannerUpdateDelete emailDuplicatePlanner = service.getPlannerByEmail(planner.getEmail());
-		 if(planner.getPreemail().equals(planner.getEmail())||emailDuplicatePlanner==null) {
+		
+//		 PlannerUpdateDelete searchedPlanner = service.getPlannerByEmail(planner.getPreemail());
+//		 PlannerUpdateDelete emailDuplicatePlanner = service.getPlannerByEmail(planner.getEmail());
+//		 if(planner.getPreemail().equals(planner.getEmail())||emailDuplicatePlanner==null) {
+//			 searchedPlanner.setEmail(planner.getEmail());
+//			 searchedPlanner.setPassword(planner.getPassword());
+//			 searchedPlanner.setPhoneNum(planner.getPhoneNum());
+//			 searchedPlanner.setGender(planner.getGender());
+//			 searchedPlanner.setPlannerCareerYears(planner.getCareer());
+//			 service.save(searchedPlanner);
+//		 }else {
+//			 throw new Exception("이메일이 중복됩니다!");
+//		 }
+		 
+		 PlannerUpdateDelete searchedPlanner = service.getPlannerByEmail(planner.getEmail());
+	
+		 if(searchedPlanner!= null) {
 			 searchedPlanner.setEmail(planner.getEmail());
 			 searchedPlanner.setPassword(planner.getPassword());
 			 searchedPlanner.setPhoneNum(planner.getPhoneNum());
+			 searchedPlanner.setName(planner.getName());
 			 searchedPlanner.setGender(planner.getGender());
 			 searchedPlanner.setPlannerCareerYears(planner.getCareer());
+			 searchedPlanner.setIntroduction(planner.getIntroduction());
+			 System.out.println(planner.getCareer());
 			 service.save(searchedPlanner);
 		 }else {
-			 throw new Exception("이메일이 중복됩니다!");
+			 throw new Exception("변경할 이메일이 존재하지 않습니다!");
 		 }
 		
 		return searchedPlanner;
@@ -117,26 +133,33 @@ public class PlannerUpdateDeleteController {
 	
 	 
 	 @RequestMapping(value="/planner/getprofileImg",  produces = MediaType.IMAGE_JPEG_VALUE)
-	 public ResponseEntity<byte[]> getImage(@RequestBody UserUpdateDeleteDTO user) {
-		 System.out.println("유저이메일: " + user.getEmail());
-		 PlannerUpdateDelete searchedPlanner = service.getPlannerByEmail(user.getEmail());
+	 public ResponseEntity<byte[]> getImage(@RequestBody UserUpdateDeleteDTO user) throws Exception {
+		 PlannerUpdateDelete searchedPlanner = null;
+		 try {
+			 searchedPlanner = service.getPlannerByEmail(user.getEmail());
+		 }catch(Exception e) {
+			  throw new Exception("서버 오류!");
+		 }
 	     if (searchedPlanner != null) {
-	         Path imagePath = Paths.get("C:/Project/profileImg/planner",searchedPlanner.getPlannerImg());
-	         
-	         try {
-	             byte[] imageBytes = Files.readAllBytes(imagePath);
-	             byte[] base64encodedData = Base64.getEncoder().encode(imageBytes);
-	              return ResponseEntity.ok()
-	                      .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + 
-	                    		  searchedPlanner.getPlannerImg() + "\"")
-	                      .body(base64encodedData);
-	         } catch (IOException e) {
+	    	 try {
+	    		 	Path imagePath = Paths.get("C:/Project/profileImg/planner",searchedPlanner.getPlannerImg());
+
+	             	 byte[] imageBytes = Files.readAllBytes(imagePath);
+	            
+	            	 byte[] base64encodedData = Base64.getEncoder().encode(imageBytes);
+		             return ResponseEntity.ok()
+		                      .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + 
+		                    		  searchedPlanner.getPlannerImg() + "\"")
+		                      .body(base64encodedData);
+	           
+	            
+	         } catch (Exception e) {
 	             e.printStackTrace();
-	             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	             throw new Exception("프로필 사진이 없습니다!");
 	         }
-	      
+	 
 	     } else {
-	         return ResponseEntity.notFound().build();
+	        throw new Exception("로그인 하세요!");
 	     }
 	 }
 	 

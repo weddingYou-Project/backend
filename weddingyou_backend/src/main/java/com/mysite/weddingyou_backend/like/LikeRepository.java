@@ -30,5 +30,7 @@ public interface LikeRepository extends JpaRepository<LikeEntity, Long> {
 	
 	List<LikeEntity> findAllByPlannerAndItem(PlannerLogin planner, Item item);
 	
-
+	void deleteAllByPlanner(PlannerLogin planner);
+	
+	void deleteAllByUser(UserLogin user);
 }

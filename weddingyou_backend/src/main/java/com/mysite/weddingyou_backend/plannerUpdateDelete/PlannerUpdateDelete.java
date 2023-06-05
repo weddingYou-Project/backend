@@ -12,7 +12,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -42,7 +41,7 @@ public class PlannerUpdateDelete {
 	private String plannerImg;
 	
 	@Column(name = "planner_career_years", nullable = false)
-	private String plannerCareerYears;
+	private int plannerCareerYears;
 	
 	 @Enumerated(EnumType.STRING) // Enum 값을 String 형태로 저장
 	    private Gender gender;
@@ -50,7 +49,8 @@ public class PlannerUpdateDelete {
 	@Column(name = "planner_join_date", columnDefinition = "datetime default current_timestamp")
 	private LocalDateTime plannerJoinDate;
 	
-	 
+	@Column(name = "planner_Introduction", length=1000000000)
+    private String introduction;
 
 	
 

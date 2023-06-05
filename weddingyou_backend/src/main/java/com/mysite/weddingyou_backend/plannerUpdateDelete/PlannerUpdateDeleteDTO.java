@@ -30,7 +30,7 @@ public class PlannerUpdateDeleteDTO {
 	private Gender gender;
 	
 	@NotNull
-	private String career;
+	private int career;
 
 	@Pattern(regexp = "^\\d{3}-\\d{3,4}-\\d{4}$")
 	@NotNull
@@ -39,6 +39,8 @@ public class PlannerUpdateDeleteDTO {
 	@Email
 	@NotNull
 	private String preemail;
+	
+	private String introduction;
 	
 	
 }

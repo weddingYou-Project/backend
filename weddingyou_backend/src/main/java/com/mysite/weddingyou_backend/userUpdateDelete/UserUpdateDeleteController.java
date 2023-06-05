@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.mysite.weddingyou_backend.like.LikeRepository;
 import com.mysite.weddingyou_backend.plannerLogin.PlannerLoginRepository;
+import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDelete;
 import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDeleteService;
 import com.mysite.weddingyou_backend.userLogin.UserLoginRepository;
 
@@ -65,18 +66,19 @@ public class UserUpdateDeleteController {
 	 
 	 @PostMapping("/user/userUpdate")
 	    public UserUpdateDelete updateUser(@RequestBody UserUpdateDeleteDTO user) throws Exception {
-		 UserUpdateDelete searchedUser = service.getUserByEmail(user.getPreemail());
-		 UserUpdateDelete emailDuplicateUser = service.getUserByEmail(user.getEmail());
-		 if(user.getPreemail().equals(user.getEmail()) || emailDuplicateUser==null) {
+		 UserUpdateDelete searchedUser = service.getUserByEmail(user.getEmail());
+			
+		 if(searchedUser!= null) {
 			 searchedUser.setEmail(user.getEmail());
 			 searchedUser.setPassword(user.getPassword());
 			 searchedUser.setPhoneNum(user.getPhoneNum());
+			 searchedUser.setName(user.getName());
 			 searchedUser.setGender(user.getGender());
-			service.save(searchedUser);
+			
+			 service.save(searchedUser);
 		 }else {
-			 throw new Exception("이메일이 중복됩니다!");
+			 throw new Exception("변경할 이메일이 존재하지 않습니다!");
 		 }
-		
 		 return searchedUser;
 		
 	    }
@@ -122,27 +124,37 @@ public class UserUpdateDeleteController {
 	
 	 
 	 @RequestMapping(value="/user/getprofileImg",  produces = MediaType.IMAGE_JPEG_VALUE)
-	 public ResponseEntity<byte[]> getImage(@RequestBody UserUpdateDeleteDTO user) {
+	 public ResponseEntity<byte[]> getImage(@RequestBody UserUpdateDeleteDTO user) throws Exception {
 		// System.out.println("유저이메일: " + user.getEmail());
-		 UserUpdateDelete searchedUser = service.getUserByEmail(user.getEmail());
+		 UserUpdateDelete searchedUser = null;
+		 try {
+			 searchedUser = service.getUserByEmail(user.getEmail());
+		 }catch(Exception e) {
+			  throw new Exception("서버 오류!");
+		 }
 	     if (searchedUser != null) {
-	         Path imagePath = Paths.get("C:/Project/profileImg/user",searchedUser.getUserImg());
+	    	 try {
+	    		 	Path imagePath = Paths.get("C:/Project/profileImg/user",searchedUser.getUserImg());
 
-	         try {
-	             byte[] imageBytes = Files.readAllBytes(imagePath);
-	             byte[] base64encodedData = Base64.getEncoder().encode(imageBytes);
-	              return ResponseEntity.ok()
-	                      .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + 
-	                    		  searchedUser.getUserImg() + "\"")
-	                      .body(base64encodedData);
-	         } catch (IOException e) {
+	             	 byte[] imageBytes = Files.readAllBytes(imagePath);
+	            
+	            	 byte[] base64encodedData = Base64.getEncoder().encode(imageBytes);
+		             return ResponseEntity.ok()
+		                      .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + 
+		                    		  searchedUser.getUserImg() + "\"")
+		                      .body(base64encodedData);
+	           
+	            
+	         } catch (Exception e) {
 	             e.printStackTrace();
-	             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	             throw new Exception("프로필 사진이 없습니다!");
 	         }
 	 
 	     } else {
-	         return ResponseEntity.notFound().build();
+	        throw new Exception("로그인 하세요!");
 	     }
+		 
+	   
 	 }
 	 
 	 	

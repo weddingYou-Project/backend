@@ -126,4 +126,5 @@ public class UserLoginService {
             throw new RuntimeException("이메일 전송 중 오류가 발생했습니다.");
         }
     }
+
 }

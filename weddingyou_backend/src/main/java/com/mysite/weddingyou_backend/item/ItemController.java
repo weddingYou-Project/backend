@@ -313,6 +313,8 @@ public class ItemController {
 			 @RequestParam("category2") Category2 category2,@RequestParam("itemName") String itemName,
 			 @RequestParam("content")String content ) throws Exception {
 		 	ItemDTO itemDTO = new ItemDTO();
+		 	System.out.println(category1);
+		 	System.out.println(category2);
 		 	itemDTO.setCategory1(category1);
 		 	itemDTO.setCategory2(category2);
 		 	itemDTO.setContent(content);
