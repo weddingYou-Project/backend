@@ -87,7 +87,7 @@ public class QnaController {
         qnaService.deleteQna(qnaId);
     }
 
-    @GetMapping
+    @GetMapping("/list")
     public List<QnaDTO> getAllQnas() {
         return qnaService.getAllQnas();
     }
