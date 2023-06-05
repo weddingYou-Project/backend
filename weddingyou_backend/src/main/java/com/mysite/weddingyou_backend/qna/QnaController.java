@@ -1,6 +1,7 @@
 package com.mysite.weddingyou_backend.qna;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -86,9 +87,35 @@ public class QnaController {
 	}
    
 
-    @PutMapping("/update/{qnaId}")
-    public QnaDTO updateQna(@PathVariable Long qnaId, @RequestBody QnaDTO qnaDTO) {
-        return qnaService.updateQna(qnaId, qnaDTO);
+    @PostMapping("/update/{qnaId}")
+    public QnaDTO updateQna(@PathVariable Long qnaId, @RequestParam(required=false) MultipartFile file,
+			@RequestParam("title") String title,@RequestParam("content") String content) throws IOException {
+    	QnaDTO qnaDTO = new QnaDTO();
+    	qnaDTO.setQnaTitle(title);
+    	qnaDTO.setQnaContent(content);
+
+		String folderPath = "C:\\Project\\qnaService";
+		//String filePath = folderPath + "\\" + file.getOriginalFilename();
+
+		File folder = new File(folderPath);
+		if (!folder.exists()) {
+			folder.mkdirs(); // 폴더가 존재하지 않으면 폴더 생성
+		}
+		try {
+		if (file!=null) {
+			System.out.println(file.getOriginalFilename());
+			Files.copy(file.getInputStream(), Paths.get(folderPath, file.getOriginalFilename())); //request에서 들어온 파일을 uploads 라는 경로에 originalfilename을 String 으로 올림
+			//file.transferTo(newFile);
+			qnaDTO.setQnaImg(file.getOriginalFilename()); 
+		}else {
+			qnaDTO.setQnaImg(null);
+		}
+		}catch(Exception e) {
+			System.out.println("error");
+			qnaDTO.setQnaImg(file.getOriginalFilename()); 
+		}
+		return qnaService.updateQna(qnaId, qnaDTO);
+    
     }
     
     @GetMapping("/{qnaId}")

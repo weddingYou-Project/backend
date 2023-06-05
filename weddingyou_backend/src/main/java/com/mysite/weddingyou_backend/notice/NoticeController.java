@@ -51,7 +51,7 @@ public class NoticeController {
 			noticeDTO.setNoticeTitle(title);
 			noticeDTO.setNoticeContent(content);
 			noticeDTO.setNoticeViewCount(0);
-			String folderPath = "C:\\Project\\customerservice";
+			String folderPath = "C:\\Project\\noticeService";
 			
 
 			File folder = new File(folderPath);
@@ -77,26 +77,31 @@ public class NoticeController {
 	}
 
 	@PostMapping("/update/{noticeId}")
-	public NoticeDTO updateNotice(@PathVariable Long noticeId, @RequestParam("file") MultipartFile file,
+	public NoticeDTO updateNotice(@PathVariable Long noticeId, @RequestParam(required=false) MultipartFile file,
 			@RequestParam("title") String title,@RequestParam("content") String content) throws IOException {
 		NoticeDTO noticeDTO = new NoticeDTO();
 		noticeDTO.setNoticeTitle(title);
 		noticeDTO.setNoticeContent(content);
 
 		String folderPath = "C:\\Project\\noticeService";
-		String filePath = folderPath + "\\" + file.getOriginalFilename();
+		//String filePath = folderPath + "\\" + file.getOriginalFilename();
 
 		File folder = new File(folderPath);
 		if (!folder.exists()) {
 			folder.mkdirs(); // 폴더가 존재하지 않으면 폴더 생성
 		}
-
-		if (!file.isEmpty()) {
+		try {
+		if (file!=null) {
 			Files.copy(file.getInputStream(), Paths.get(folderPath, file.getOriginalFilename()),StandardCopyOption.REPLACE_EXISTING); //request에서 들어온 파일을 uploads 라는 경로에 originalfilename을 String 으로 올림
 			//file.transferTo(newFile);
 			 noticeDTO.setNoticeImg(file.getOriginalFilename()); 
 		}else {
 			noticeDTO.setAttachment(null);
+		}
+		}catch(Exception e) {
+			System.out.println("error");
+			noticeDTO.setNoticeImg(file.getOriginalFilename()); 
+		
 		}
 		return noticeService.updateNotice(noticeId, noticeDTO);
 	}

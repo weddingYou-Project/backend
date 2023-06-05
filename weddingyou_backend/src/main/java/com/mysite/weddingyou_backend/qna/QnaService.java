@@ -36,10 +36,11 @@ public class QnaService {
 
     public QnaDTO updateQna(Long qnaId, QnaDTO qnaDTO) {
         Qna qna = qnaRepository.findById(qnaId).orElseThrow(() -> new IllegalArgumentException("Q&A not found."));
-        qna.setQnaWriter(qnaDTO.getQnaWriter());
+        //qna.setQnaWriter(qnaDTO.getQnaWriter());
         qna.setQnaTitle(qnaDTO.getQnaTitle());
         qna.setQnaContent(qnaDTO.getQnaContent());
         qna.setQnaWriteDate(LocalDateTime.now());
+        qna.setQnaImg(qnaDTO.getQnaImg());
         Qna updatedQna = qnaRepository.save(qna);
         return QnaDTO.fromEntity(updatedQna);
     }
