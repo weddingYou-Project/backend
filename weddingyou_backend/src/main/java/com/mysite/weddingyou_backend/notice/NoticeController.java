@@ -92,7 +92,7 @@ public class NoticeController {
 		}
 		try {
 		if (file!=null) {
-			Files.copy(file.getInputStream(), Paths.get(folderPath, file.getOriginalFilename()),StandardCopyOption.REPLACE_EXISTING); //request에서 들어온 파일을 uploads 라는 경로에 originalfilename을 String 으로 올림
+			Files.copy(file.getInputStream(), Paths.get(folderPath, file.getOriginalFilename())); //request에서 들어온 파일을 uploads 라는 경로에 originalfilename을 String 으로 올림
 			//file.transferTo(newFile);
 			 noticeDTO.setNoticeImg(file.getOriginalFilename()); 
 		}else {
