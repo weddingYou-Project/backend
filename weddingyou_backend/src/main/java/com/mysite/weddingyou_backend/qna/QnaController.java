@@ -2,14 +2,18 @@ package com.mysite.weddingyou_backend.qna;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -82,12 +86,17 @@ public class QnaController {
 	}
    
 
-    @PutMapping("/{qnaId}")
+    @PutMapping("/update/{qnaId}")
     public QnaDTO updateQna(@PathVariable Long qnaId, @RequestBody QnaDTO qnaDTO) {
         return qnaService.updateQna(qnaId, qnaDTO);
     }
+    
+    @GetMapping("/{qnaId}")
+    public Qna getQna(@PathVariable Long qnaId) {
+        return qnaService.getQnaById2(qnaId).get();
+    }
 
-    @DeleteMapping("/{qnaId}")
+    @DeleteMapping("/delete/{qnaId}")
     public void deleteQna(@PathVariable Long qnaId) {
         qnaService.deleteQna(qnaId);
     }
@@ -128,4 +137,33 @@ public class QnaController {
 		qnaService.save(targetQna);
 		return targetQna;
 	}
+    
+    @RequestMapping(value="/getqnaimg",  produces = MediaType.IMAGE_JPEG_VALUE)
+	 public ResponseEntity<byte[]> getNoticeImg(@RequestParam Long qnaId) throws Exception {
+	
+		 Qna targetQna = qnaService.getQnaById2(qnaId).get();
+	     if (targetQna != null) {
+	    	 try {
+	    		 	Path imagePath = Paths.get("C:/Project/qnaService",targetQna.getQnaImg());
+
+	             	 byte[] imageBytes = Files.readAllBytes(imagePath);
+	            
+	            	 byte[] base64encodedData = Base64.getEncoder().encode(imageBytes);
+		             return ResponseEntity.ok()
+		                      .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + 
+		                    		  targetQna.getQnaImg() + "\"")
+		                      .body(base64encodedData);
+	           
+	            
+	         } catch (Exception e) {
+	             e.printStackTrace();
+	             throw new Exception("QNA 사진이 없습니다!");
+	         }
+	 
+	     } else {
+	        throw new Exception("QNA 글이 없습니다!");
+	     }
+		 
+	   
+	 }
 }
