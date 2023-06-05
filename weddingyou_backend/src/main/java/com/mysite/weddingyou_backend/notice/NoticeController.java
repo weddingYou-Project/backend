@@ -44,7 +44,7 @@ public class NoticeController {
 	}
 
 	@PostMapping("/post")
-	public ResponseEntity<NoticeDTO> createNotice(@RequestParam("file") MultipartFile file,
+	public ResponseEntity<NoticeDTO> createNotice(@RequestParam(required=false) MultipartFile file,
 			@RequestParam("title") String title,@RequestParam("content") String content) {
 		try {
 			NoticeDTO noticeDTO = new NoticeDTO();
@@ -52,14 +52,15 @@ public class NoticeController {
 			noticeDTO.setNoticeContent(content);
 			noticeDTO.setNoticeViewCount(0);
 			String folderPath = "C:\\Project\\customerservice";
-			String filePath = folderPath + "\\" + file.getOriginalFilename();
+			
 
 			File folder = new File(folderPath);
 			if (!folder.exists()) {
 				folder.mkdirs(); // 폴더가 존재하지 않으면 폴더 생성
 			}
 
-			if (!file.isEmpty()) {
+			if (file!=null) {
+			
 				Files.copy(file.getInputStream(), Paths.get(folderPath, file.getOriginalFilename()),StandardCopyOption.REPLACE_EXISTING); //request에서 들어온 파일을 uploads 라는 경로에 originalfilename을 String 으로 올림
 				//file.transferTo(newFile);
 				 noticeDTO.setAttachment(file.getOriginalFilename()); 
