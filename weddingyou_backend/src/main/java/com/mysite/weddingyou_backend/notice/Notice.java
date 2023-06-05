@@ -31,7 +31,7 @@ public class Notice {
 	private String noticeContent;
 	
 	@Column(name = "notice_viewcount")
-	private String noticeViewCount;
+	private int noticeViewCount;
 	
 	@Column(name = "notice_write_date")
     private LocalDateTime noticeWriteDate;

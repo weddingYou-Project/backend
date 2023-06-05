@@ -42,7 +42,7 @@ public class QnaController {
 		this.plannerLoginRepository = plannerLoginRepository;
     }
 
-    @PostMapping
+    @PostMapping("/post")
     public ResponseEntity<QnaDTO> createQna(@RequestParam("file") MultipartFile file,
 			@RequestParam("qnaDTO") String qnaDTOJson, @RequestHeader("category") String category) {
         try {
