@@ -1,6 +1,9 @@
 package com.mysite.weddingyou_backend.qna;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -21,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mysite.weddingyou_backend.comment.CommentDTO;
+import com.mysite.weddingyou_backend.notice.NoticeDTO;
 import com.mysite.weddingyou_backend.plannerLogin.PlannerLogin;
 import com.mysite.weddingyou_backend.plannerLogin.PlannerLoginRepository;
 import com.mysite.weddingyou_backend.userLogin.UserLogin;
@@ -41,41 +45,40 @@ public class QnaController {
         this.userLoginRepository = userLoginRepository;
 		this.plannerLoginRepository = plannerLoginRepository;
     }
-
     @PostMapping("/post")
-    public ResponseEntity<QnaDTO> createQna(@RequestParam("file") MultipartFile file,
-			@RequestParam("qnaDTO") String qnaDTOJson, @RequestHeader("category") String category) {
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            QnaDTO qnaDTO = objectMapper.readValue(qnaDTOJson, QnaDTO.class);
+	public ResponseEntity<QnaDTO> createQna(@RequestParam(required=false) MultipartFile file,
+			@RequestParam("title") String title,@RequestParam("content") String content, @RequestParam("email") String email) {
+		try {
+			QnaDTO qnaDTO = new QnaDTO();
+			qnaDTO.setQnaTitle(title);
+			qnaDTO.setQnaContent(content);
+			qnaDTO.setQnaViewCount(0);
+			qnaDTO.setQnaWriter(email);
+			String folderPath = "C:\\Project\\qnaService";
+			
 
-            String email = qnaDTO.getQnaWriter();
+			File folder = new File(folderPath);
+			if (!folder.exists()) {
+				folder.mkdirs(); // 폴더가 존재하지 않으면 폴더 생성
+			}
 
-            if (category.equals("user")) {
-                UserLogin user = userLoginRepository.findByEmail(email);
-                if (user != null) {
-                    qnaDTO.setQnaWriter(user.getName());
-                }
-            } else if (category.equals("planner")) {
-                PlannerLogin planner = plannerLoginRepository.findByEmail(email);
-                if (planner != null) {
-                    qnaDTO.setQnaWriter(planner.getName());
-                }
-            }
+			if (file!=null) {
+			
+				Files.copy(file.getInputStream(), Paths.get(folderPath, file.getOriginalFilename()),StandardCopyOption.REPLACE_EXISTING); //request에서 들어온 파일을 uploads 라는 경로에 originalfilename을 String 으로 올림
+				//file.transferTo(newFile);
+				qnaDTO.setQnaImg(file.getOriginalFilename()); 
+			}else {
+				qnaDTO.setQnaImg(null);
+			}
 
-            String folderPath = "C:\\Project\\customerservice";
-            String originalFileName = file.getOriginalFilename();
-            String filePath = folderPath + "\\" + originalFileName;
-            file.transferTo(new File(filePath));
-            qnaDTO.setQnaImg(originalFileName);
-
-            qnaDTO.setQnaWriteDate(LocalDateTime.now());
-            QnaDTO savedQna = qnaService.createQna(qnaDTO);
-            return new ResponseEntity<>(savedQna, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+			QnaDTO qnadto = qnaService.createQna(qnaDTO);
+			return ResponseEntity.ok(qnadto);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+   
 
     @PutMapping("/{qnaId}")
     public QnaDTO updateQna(@PathVariable Long qnaId, @RequestBody QnaDTO qnaDTO) {

@@ -23,9 +23,11 @@ public class QnaService {
     public QnaDTO createQna(QnaDTO qnaDTO) {
         Qna qna = new Qna();
         qna.setQnaWriter(qnaDTO.getQnaWriter());
+        qna.setQnaViewCount(qnaDTO.getQnaViewCount());
         qna.setQnaTitle(qnaDTO.getQnaTitle());
         qna.setQnaContent(qnaDTO.getQnaContent());
         qna.setQnaWriteDate(LocalDateTime.now());
+        qna.setQnaImg(qnaDTO.getQnaImg());
         Qna savedQna = qnaRepository.save(qna);
         return QnaDTO.fromEntity(savedQna);
     }

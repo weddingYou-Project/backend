@@ -41,6 +41,9 @@ public class Qna {
 
     @Column(name = "qna_write_date")
     private LocalDateTime qnaWriteDate;
+    
+    @Column(name = "qna_viewcount")
+    private int qnaViewCount;
 
     @OneToMany(mappedBy = "qna", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();

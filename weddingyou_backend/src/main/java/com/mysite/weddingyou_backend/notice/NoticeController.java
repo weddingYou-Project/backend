@@ -83,7 +83,7 @@ public class NoticeController {
 		noticeDTO.setNoticeTitle(title);
 		noticeDTO.setNoticeContent(content);
 
-		String folderPath = "C:\\Project\\customerservice";
+		String folderPath = "C:\\Project\\noticeService";
 		String filePath = folderPath + "\\" + file.getOriginalFilename();
 
 		File folder = new File(folderPath);
@@ -131,7 +131,7 @@ public class NoticeController {
 		 Notice targetNotice = noticeService.getNoticeById2(noticeId);
 	     if (targetNotice != null) {
 	    	 try {
-	    		 	Path imagePath = Paths.get("C:/Project/customerservice",targetNotice.getNoticeImg());
+	    		 	Path imagePath = Paths.get("C:/Project/noticeService",targetNotice.getNoticeImg());
 
 	             	 byte[] imageBytes = Files.readAllBytes(imagePath);
 	            
