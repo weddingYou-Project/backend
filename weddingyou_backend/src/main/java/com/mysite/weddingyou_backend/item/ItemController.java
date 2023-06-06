@@ -147,7 +147,13 @@ public class ItemController {
 		        encodingDatas.add(String.valueOf(targetItem.getItemId()));
 		        encodingDatas.add(String.valueOf(targetItem.getItemName()));
 		        encodingDatas.add(String.valueOf(targetItem.getContent()));
-		      
+		        if(targetItem.getImgDetailContent().length()==0) {
+		        	 encodingDatas.add(String.valueOf(" "));
+		        }else {
+		        	 encodingDatas.add(String.valueOf(targetItem.getImgDetailContent()));
+		        }
+		        
+		       
 	    	}
 	    	
 	    }
@@ -311,13 +317,14 @@ public class ItemController {
 	 @RequestMapping("/insertItem")
 	 public ResponseEntity<Item> createItem(@RequestParam("file") MultipartFile file,@RequestParam("category1") Category1 category1, 
 			 @RequestParam("category2") Category2 category2,@RequestParam("itemName") String itemName,
-			 @RequestParam("content")String content ) throws Exception {
+			 @RequestParam("content")String content, @RequestParam("imgDetailContent") String imgDetailContent ) throws Exception {
 		 	ItemDTO itemDTO = new ItemDTO();
 		 	System.out.println(category1);
 		 	System.out.println(category2);
 		 	itemDTO.setCategory1(category1);
 		 	itemDTO.setCategory2(category2);
 		 	itemDTO.setContent(content);
+		 	itemDTO.setImgDetailContent(imgDetailContent);
 		 	itemDTO.setItemName(itemName.toLowerCase());
 		 	//itemDTO.setItemWriteDate(LocalDateTime.now());
 		 	//itemDTO.setLikeCount(0);
@@ -359,7 +366,7 @@ public class ItemController {
 	 // 아이템 수정
 	 @PostMapping("/updateItem/{itemId}")
 	 public ResponseEntity<Item> updateItem(@RequestParam(value="file", required=false) MultipartFile file,@PathVariable Long itemId,  @RequestParam("itemName") String itemName, 
-			 @RequestParam("content") String content) {
+			 @RequestParam("content") String content, @RequestParam("imgDetailContent") String imgDetailContent) {
 		 
 		 	try {	
 		 		
@@ -380,6 +387,7 @@ public class ItemController {
 		        itemDTO.setCategory2(searchedItem.getCategory2());
 		        itemDTO.setContent(content);
 		        itemDTO.setItemName(itemName);
+		        itemDTO.setImgDetailContent(imgDetailContent);
 		        Item updatedItemDTO = itemService.updateItem(itemId,itemDTO); // 이미지파일이름 데이터베이스에 업데이트함
 		        return ResponseEntity.ok().body(updatedItemDTO);
 		    } catch (IOException e) {
