@@ -134,7 +134,7 @@ public class QnaController {
     }
 
     @GetMapping("/search/{keyword}")
-    public List<QnaDTO> searchQnas(@PathVariable String keyword) {
+    public List<Qna> searchQnas(@PathVariable String keyword) {
         return qnaService.searchQnas(keyword);
     }
 

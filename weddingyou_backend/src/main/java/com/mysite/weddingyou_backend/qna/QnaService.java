@@ -54,9 +54,9 @@ public class QnaService {
         return QnaDTO.fromEntity(qna);
     }
 
-    public List<QnaDTO> searchQnas(String keyword) {
+    public List<Qna> searchQnas(String keyword) {
         List<Qna> qnas = qnaRepository.findByQnaTitleContaining(keyword);
-        return qnas.stream().map(QnaDTO::fromEntity).collect(Collectors.toList());
+        return qnas;
     }
 
     public List<QnaDTO> getAllQnas() {
