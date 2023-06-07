@@ -169,7 +169,8 @@ public class EstimateController {
 		List<Comment> commentData = commentRepository.findAllByReview(review);
 		if(commentData!=null) {
 			for(int i=0;i<commentData.size();i++) {
-				commentRepository.delete(commentData.get(i));
+				Comment targetReview = commentData.get(i);
+				commentRepository.delete(targetReview);
 			}
 		}
 		

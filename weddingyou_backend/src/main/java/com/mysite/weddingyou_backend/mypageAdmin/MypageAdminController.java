@@ -286,7 +286,7 @@ public class MypageAdminController {
 	    List<Comment> commentData = commentRepository.findAll();
 	    for(int i =0;i<commentData.size();i++) {
 	    	Comment comment  = commentData.get(i);
-	     	String targetEmail = comment.getCommentWriter();
+	    	String targetEmail = comment.getCommentEmail();
 	    	
 	    	if(targetEmail.equals(plannerEmail)) {
 	    		commentRepository.delete(comment);
