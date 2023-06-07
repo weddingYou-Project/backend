@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.mysite.weddingyou_backend.comment.Comment;
+import com.mysite.weddingyou_backend.comment.CommentRepository;
 import com.mysite.weddingyou_backend.estimate.Estimate;
 import com.mysite.weddingyou_backend.estimate.EstimateRepository;
 import com.mysite.weddingyou_backend.like.LikeRepository;
@@ -35,8 +37,6 @@ import com.mysite.weddingyou_backend.payment.PaymentRepository;
 import com.mysite.weddingyou_backend.plannerLogin.PlannerLogin;
 import com.mysite.weddingyou_backend.plannerLogin.PlannerLoginRepository;
 import com.mysite.weddingyou_backend.plannerProfile.PlannerProfileRepository;
-import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDelete;
-import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDeleteService;
 import com.mysite.weddingyou_backend.review.Review;
 import com.mysite.weddingyou_backend.review.ReviewRepository;
 import com.mysite.weddingyou_backend.userLogin.UserLogin;
@@ -83,6 +83,9 @@ public class UserUpdateDeleteController {
 	
 	@Autowired
 	PaymentRepository paymentRepository;
+	
+	@Autowired
+	CommentRepository commentRepository;
 	
 
 	 @PostMapping("/user/userSearch")
@@ -252,6 +255,19 @@ public class UserUpdateDeleteController {
 		    	}
 		    	if(useremail.equals(userEmail)) {
 		    		paymentRepository.delete(payment);
+		    	}	    
+		    }
+		    
+		    List<Comment> commentData = commentRepository.findAll();
+		    for(int i =0;i<commentData.size();i++) {
+		    	Comment comment  = commentData.get(i);
+		     	String targetEmail = comment.getCommentWriter();
+		    	
+		    	if(targetEmail.equals(plannerEmail)) {
+		    		commentRepository.delete(comment);
+		    	}
+		    	if(targetEmail.equals(userEmail)) {
+		    		commentRepository.delete(comment);
 		    	}	    
 		    }
 
