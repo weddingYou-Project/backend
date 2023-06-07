@@ -97,8 +97,8 @@ public class UserLoginService {
     private void sendEmail(String email, String temporaryPassword) {
         String host = "smtp.naver.com"; // 메일 서버 호스트
         String port = "465"; // 메일 서버 포트
-        String senderEmail = "weddingyou502@naver.com"; // 보내는 사람 이메일 주소
-        String senderPassword = "weddingyou502!"; // 보내는 사람 이메일 비밀번호
+        String senderEmail = "weddingyou602@naver.com"; // 보내는 사람 이메일 주소
+        String senderPassword = "WeddingYou602!!"; // 보내는 사람 이메일 비밀번호
 
         Properties properties = new Properties();
         properties.put("mail.smtp.auth", "true");
