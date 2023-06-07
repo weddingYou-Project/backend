@@ -79,4 +79,6 @@ public interface MypageAdminRepository extends JpaRepository<MypageAdmin, Long> 
   			, nativeQuery=true)
   	int getSearchCount(String search);
   	
+  	MypageAdmin findByUserEmail(String useremail);
+  	MypageAdmin findByPlannerEmail(String planneremail);
 }

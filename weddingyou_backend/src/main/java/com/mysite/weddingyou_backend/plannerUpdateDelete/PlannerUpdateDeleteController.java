@@ -53,13 +53,13 @@ public class PlannerUpdateDeleteController {
        
     }
 	 
-	 //회원 탈퇴
-	 @PostMapping("/planner/plannerDelete")
-	    public ResponseEntity<PlannerUpdateDelete> deleteUser(@RequestBody PlannerUpdateDeleteDTO planner) {
-		 PlannerUpdateDelete searchedPlanner = service.getPlannerByEmail(planner.getEmail());
-		service.delete(searchedPlanner);
-		return ResponseEntity.status(HttpStatus.OK).build();
-	    }
+//	 //회원 탈퇴
+//	 @PostMapping("/planner/plannerDelete")
+//	    public ResponseEntity<PlannerUpdateDelete> deleteUser(@RequestBody PlannerUpdateDeleteDTO planner) {
+//		 PlannerUpdateDelete searchedPlanner = service.getPlannerByEmail(planner.getEmail());
+//		service.delete(searchedPlanner);
+//		return ResponseEntity.status(HttpStatus.OK).build();
+//	    }
 	 
 	 //회원 업데이트
 	 @PostMapping("/planner/userUpdate")
