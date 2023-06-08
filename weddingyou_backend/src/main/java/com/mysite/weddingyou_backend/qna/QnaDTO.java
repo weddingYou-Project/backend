@@ -16,6 +16,8 @@ public class QnaDTO {
 
     private LocalDateTime qnaWriteDate;
     
+    private int qnaViewCount;
+    
     public static QnaDTO fromEntity(Qna qna) {
         QnaDTO qnaDTO = new QnaDTO();
         qnaDTO.setQnaId(qna.getQnaId());
@@ -24,6 +26,7 @@ public class QnaDTO {
         qnaDTO.setQnaContent(qna.getQnaContent());
 		qnaDTO.setQnaImg(qna.getQnaImg());
         qnaDTO.setQnaWriteDate(qna.getQnaWriteDate());
+        qnaDTO.setQnaViewCount(qna.getQnaViewCount());
         return qnaDTO;
     }
 }

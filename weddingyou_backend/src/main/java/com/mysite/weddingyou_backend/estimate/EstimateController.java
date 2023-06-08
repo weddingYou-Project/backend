@@ -7,7 +7,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -30,11 +29,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.mysite.weddingyou_backend.comment.Comment;
+import com.mysite.weddingyou_backend.comment.CommentRepository;
 import com.mysite.weddingyou_backend.payment.Payment;
 import com.mysite.weddingyou_backend.payment.PaymentRepository;
 import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDelete;
 import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDeleteRepository;
 import com.mysite.weddingyou_backend.plannerUpdateDelete.PlannerUpdateDeleteService;
+import com.mysite.weddingyou_backend.review.Review;
 import com.mysite.weddingyou_backend.review.ReviewRepository;
 import com.mysite.weddingyou_backend.userUpdateDelete.UserUpdateDelete;
 import com.mysite.weddingyou_backend.userUpdateDelete.UserUpdateDeleteService;
@@ -66,6 +68,9 @@ public class EstimateController {
 	
 	@Autowired
 	private ReviewRepository reviewRepository;
+	
+	@Autowired
+	private CommentRepository commentRepository;
 	
 	@Value("${spring.servlet.multipart.location}")
     String uploadDir;
@@ -156,9 +161,19 @@ public class EstimateController {
 	@Transactional
 	@RequestMapping("/delete")
 	public void delete(@RequestParam Long id) {
+		Review review = reviewRepository.findByEstimateId(id);
+		Long reviewId = review.getReviewId();
 		estimateService.delete(id);
 		reviewRepository.deleteByEstimateId(id);
 		paymentRepository.deleteByEstimateId(id);
+		List<Comment> commentData = commentRepository.findAllByReview(review);
+		if(commentData!=null) {
+			for(int i=0;i<commentData.size();i++) {
+				Comment targetReview = commentData.get(i);
+				commentRepository.delete(targetReview);
+			}
+		}
+		
 	}
 	
 	

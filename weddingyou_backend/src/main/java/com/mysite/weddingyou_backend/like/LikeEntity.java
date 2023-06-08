@@ -46,9 +46,7 @@ public class LikeEntity  {
     @Column(name = "like", nullable = false)
     private Integer likeCount;
     
-    @Column(name = "location")
-    private String location;
-    
+
    
     @Column(name = "like_write_date")
     private LocalDateTime likeWriteDate;

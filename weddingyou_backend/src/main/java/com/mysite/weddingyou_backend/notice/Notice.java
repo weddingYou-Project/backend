@@ -30,6 +30,9 @@ public class Notice {
 	@Column(name = "notice_content")
 	private String noticeContent;
 	
+	@Column(name = "notice_viewcount")
+	private int noticeViewCount;
+	
 	@Column(name = "notice_write_date")
     private LocalDateTime noticeWriteDate;
 }

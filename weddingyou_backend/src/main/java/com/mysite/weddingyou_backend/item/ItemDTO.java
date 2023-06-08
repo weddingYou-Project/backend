@@ -39,6 +39,9 @@ public class ItemDTO {
 	private String content;
 	
 	@NotNull
+	private String imgDetailContent;
+	
+	@NotNull
     private Category1 category1;
 	
 
@@ -51,6 +54,7 @@ public class ItemDTO {
         itemDTO.setItemName(item.getItemName());
         itemDTO.setItemImg(item.getItemImg());
         itemDTO.setContent(item.getImgContent());
+        itemDTO.setImgDetailContent(item.getImgDetailContent());
         itemDTO.setItemWriteDate(item.getItemWriteDate());
         itemDTO.setCategory1(item.getCategory1());
         itemDTO.setCategory2(item.getCategory2());

@@ -49,9 +49,18 @@ public class NoticeService {
 		Notice notice = noticeRepository.findById(noticeId).orElseThrow(() -> new IllegalArgumentException("불러오기 실패"));
 		return NoticeDTO.fromEntity(notice);
 	}
+	
+	public Notice getNoticeById2(Long noticeId) {
+		Notice notice = noticeRepository.findById(noticeId).orElseThrow(() -> new IllegalArgumentException("불러오기 실패"));
+		return notice;
+	}
 
 	public List<NoticeDTO> searchNotices(String keyword) {
 		List<Notice> notices = noticeRepository.findByNoticeTitleContaining(keyword);
 		return notices.stream().map(NoticeDTO::fromEntity).collect(Collectors.toList());
+	}
+	
+	public void save(Notice notice) {
+		noticeRepository.save(notice);
 	}
 }

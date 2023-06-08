@@ -39,6 +39,9 @@ public class Item {
 	@Column(name="img_content",nullable=false)
 	private String imgContent;
 	
+	@Column(name="img_detail_content",length=1000000000, nullable=false)
+	private String imgDetailContent;
+	
 	@JsonManagedReference
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "item_id")

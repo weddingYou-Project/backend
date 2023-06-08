@@ -36,11 +36,14 @@ public class Qna {
     @Column(name = "qna_content")
     private String qnaContent;
     
-	@Column(name = "qna_attachedfile")
+	@Column(name = "qna_attachedfile", length=1000000000)
 	private String qnaImg;
 
     @Column(name = "qna_write_date")
     private LocalDateTime qnaWriteDate;
+    
+    @Column(name = "qna_viewcount")
+    private int qnaViewCount;
 
     @OneToMany(mappedBy = "qna", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();

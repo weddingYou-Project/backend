@@ -30,6 +30,8 @@ public class NoticeDTO {
 
     private LocalDateTime noticeWriteDate;
     
+    private int noticeViewCount;
+    
  // 첨부 파일 
     public void setAttachment(String noticeImg) {
         this.noticeImg = noticeImg;
@@ -42,6 +44,7 @@ public class NoticeDTO {
 		NoticeDTO.setNoticeContent(notice.getNoticeContent());
 		NoticeDTO.setNoticeImg(notice.getNoticeImg());
 		NoticeDTO.setNoticeWriteDate(notice.getNoticeWriteDate());
+		NoticeDTO.setNoticeViewCount(notice.getNoticeViewCount());
         return NoticeDTO;
 	}
 }

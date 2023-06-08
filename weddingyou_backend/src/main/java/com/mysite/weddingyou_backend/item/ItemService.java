@@ -74,6 +74,7 @@ public class ItemService {
     
     public Item createItem(ItemDTO itemDTO) {
         Item item = new Item();
+        item.setImgDetailContent(itemDTO.getImgDetailContent());
         item.setImgContent(itemDTO.getContent());
         item.setItemName(itemDTO.getItemName());
         item.setCategory1(itemDTO.getCategory1());
@@ -88,6 +89,7 @@ public class ItemService {
 
     public Item updateItem(Long itemId, ItemDTO itemDTO) {
         Item item = getItemById(itemId);
+        item.setImgDetailContent(itemDTO.getImgDetailContent());
         item.setItemName(itemDTO.getItemName());
         item.setCategory1(itemDTO.getCategory1());
         item.setCategory2(itemDTO.getCategory2());

@@ -1,27 +1,33 @@
 package com.mysite.weddingyou_backend.userLogin;
 
-import java.util.Date;
-import java.util.Map;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mysite.weddingyou_backend.plannerLogin.PlannerLogin;
+import com.mysite.weddingyou_backend.plannerLogin.PlannerLoginRepository;
+import com.mysite.weddingyou_backend.plannerLogin.PlannerLoginService;
+
 import jakarta.servlet.http.HttpSession;
-import jakarta.transaction.Transactional;
 
 @RestController //데이터를 반환
 public class UserLoginController {
 	
 	@Autowired
 	UserLoginService service;
+	
+	@Autowired
+	UserLoginRepository userLoginRepository;
+	
+	@Autowired
+	PlannerLoginRepository plannerLoginRepository;
+	
+	@Autowired
+	PlannerLoginService plannerLoginService;
 	
 	//로그인
 	@PostMapping("/user/login")
@@ -40,9 +46,24 @@ public class UserLoginController {
 
 	//비밀번호 수정
 	@PostMapping("/user/updatePassword") //userDTO에 email과 password를 저장한다고 가정
-	public int updatePassword(@RequestBody UserLogin user, HttpSession session) { //리액트에서 email과 password란 이름으로 전달하도록
+	public int updatePassword(@RequestParam String email, @RequestParam String password) { //리액트에서 email과 password란 이름으로 전달하도록
 		int res = 0;
-		res = service.updatePassword(user.getEmail(), user.getPassword());
+		List<UserLogin> userlogindata = userLoginRepository.findAll();
+		List<PlannerLogin> plannerlogindata = plannerLoginRepository.findAll();
+		
+		for(int i =0;i<userlogindata.size();i++) {
+			UserLogin user = userlogindata.get(i);
+			if(userlogindata.get(i).getEmail().equals(email)) {
+				res = service.updatePassword(user.getEmail(), password);
+			}
+		}
+		for(int i=0;i<plannerlogindata.size();i++) {
+			PlannerLogin planner = plannerlogindata.get(i);
+			if(planner.getEmail().equals(email)) {
+				res = plannerLoginService.updatePassword(planner.getEmail(),password);
+			}
+		}
+		
 		return res; //수정이 됐음1, 아니면 0
 	}
 	

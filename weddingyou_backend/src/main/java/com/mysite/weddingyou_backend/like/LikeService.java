@@ -53,7 +53,6 @@ public class LikeService {
 	//좋아요 추가
     public void addLike(LikeEntity likeEntity, Item item) {
     	likeEntity.setLikeWriteDate(LocalDateTime.now());
-    	likeEntity.setLocation("location");
     	item.setLikeWriteDate(LocalDateTime.now());
     	itemRepository.save(item);
     	likeRepository.save(likeEntity);

@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mysite.weddingyou_backend.comment.Comment;
+import com.mysite.weddingyou_backend.comment.CommentRepository;
 import com.mysite.weddingyou_backend.estimate.Estimate;
 import com.mysite.weddingyou_backend.estimate.EstimateRepository;
 import com.mysite.weddingyou_backend.like.LikeRepository;
@@ -63,6 +65,9 @@ public class MypageAdminController {
 	
 	@Autowired
 	PaymentRepository paymentRepository;
+	
+	@Autowired
+	CommentRepository commentRepository;
 	
 
 	//전체 사용자 정보 리스트 조회
@@ -275,6 +280,19 @@ public class MypageAdminController {
 	    	}
 	    	if(useremail.equals(userEmail)) {
 	    		paymentRepository.delete(payment);
+	    	}	    
+	    }
+	    
+	    List<Comment> commentData = commentRepository.findAll();
+	    for(int i =0;i<commentData.size();i++) {
+	    	Comment comment  = commentData.get(i);
+	    	String targetEmail = comment.getCommentEmail();
+	    	
+	    	if(targetEmail.equals(plannerEmail)) {
+	    		commentRepository.delete(comment);
+	    	}
+	    	if(targetEmail.equals(userEmail)) {
+	    		commentRepository.delete(comment);
 	    	}	    
 	    }
 

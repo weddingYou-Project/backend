@@ -2,6 +2,7 @@ package com.mysite.weddingyou_backend.qna;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.mysite.weddingyou_backend.comment.Comment;
 import com.mysite.weddingyou_backend.comment.CommentDTO;
 import com.mysite.weddingyou_backend.comment.CommentRepository;
+import com.mysite.weddingyou_backend.notice.Notice;
 
 @Service
 public class QnaService {
@@ -23,19 +25,22 @@ public class QnaService {
     public QnaDTO createQna(QnaDTO qnaDTO) {
         Qna qna = new Qna();
         qna.setQnaWriter(qnaDTO.getQnaWriter());
+        qna.setQnaViewCount(qnaDTO.getQnaViewCount());
         qna.setQnaTitle(qnaDTO.getQnaTitle());
         qna.setQnaContent(qnaDTO.getQnaContent());
         qna.setQnaWriteDate(LocalDateTime.now());
+        qna.setQnaImg(qnaDTO.getQnaImg());
         Qna savedQna = qnaRepository.save(qna);
         return QnaDTO.fromEntity(savedQna);
     }
 
     public QnaDTO updateQna(Long qnaId, QnaDTO qnaDTO) {
         Qna qna = qnaRepository.findById(qnaId).orElseThrow(() -> new IllegalArgumentException("Q&A not found."));
-        qna.setQnaWriter(qnaDTO.getQnaWriter());
+        //qna.setQnaWriter(qnaDTO.getQnaWriter());
         qna.setQnaTitle(qnaDTO.getQnaTitle());
         qna.setQnaContent(qnaDTO.getQnaContent());
         qna.setQnaWriteDate(LocalDateTime.now());
+        qna.setQnaImg(qnaDTO.getQnaImg());
         Qna updatedQna = qnaRepository.save(qna);
         return QnaDTO.fromEntity(updatedQna);
     }
@@ -49,14 +54,19 @@ public class QnaService {
         return QnaDTO.fromEntity(qna);
     }
 
-    public List<QnaDTO> searchQnas(String keyword) {
+    public List<Qna> searchQnas(String keyword) {
         List<Qna> qnas = qnaRepository.findByQnaTitleContaining(keyword);
-        return qnas.stream().map(QnaDTO::fromEntity).collect(Collectors.toList());
+        return qnas;
     }
 
     public List<QnaDTO> getAllQnas() {
         List<Qna> qnas = qnaRepository.findAll();
         return qnas.stream().map(QnaDTO::fromEntity).collect(Collectors.toList());
+    }
+    
+    public List<Qna> getAllQnas2() {
+        List<Qna> qnas = qnaRepository.findAll();
+        return qnas;
     }
 
     public CommentDTO createComment(Long qnaId, CommentDTO commentDTO) {
@@ -90,4 +100,13 @@ public class QnaService {
 
         commentRepository.delete(comment);
     }
+    
+    public void save(Qna qna) {
+		qnaRepository.save(qna);
+	}
+    
+    public Optional<Qna> getQnaById2(Long qnaId) {
+    	
+		return qnaRepository.findById(qnaId);
+	}
 }
